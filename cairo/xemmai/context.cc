@@ -102,7 +102,7 @@ void t_type_of<t_context>::f_define(t_extension* a_extension)
 		(L"move_to", t_member<void (t_context::*)(double, double), &t_context::f_move_to>())
 		(L"rectangle", t_member<void (t_context::*)(double, double, double, double), &t_context::f_rectangle>())
 		//(L"glyph_path", t_member<void (t_context::*)(const cairo_glyph_t*, int), &t_context::f_glyph_path>())
-		//(L"text_path", t_member<void (t_context::*)(const char*), &t_context::f_text_path>())
+		(L"text_path", t_member<void (t_context::*)(const std::wstring&), &t_context::f_text_path>())
 		(L"rel_curve_to", t_member<void (t_context::*)(double, double, double, double, double, double), &t_context::f_rel_curve_to>())
 		(L"rel_line_to", t_member<void (t_context::*)(double, double), &t_context::f_rel_line_to>())
 		(L"rel_move_to", t_member<void (t_context::*)(double, double), &t_context::f_rel_move_to>())
@@ -118,6 +118,22 @@ void t_type_of<t_context>::f_define(t_extension* a_extension)
 		(L"user_to_device_distance", t_member<t_transfer (t_context::*)(double, double) const, &t_context::f_user_to_device_distance>())
 		(L"device_to_user", t_member<t_transfer (t_context::*)(double, double) const, &t_context::f_device_to_user>())
 		(L"device_to_user_distance", t_member<t_transfer (t_context::*)(double, double) const, &t_context::f_device_to_user_distance>())
+		(L"select_font_face", t_member<void (t_context::*)(const std::wstring&, cairo_font_slant_t, cairo_font_weight_t), &t_context::f_select_font_face>())
+		(L"set_font_size", t_member<void (t_context::*)(double), &t_context::f_set_font_size>())
+		(L"set_font_matrix", t_member<void (t_context::*)(const t_matrix&), &t_context::f_set_font_matrix>())
+		(L"get_font_matrix", t_member<t_matrix (t_context::*)() const, &t_context::f_get_font_matrix>())
+		//(L"set_font_options", t_member<void (t_context::*)(const cairo_font_options_t*), &t_context::f_set_font_options>())
+		//(L"get_font_options", t_member<void (t_context::*)(cairo_font_options_t*) const, &t_context::f_get_font_options>())
+		//(L"set_font_face", t_member<void (t_context::*)(cairo_font_face_t*), &t_context::f_set_font_face>())
+		//(L"get_font_face", t_member<cairo_font_face_t* (t_context::*)() const, &t_context::f_get_font_face>())
+		//(L"set_scaled_font", t_member<void (t_context::*)(const cairo_scaled_font_t*), &t_context::f_set_scaled_font>())
+		//(L"get_scaled_font", t_member<cairo_scaled_font_t* (t_context::*)() const, &t_context::f_get_scaled_font>())
+		(L"show_text", t_member<void (t_context::*)(const std::wstring&), &t_context::f_show_text>())
+		//(L"show_glyphs", t_member<void (t_context::*)(const cairo_glyph_t*, int), &t_context::f_show_glyphs>())
+		//(L"show_text_glyphs", t_member<void (t_context::*)(const char*, int, const cairo_glyph_t*, int, const cairo_text_cluster_t*, int, cairo_text_cluster_flags_t), &t_context::f_show_text_glyphs>())
+		//(L"font_extents", t_member<void (t_context::*)(cairo_font_extents_t*) const, &t_context::f_font_extents>())
+		//(L"text_extents", t_member<void (t_context::*)(const std::wstring&, cairo_text_extents_t*) const, &t_context::f_text_extents>())
+		//(L"glyph_extents", t_member<void (t_context::*)(const cairo_glyph_t*, int, cairo_text_extents_t*) const, &t_context::f_glyph_extents>())
 	;
 }
 
@@ -196,6 +212,23 @@ void t_type_of<cairo_operator_t>::f_define(t_extension* a_extension)
 		(L"XOR", CAIRO_OPERATOR_XOR)
 		(L"ADD", CAIRO_OPERATOR_ADD)
 		(L"SATURATE", CAIRO_OPERATOR_SATURATE)
+	;
+}
+
+void t_type_of<cairo_font_slant_t>::f_define(t_extension* a_extension)
+{
+	t_define<cairo_font_slant_t, int>(a_extension, L"FontSlant")
+		(L"NORMAL", CAIRO_FONT_SLANT_NORMAL)
+		(L"ITALIC", CAIRO_FONT_SLANT_ITALIC)
+		(L"OBLIQUE", CAIRO_FONT_SLANT_OBLIQUE)
+	;
+}
+
+void t_type_of<cairo_font_weight_t>::f_define(t_extension* a_extension)
+{
+	t_define<cairo_font_weight_t, int>(a_extension, L"FontWeight")
+		(L"NORMAL", CAIRO_FONT_WEIGHT_NORMAL)
+		(L"BOLD", CAIRO_FONT_WEIGHT_BOLD)
 	;
 }
 

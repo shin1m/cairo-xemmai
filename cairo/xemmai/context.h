@@ -335,9 +335,9 @@ public:
 	{
 		cairo_glyph_path(v_value, a_glyphs, a_n);
 	}
-	void f_text_path(const char* a_utf8)
+	void f_text_path(const std::wstring& a_text)
 	{
-		cairo_text_path(v_value, a_utf8);
+		cairo_text_path(v_value, f_convert(a_text).c_str());
 	}
 	void f_rel_curve_to(double a_x0, double a_y0, double a_x1, double a_y1, double a_x2, double a_y2)
 	{
@@ -410,6 +410,72 @@ public:
 		cairo_device_to_user_distance(v_value, &a_x, &a_y);
 		return f_array(f_global()->f_as(a_x), f_global()->f_as(a_y));
 	}
+	void f_select_font_face(const std::wstring& a_family, cairo_font_slant_t a_slant, cairo_font_weight_t a_weight)
+	{
+		cairo_select_font_face(v_value, f_convert(a_family).c_str(), a_slant, a_weight);
+	}
+	void f_set_font_size(double a_size)
+	{
+		cairo_set_font_size(v_value, a_size);
+	}
+	void f_set_font_matrix(const t_matrix& a_matrix)
+	{
+		cairo_set_font_matrix(v_value, &a_matrix);
+	}
+	t_matrix f_get_font_matrix() const
+	{
+		cairo_matrix_t matrix;
+		cairo_get_font_matrix(v_value, &matrix);
+		return matrix;
+	}
+	void f_set_font_options(const cairo_font_options_t* a_options)
+	{
+		cairo_set_font_options(v_value, a_options);
+	}
+	void f_get_font_options(cairo_font_options_t* a_options) const
+	{
+		cairo_get_font_options(v_value, a_options);
+	}
+	void f_set_font_face(cairo_font_face_t* a_font_face)
+	{
+		cairo_set_font_face(v_value, a_font_face);
+	}
+	cairo_font_face_t* f_get_font_face() const
+	{
+		return cairo_get_font_face(v_value);
+	}
+	void f_set_scaled_font(const cairo_scaled_font_t* a_scaled_font)
+	{
+		cairo_set_scaled_font(v_value, a_scaled_font);
+	}
+	cairo_scaled_font_t* f_get_scaled_font() const
+	{
+		return cairo_get_scaled_font(v_value);
+	}
+	void f_show_text(const std::wstring& a_text)
+	{
+		cairo_show_text(v_value, f_convert(a_text).c_str());
+	}
+	void f_show_glyphs(const cairo_glyph_t* a_glyphs, int a_n)
+	{
+		cairo_show_glyphs(v_value, a_glyphs, a_n);
+	}
+	void f_show_text_glyphs(const char* a_utf8, int a_n0, const cairo_glyph_t* a_glyphs, int a_n1, const cairo_text_cluster_t* a_clusters, int a_n2, cairo_text_cluster_flags_t a_cluster_flags)
+	{
+		cairo_show_text_glyphs(v_value, a_utf8, a_n0, a_glyphs, a_n1, a_clusters, a_n2, a_cluster_flags);
+	}
+	void f_font_extents(cairo_font_extents_t* a_extents) const
+	{
+		cairo_font_extents(v_value, a_extents);
+	}
+	void f_text_extents(const std::wstring& a_text, cairo_text_extents_t* a_extents) const
+	{
+		cairo_text_extents(v_value, f_convert(a_text).c_str(), a_extents);
+	}
+	void f_glyph_extents(const cairo_glyph_t* a_glyphs, int a_n, cairo_text_extents_t* a_extents) const
+	{
+		cairo_glyph_extents(v_value, a_glyphs, a_n, a_extents);
+	}
 };
 
 }
@@ -480,6 +546,26 @@ struct t_type_of<cairo_line_join_t> : t_enum_of<cairo_line_join_t, cairo::xemmai
 
 template<>
 struct t_type_of<cairo_operator_t> : t_enum_of<cairo_operator_t, cairo::xemmai::t_extension>
+{
+	static void f_define(t_extension* a_extension);
+
+	t_type_of(const t_transfer& a_module, const t_transfer& a_super) : t_base(a_module, a_super)
+	{
+	}
+};
+
+template<>
+struct t_type_of<cairo_font_slant_t> : t_enum_of<cairo_font_slant_t, cairo::xemmai::t_extension>
+{
+	static void f_define(t_extension* a_extension);
+
+	t_type_of(const t_transfer& a_module, const t_transfer& a_super) : t_base(a_module, a_super)
+	{
+	}
+};
+
+template<>
+struct t_type_of<cairo_font_weight_t> : t_enum_of<cairo_font_weight_t, cairo::xemmai::t_extension>
 {
 	static void f_define(t_extension* a_extension);
 

@@ -204,6 +204,8 @@ class t_extension : public ::xemmai::t_extension
 	t_slot v_type_line_cap;
 	t_slot v_type_line_join;
 	t_slot v_type_operator;
+	t_slot v_type_font_slant;
+	t_slot v_type_font_weight;
 
 	template<typename T>
 	void f_type__(const t_transfer& a_type);
@@ -356,6 +358,18 @@ inline void t_extension::f_type__<cairo_operator_t>(const t_transfer& a_type)
 }
 
 template<>
+inline void t_extension::f_type__<cairo_font_slant_t>(const t_transfer& a_type)
+{
+	v_type_font_slant = a_type;
+}
+
+template<>
+inline void t_extension::f_type__<cairo_font_weight_t>(const t_transfer& a_type)
+{
+	v_type_font_weight = a_type;
+}
+
+template<>
 inline const t_extension* t_extension::f_extension<t_extension>() const
 {
 	return this;
@@ -485,6 +499,18 @@ template<>
 inline t_object* t_extension::f_type<cairo_operator_t>() const
 {
 	return v_type_operator;
+}
+
+template<>
+inline t_object* t_extension::f_type<cairo_font_slant_t>() const
+{
+	return v_type_font_slant;
+}
+
+template<>
+inline t_object* t_extension::f_type<cairo_font_weight_t>() const
+{
+	return v_type_font_weight;
 }
 
 }
