@@ -119,6 +119,7 @@ t_extension::t_extension(t_object* a_module) : ::xemmai::t_extension(a_module)
 	t_type_of<t_radial_gradient>::f_define(this);
 	t_type_of<cairo_extend_t>::f_define(this);
 	t_type_of<cairo_filter_t>::f_define(this);
+	t_type_of<cairo_pattern_type_t>::f_define(this);
 	t_type_of<t_context>::f_define(this);
 	t_type_of<cairo_antialias_t>::f_define(this);
 	t_type_of<cairo_fill_rule_t>::f_define(this);
@@ -127,6 +128,9 @@ t_extension::t_extension(t_object* a_module) : ::xemmai::t_extension(a_module)
 	t_type_of<cairo_operator_t>::f_define(this);
 	t_type_of<cairo_font_slant_t>::f_define(this);
 	t_type_of<cairo_font_weight_t>::f_define(this);
+	t_type_of<t_font_face>::f_define(this);
+	t_type_of<cairo_font_type_t>::f_define(this);
+	t_type_of<t_toy_font_face>::f_define(this);
 	f_define<void (*)(t_extension*, t_object*), f_main>(this, L"main");
 }
 
@@ -147,6 +151,7 @@ void t_extension::f_scan(t_scan a_scan)
 	a_scan(v_type_radial_gradient);
 	a_scan(v_type_extend);
 	a_scan(v_type_filter);
+	a_scan(v_type_pattern_type);
 	a_scan(v_type_context);
 	a_scan(v_type_antialias);
 	a_scan(v_type_fill_rule);
@@ -155,6 +160,9 @@ void t_extension::f_scan(t_scan a_scan)
 	a_scan(v_type_operator);
 	a_scan(v_type_font_slant);
 	a_scan(v_type_font_weight);
+	a_scan(v_type_font_face);
+	a_scan(v_type_font_type);
+	a_scan(v_type_toy_font_face);
 }
 
 }

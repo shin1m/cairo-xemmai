@@ -2,6 +2,7 @@
 #define CAIRO__XEMMAI__CONTEXT_H
 
 #include "pattern.h"
+#include "font_face.h"
 
 namespace cairo
 {
@@ -69,7 +70,7 @@ public:
 	{
 		cairo_push_group(v_value);
 	}
-	void f_push_group(cairo_content_t a_content)
+	void f_push_group_with_content(cairo_content_t a_content)
 	{
 		cairo_push_group_with_content(v_value, a_content);
 	}
@@ -85,11 +86,11 @@ public:
 	{
 		return t_surface::f_wrap(cairo_get_group_target(v_value));
 	}
-	void f_set_source(double a_red, double a_green, double a_blue)
+	void f_set_source_rgb(double a_red, double a_green, double a_blue)
 	{
 		cairo_set_source_rgb(v_value, a_red, a_green, a_blue);
 	}
-	void f_set_source(double a_red, double a_green, double a_blue, double a_alpha)
+	void f_set_source_rgba(double a_red, double a_green, double a_blue, double a_alpha)
 	{
 		cairo_set_source_rgba(v_value, a_red, a_green, a_blue, a_alpha);
 	}
@@ -239,7 +240,7 @@ public:
 	{
 		cairo_paint(v_value);
 	}
-	void f_paint(double a_alpha)
+	void f_paint_with_alpha(double a_alpha)
 	{
 		cairo_paint_with_alpha(v_value, a_alpha);
 	}
@@ -436,13 +437,13 @@ public:
 	{
 		cairo_get_font_options(v_value, a_options);
 	}
-	void f_set_font_face(cairo_font_face_t* a_font_face)
+	void f_set_font_face(t_font_face& a_font_face)
 	{
 		cairo_set_font_face(v_value, a_font_face);
 	}
-	cairo_font_face_t* f_get_font_face() const
+	t_font_face* f_get_font_face() const
 	{
-		return cairo_get_font_face(v_value);
+		return t_font_face::f_wrap(cairo_get_font_face(v_value));
 	}
 	void f_set_scaled_font(const cairo_scaled_font_t* a_scaled_font)
 	{
@@ -464,17 +465,23 @@ public:
 	{
 		cairo_show_text_glyphs(v_value, a_utf8, a_n0, a_glyphs, a_n1, a_clusters, a_n2, a_cluster_flags);
 	}
-	void f_font_extents(cairo_font_extents_t* a_extents) const
+	t_transfer f_font_extents() const
 	{
-		cairo_font_extents(v_value, a_extents);
+		cairo_font_extents_t extents;
+		cairo_font_extents(v_value, &extents);
+		return f_array(f_global()->f_as(extents.ascent), f_global()->f_as(extents.descent), f_global()->f_as(extents.height), f_global()->f_as(extents.max_x_advance), f_global()->f_as(extents.max_y_advance));
 	}
-	void f_text_extents(const std::wstring& a_text, cairo_text_extents_t* a_extents) const
+	t_transfer f_text_extents(const std::wstring& a_text) const
 	{
-		cairo_text_extents(v_value, f_convert(a_text).c_str(), a_extents);
+		cairo_text_extents_t extents;
+		cairo_text_extents(v_value, f_convert(a_text).c_str(), &extents);
+		return f_array(f_global()->f_as(extents.x_bearing), f_global()->f_as(extents.y_bearing), f_global()->f_as(extents.width), f_global()->f_as(extents.height), f_global()->f_as(extents.x_advance), f_global()->f_as(extents.y_advance));
 	}
-	void f_glyph_extents(const cairo_glyph_t* a_glyphs, int a_n, cairo_text_extents_t* a_extents) const
+	t_transfer f_glyph_extents(const cairo_glyph_t* a_glyphs, int a_n) const
 	{
-		cairo_glyph_extents(v_value, a_glyphs, a_n, a_extents);
+		cairo_text_extents_t extents;
+		cairo_glyph_extents(v_value, a_glyphs, a_n, &extents);
+		return f_array(f_global()->f_as(extents.x_bearing), f_global()->f_as(extents.y_bearing), f_global()->f_as(extents.width), f_global()->f_as(extents.height), f_global()->f_as(extents.x_advance), f_global()->f_as(extents.y_advance));
 	}
 };
 
@@ -546,26 +553,6 @@ struct t_type_of<cairo_line_join_t> : t_enum_of<cairo_line_join_t, cairo::xemmai
 
 template<>
 struct t_type_of<cairo_operator_t> : t_enum_of<cairo_operator_t, cairo::xemmai::t_extension>
-{
-	static void f_define(t_extension* a_extension);
-
-	t_type_of(const t_transfer& a_module, const t_transfer& a_super) : t_base(a_module, a_super)
-	{
-	}
-};
-
-template<>
-struct t_type_of<cairo_font_slant_t> : t_enum_of<cairo_font_slant_t, cairo::xemmai::t_extension>
-{
-	static void f_define(t_extension* a_extension);
-
-	t_type_of(const t_transfer& a_module, const t_transfer& a_super) : t_base(a_module, a_super)
-	{
-	}
-};
-
-template<>
-struct t_type_of<cairo_font_weight_t> : t_enum_of<cairo_font_weight_t, cairo::xemmai::t_extension>
 {
 	static void f_define(t_extension* a_extension);
 

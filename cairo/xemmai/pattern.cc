@@ -42,6 +42,7 @@ void t_type_of<t_pattern>::f_define(t_extension* a_extension)
 		(L"status", t_member<cairo_status_t (t_pattern::*)() const, &t_pattern::f_status>())
 		(L"set_matrix", t_member<void (t_pattern::*)(const t_matrix&), &t_pattern::f_set_matrix>())
 		(L"get_matrix", t_member<t_matrix (t_pattern::*)() const, &t_pattern::f_get_matrix>())
+		(L"get_type", t_member<cairo_pattern_type_t (t_pattern::*)() const, &t_pattern::f_get_type>())
 	;
 }
 
@@ -116,6 +117,16 @@ void t_type_of<cairo_filter_t>::f_define(t_extension* a_extension)
 		(L"NEAREST", CAIRO_FILTER_NEAREST)
 		(L"BILINEAR", CAIRO_FILTER_BILINEAR)
 		(L"GAUSSIAN", CAIRO_FILTER_GAUSSIAN)
+	;
+}
+
+void t_type_of<cairo_pattern_type_t>::f_define(t_extension* a_extension)
+{
+	t_define<cairo_pattern_type_t, int>(a_extension, L"PatternType")
+		(L"SOLID", CAIRO_PATTERN_TYPE_SOLID)
+		(L"SURFACE", CAIRO_PATTERN_TYPE_SURFACE)
+		(L"LINEAR", CAIRO_PATTERN_TYPE_LINEAR)
+		(L"RADIAL", CAIRO_PATTERN_TYPE_RADIAL)
 	;
 }
 

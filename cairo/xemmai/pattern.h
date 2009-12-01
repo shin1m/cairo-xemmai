@@ -61,6 +61,10 @@ public:
 		cairo_pattern_get_matrix(v_value, &matrix);
 		return matrix;
 	}
+	cairo_pattern_type_t f_get_type() const
+	{
+		return cairo_pattern_get_type(v_value);
+	}
 };
 
 class t_solid_pattern : public t_pattern
@@ -281,6 +285,16 @@ struct t_type_of<cairo_extend_t> : t_enum_of<cairo_extend_t, cairo::xemmai::t_ex
 
 template<>
 struct t_type_of<cairo_filter_t> : t_enum_of<cairo_filter_t, cairo::xemmai::t_extension>
+{
+	static void f_define(t_extension* a_extension);
+
+	t_type_of(const t_transfer& a_module, const t_transfer& a_super) : t_base(a_module, a_super)
+	{
+	}
+};
+
+template<>
+struct t_type_of<cairo_pattern_type_t> : t_enum_of<cairo_pattern_type_t, cairo::xemmai::t_extension>
 {
 	static void f_define(t_extension* a_extension);
 

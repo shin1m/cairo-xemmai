@@ -39,6 +39,8 @@ class t_surface_pattern;
 class t_gradient;
 class t_linear_gradient;
 class t_radial_gradient;
+class t_font_face;
+class t_toy_font_face;
 class t_context;
 
 t_transfer f_array(const t_transfer& a_0, const t_transfer& a_1);
@@ -198,6 +200,7 @@ class t_extension : public ::xemmai::t_extension
 	t_slot v_type_radial_gradient;
 	t_slot v_type_extend;
 	t_slot v_type_filter;
+	t_slot v_type_pattern_type;
 	t_slot v_type_context;
 	t_slot v_type_antialias;
 	t_slot v_type_fill_rule;
@@ -206,6 +209,9 @@ class t_extension : public ::xemmai::t_extension
 	t_slot v_type_operator;
 	t_slot v_type_font_slant;
 	t_slot v_type_font_weight;
+	t_slot v_type_font_face;
+	t_slot v_type_font_type;
+	t_slot v_type_toy_font_face;
 
 	template<typename T>
 	void f_type__(const t_transfer& a_type);
@@ -322,6 +328,12 @@ inline void t_extension::f_type__<cairo_filter_t>(const t_transfer& a_type)
 }
 
 template<>
+inline void t_extension::f_type__<cairo_pattern_type_t>(const t_transfer& a_type)
+{
+	v_type_pattern_type = a_type;
+}
+
+template<>
 inline void t_extension::f_type__<t_context>(const t_transfer& a_type)
 {
 	v_type_context = a_type;
@@ -367,6 +379,24 @@ template<>
 inline void t_extension::f_type__<cairo_font_weight_t>(const t_transfer& a_type)
 {
 	v_type_font_weight = a_type;
+}
+
+template<>
+inline void t_extension::f_type__<t_font_face>(const t_transfer& a_type)
+{
+	v_type_font_face = a_type;
+}
+
+template<>
+inline void t_extension::f_type__<cairo_font_type_t>(const t_transfer& a_type)
+{
+	v_type_font_type = a_type;
+}
+
+template<>
+inline void t_extension::f_type__<t_toy_font_face>(const t_transfer& a_type)
+{
+	v_type_toy_font_face = a_type;
 }
 
 template<>
@@ -466,6 +496,12 @@ inline t_object* t_extension::f_type<cairo_filter_t>() const
 }
 
 template<>
+inline t_object* t_extension::f_type<cairo_pattern_type_t>() const
+{
+	return v_type_pattern_type;
+}
+
+template<>
 inline t_object* t_extension::f_type<t_context>() const
 {
 	return v_type_context;
@@ -511,6 +547,24 @@ template<>
 inline t_object* t_extension::f_type<cairo_font_weight_t>() const
 {
 	return v_type_font_weight;
+}
+
+template<>
+inline t_object* t_extension::f_type<t_font_face>() const
+{
+	return v_type_font_face;
+}
+
+template<>
+inline t_object* t_extension::f_type<cairo_font_type_t>() const
+{
+	return v_type_font_type;
+}
+
+template<>
+inline t_object* t_extension::f_type<t_toy_font_face>() const
+{
+	return v_type_toy_font_face;
 }
 
 }

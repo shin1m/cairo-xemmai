@@ -37,12 +37,12 @@ void t_type_of<t_context>::f_define(t_extension* a_extension)
 		(L"restore", t_member<void (t_context::*)(), &t_context::f_restore>())
 		(L"get_target", t_member<t_surface* (t_context::*)() const, &t_context::f_get_target>())
 		(L"push_group", t_member<void (t_context::*)(), &t_context::f_push_group>())
-		(L"push_group_with_content", t_member<void (t_context::*)(cairo_content_t), &t_context::f_push_group>())
+		(L"push_group_with_content", t_member<void (t_context::*)(cairo_content_t), &t_context::f_push_group_with_content>())
 		(L"pop_group", t_member<t_pattern* (t_context::*)(), &t_context::f_pop_group>())
 		(L"pop_group_to_source", t_member<void (t_context::*)(), &t_context::f_pop_group_to_source>())
 		(L"get_group_target", t_member<t_surface* (t_context::*)() const, &t_context::f_get_group_target>())
-		(L"set_source_rgb", t_member<void (t_context::*)(double, double, double), &t_context::f_set_source>())
-		(L"set_source_rgba", t_member<void (t_context::*)(double, double, double, double), &t_context::f_set_source>())
+		(L"set_source_rgb", t_member<void (t_context::*)(double, double, double), &t_context::f_set_source_rgb>())
+		(L"set_source_rgba", t_member<void (t_context::*)(double, double, double, double), &t_context::f_set_source_rgba>())
 		(L"set_source",
 			t_member<void (t_context::*)(t_pattern&), &t_context::f_set_source>(),
 			t_member<void (t_context::*)(t_surface&, double, double), &t_context::f_set_source>()
@@ -80,7 +80,7 @@ void t_type_of<t_context>::f_define(t_extension* a_extension)
 			t_member<void (t_context::*)(t_surface&, double, double), &t_context::f_mask>()
 		)
 		(L"paint", t_member<void (t_context::*)(), &t_context::f_paint>())
-		(L"paint_with_alpha", t_member<void (t_context::*)(double), &t_context::f_paint>())
+		(L"paint_with_alpha", t_member<void (t_context::*)(double), &t_context::f_paint_with_alpha>())
 		(L"stroke", t_member<void (t_context::*)(), &t_context::f_stroke>())
 		(L"stroke_preserve", t_member<void (t_context::*)(), &t_context::f_stroke_preserve>())
 		(L"storke_extents", t_member<t_transfer (t_context::*)() const, &t_context::f_stroke_extents>())
@@ -124,16 +124,16 @@ void t_type_of<t_context>::f_define(t_extension* a_extension)
 		(L"get_font_matrix", t_member<t_matrix (t_context::*)() const, &t_context::f_get_font_matrix>())
 		//(L"set_font_options", t_member<void (t_context::*)(const cairo_font_options_t*), &t_context::f_set_font_options>())
 		//(L"get_font_options", t_member<void (t_context::*)(cairo_font_options_t*) const, &t_context::f_get_font_options>())
-		//(L"set_font_face", t_member<void (t_context::*)(cairo_font_face_t*), &t_context::f_set_font_face>())
-		//(L"get_font_face", t_member<cairo_font_face_t* (t_context::*)() const, &t_context::f_get_font_face>())
+		(L"set_font_face", t_member<void (t_context::*)(t_font_face&), &t_context::f_set_font_face>())
+		(L"get_font_face", t_member<t_font_face* (t_context::*)() const, &t_context::f_get_font_face>())
 		//(L"set_scaled_font", t_member<void (t_context::*)(const cairo_scaled_font_t*), &t_context::f_set_scaled_font>())
 		//(L"get_scaled_font", t_member<cairo_scaled_font_t* (t_context::*)() const, &t_context::f_get_scaled_font>())
 		(L"show_text", t_member<void (t_context::*)(const std::wstring&), &t_context::f_show_text>())
 		//(L"show_glyphs", t_member<void (t_context::*)(const cairo_glyph_t*, int), &t_context::f_show_glyphs>())
 		//(L"show_text_glyphs", t_member<void (t_context::*)(const char*, int, const cairo_glyph_t*, int, const cairo_text_cluster_t*, int, cairo_text_cluster_flags_t), &t_context::f_show_text_glyphs>())
-		//(L"font_extents", t_member<void (t_context::*)(cairo_font_extents_t*) const, &t_context::f_font_extents>())
-		//(L"text_extents", t_member<void (t_context::*)(const std::wstring&, cairo_text_extents_t*) const, &t_context::f_text_extents>())
-		//(L"glyph_extents", t_member<void (t_context::*)(const cairo_glyph_t*, int, cairo_text_extents_t*) const, &t_context::f_glyph_extents>())
+		(L"font_extents", t_member<t_transfer (t_context::*)() const, &t_context::f_font_extents>())
+		(L"text_extents", t_member<t_transfer (t_context::*)(const std::wstring&) const, &t_context::f_text_extents>())
+		//(L"glyph_extents", t_member<t_transfer (t_context::*)(const cairo_glyph_t*, int) const, &t_context::f_glyph_extents>())
 	;
 }
 
@@ -212,23 +212,6 @@ void t_type_of<cairo_operator_t>::f_define(t_extension* a_extension)
 		(L"XOR", CAIRO_OPERATOR_XOR)
 		(L"ADD", CAIRO_OPERATOR_ADD)
 		(L"SATURATE", CAIRO_OPERATOR_SATURATE)
-	;
-}
-
-void t_type_of<cairo_font_slant_t>::f_define(t_extension* a_extension)
-{
-	t_define<cairo_font_slant_t, int>(a_extension, L"FontSlant")
-		(L"NORMAL", CAIRO_FONT_SLANT_NORMAL)
-		(L"ITALIC", CAIRO_FONT_SLANT_ITALIC)
-		(L"OBLIQUE", CAIRO_FONT_SLANT_OBLIQUE)
-	;
-}
-
-void t_type_of<cairo_font_weight_t>::f_define(t_extension* a_extension)
-{
-	t_define<cairo_font_weight_t, int>(a_extension, L"FontWeight")
-		(L"NORMAL", CAIRO_FONT_WEIGHT_NORMAL)
-		(L"BOLD", CAIRO_FONT_WEIGHT_BOLD)
 	;
 }
 

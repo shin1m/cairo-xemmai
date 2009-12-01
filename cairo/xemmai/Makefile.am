@@ -23,6 +23,8 @@ cairo_la_SOURCES = \
 	surface.cc \
 	pattern.h \
 	pattern.cc \
+	font_face.h \
+	font_face.cc \
 	context.h \
 	context.cc \
 	cairo.h \
