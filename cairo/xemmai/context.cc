@@ -122,12 +122,12 @@ void t_type_of<t_context>::f_define(t_extension* a_extension)
 		(L"set_font_size", t_member<void (t_context::*)(double), &t_context::f_set_font_size>())
 		(L"set_font_matrix", t_member<void (t_context::*)(const t_matrix&), &t_context::f_set_font_matrix>())
 		(L"get_font_matrix", t_member<t_matrix (t_context::*)() const, &t_context::f_get_font_matrix>())
-		//(L"set_font_options", t_member<void (t_context::*)(const cairo_font_options_t*), &t_context::f_set_font_options>())
-		//(L"get_font_options", t_member<void (t_context::*)(cairo_font_options_t*) const, &t_context::f_get_font_options>())
-		(L"set_font_face", t_member<void (t_context::*)(t_font_face&), &t_context::f_set_font_face>())
+		(L"set_font_options", t_member<void (t_context::*)(const t_font_options&), &t_context::f_set_font_options>())
+		(L"get_font_options", t_member<t_transfer (t_context::*)() const, &t_context::f_get_font_options>())
+		(L"set_font_face", t_member<void (t_context::*)(t_font_face*), &t_context::f_set_font_face>())
 		(L"get_font_face", t_member<t_font_face* (t_context::*)() const, &t_context::f_get_font_face>())
-		//(L"set_scaled_font", t_member<void (t_context::*)(const cairo_scaled_font_t*), &t_context::f_set_scaled_font>())
-		//(L"get_scaled_font", t_member<cairo_scaled_font_t* (t_context::*)() const, &t_context::f_get_scaled_font>())
+		(L"set_scaled_font", t_member<void (t_context::*)(const t_scaled_font&), &t_context::f_set_scaled_font>())
+		(L"get_scaled_font", t_member<t_scaled_font* (t_context::*)() const, &t_context::f_get_scaled_font>())
 		(L"show_text", t_member<void (t_context::*)(const std::wstring&), &t_context::f_show_text>())
 		//(L"show_glyphs", t_member<void (t_context::*)(const cairo_glyph_t*, int), &t_context::f_show_glyphs>())
 		//(L"show_text_glyphs", t_member<void (t_context::*)(const char*, int, const cairo_glyph_t*, int, const cairo_text_cluster_t*, int, cairo_text_cluster_flags_t), &t_context::f_show_text_glyphs>())
@@ -157,16 +157,6 @@ void t_type_of<t_context>::f_construct(t_object* a_class, size_t a_n, t_stack& a
 void t_type_of<t_context>::f_instantiate(t_object* a_class, size_t a_n, t_stack& a_stack)
 {
 	f_construct(a_class, a_n, a_stack);
-}
-
-void t_type_of<cairo_antialias_t>::f_define(t_extension* a_extension)
-{
-	t_define<cairo_antialias_t, int>(a_extension, L"Antialias")
-		(L"DEFAULT", CAIRO_ANTIALIAS_DEFAULT)
-		(L"NONE", CAIRO_ANTIALIAS_NONE)
-		(L"GRAY", CAIRO_ANTIALIAS_GRAY)
-		(L"SUBPIXEL", CAIRO_ANTIALIAS_SUBPIXEL)
-	;
 }
 
 void t_type_of<cairo_fill_rule_t>::f_define(t_extension* a_extension)

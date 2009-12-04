@@ -1,7 +1,7 @@
 #ifndef CAIRO__XEMMAI__SURFACE_H
 #define CAIRO__XEMMAI__SURFACE_H
 
-#include "cairo.h"
+#include "font_options.h"
 
 namespace cairo
 {
@@ -67,9 +67,11 @@ public:
 	{
 		cairo_surface_flush(v_value);
 	}
-	void f_get_font_options(cairo_font_options_t* a_options) const
+	t_transfer f_get_font_options() const
 	{
-		cairo_surface_get_font_options(v_value, a_options);
+		t_transfer options = t_type_of<t_font_options>::f_construct();
+		cairo_surface_get_font_options(v_value, t_font_options::f_to(f_as<t_font_options*>(options)));
+		return options;
 	}
 	cairo_content_t f_get_content() const
 	{

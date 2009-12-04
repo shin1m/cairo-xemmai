@@ -2,7 +2,7 @@
 #define CAIRO__XEMMAI__CONTEXT_H
 
 #include "pattern.h"
-#include "font_face.h"
+#include "scaled_font.h"
 
 namespace cairo
 {
@@ -429,29 +429,34 @@ public:
 		cairo_get_font_matrix(v_value, &matrix);
 		return matrix;
 	}
-	void f_set_font_options(const cairo_font_options_t* a_options)
+	void f_set_font_options(const t_font_options& a_options)
 	{
-		cairo_set_font_options(v_value, a_options);
+		cairo_set_font_options(v_value, t_font_options::f_to(&a_options));
 	}
-	void f_get_font_options(cairo_font_options_t* a_options) const
+	t_transfer f_get_font_options() const
 	{
-		cairo_get_font_options(v_value, a_options);
+		t_transfer options = t_type_of<t_font_options>::f_construct();
+		cairo_get_font_options(v_value, t_font_options::f_to(f_as<t_font_options*>(options)));
+		return options;
 	}
-	void f_set_font_face(t_font_face& a_font_face)
+	void f_set_font_face(t_font_face* a_font_face)
 	{
-		cairo_set_font_face(v_value, a_font_face);
+		if (a_font_face)
+			cairo_set_font_face(v_value, *a_font_face);
+		else
+			cairo_set_font_face(v_value, NULL);
 	}
 	t_font_face* f_get_font_face() const
 	{
 		return t_font_face::f_wrap(cairo_get_font_face(v_value));
 	}
-	void f_set_scaled_font(const cairo_scaled_font_t* a_scaled_font)
+	void f_set_scaled_font(const t_scaled_font& a_scaled_font)
 	{
 		cairo_set_scaled_font(v_value, a_scaled_font);
 	}
-	cairo_scaled_font_t* f_get_scaled_font() const
+	t_scaled_font* f_get_scaled_font() const
 	{
-		return cairo_get_scaled_font(v_value);
+		return t_scaled_font::f_wrap(cairo_get_scaled_font(v_value));
 	}
 	void f_show_text(const std::wstring& a_text)
 	{
@@ -509,16 +514,6 @@ struct t_type_of<t_context> : t_type
 	virtual void f_finalize(t_object* a_this);
 	virtual void f_construct(t_object* a_class, size_t a_n, t_stack& a_stack);
 	virtual void f_instantiate(t_object* a_class, size_t a_n, t_stack& a_stack);
-};
-
-template<>
-struct t_type_of<cairo_antialias_t> : t_enum_of<cairo_antialias_t, cairo::xemmai::t_extension>
-{
-	static void f_define(t_extension* a_extension);
-
-	t_type_of(const t_transfer& a_module, const t_transfer& a_super) : t_base(a_module, a_super)
-	{
-	}
 };
 
 template<>

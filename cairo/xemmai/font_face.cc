@@ -51,6 +51,7 @@ void t_type_of<t_font_face>::f_define(t_extension* a_extension)
 		(L"acquire", t_member<void (t_font_face::*)(), &t_font_face::f_acquire>())
 		(L"release", t_member<void (t_font_face::*)(), &t_font_face::f_release>())
 		(L"status", t_member<cairo_status_t (t_font_face::*)() const, &t_font_face::f_status>())
+		(L"get_type", t_member<cairo_font_type_t (t_font_face::*)() const, &t_font_face::f_get_type>())
 	;
 }
 

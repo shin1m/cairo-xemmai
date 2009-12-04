@@ -18,6 +18,8 @@ cairo_la_LIBADD = $(CAIRO_LIBS)
 cairo_la_SOURCES = \
 	matrix.h \
 	matrix.cc \
+	font_options.h \
+	font_options.cc \
 	cast.h \
 	surface.h \
 	surface.cc \
@@ -25,6 +27,8 @@ cairo_la_SOURCES = \
 	pattern.cc \
 	font_face.h \
 	font_face.cc \
+	scaled_font.h \
+	scaled_font.cc \
 	context.h \
 	context.cc \
 	cairo.h \
