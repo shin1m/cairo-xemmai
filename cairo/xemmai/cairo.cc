@@ -76,6 +76,7 @@ t_session::t_session(t_extension* a_extension) : t_entry(false), v_extension(a_e
 t_session::~t_session()
 {
 	while (v_next != this) v_next->f_dispose();
+	cairo_debug_reset_static_data();
 	v_instance = 0;
 }
 
