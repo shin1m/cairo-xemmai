@@ -1,8 +1,12 @@
-AC_INIT([cairo-xemmai], [200911])
+AC_INIT([cairo-xemmai], [201001])
 AM_INIT_AUTOMAKE([foreign nostdinc dist-bzip2 no-dist-gzip])
 AC_CONFIG_SRCDIR([cairo/xemmai/cairo.cc])
 
 PKG_CHECK_MODULES([CAIRO], [cairo >= 1.8])
+PKG_CHECK_MODULES([XEMMAI], [xemmai-201001], [
+	XEMMAI_MODULE_PATH=`pkg-config --variable=module_path xemmai-201001`
+])
+AC_SUBST(XEMMAI_MODULE_PATH)
 
 if test "${CXXFLAGS+set}" != set; then
 	CXXFLAGS=
@@ -15,14 +19,6 @@ AC_C_INLINE
 AC_TYPE_PID_T
 AC_TYPE_SIZE_T
 
-AC_ARG_WITH(
-	[xemmai],
-	AS_HELP_STRING([--with-xemmai], [specify xemmai executable [[default=xemmai]]]),
-	[xemmai_executable=${withval}],
-	[xemmai_executable=xemmai]
-)
-AC_SUBST(XEMMAI_MODULE_PATH)
-XEMMAI_MODULE_PATH=`${xemmai_executable} --default-module-path`
 AC_ARG_ENABLE(
 	[debug],
 	AS_HELP_STRING([--enable-debug], [turn on debugging]),
