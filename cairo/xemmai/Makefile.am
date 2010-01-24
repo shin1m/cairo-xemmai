@@ -2,8 +2,8 @@ xemmaidir = $(XEMMAI_MODULE_PATH)
 
 xemmai_LTLIBRARIES = cairo.la
 AM_CPPFLAGS = $(CAIRO_CFLAGS) $(XEMMAI_CFLAGS)
-AM_LDFLAGS = -module
 AM_CXXFLAGS =
+AM_LDFLAGS = -module -avoid-version
 if DEBUG
 AM_CXXFLAGS += -g
 else
