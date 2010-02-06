@@ -8,6 +8,26 @@ namespace cairo
 namespace xemmai
 {
 
+cairo_status_t t_surface::f_write_stream(void* a_closure, const unsigned char* a_data, unsigned int a_length)
+{
+	t_object* write = static_cast<t_object**>(a_closure)[0];
+	t_object* buffer = static_cast<t_object**>(a_closure)[1];
+	t_bytes& bytes = f_as<t_bytes&>(buffer);
+	t_scoped zero = f_global()->f_as(0);
+	try {
+		while (a_length > 0) {
+			size_t m = std::min(bytes.f_size(), a_length);
+			std::copy(a_data, a_data + m, &bytes[0]);
+			write->f_call(buffer, zero, f_global()->f_as(m));
+			a_data += m;
+			a_length -= m;
+		}
+		return CAIRO_STATUS_SUCCESS;
+	} catch (...) {
+		return CAIRO_STATUS_WRITE_ERROR;
+	}
+}
+
 t_surface* t_surface::f_wrap(cairo_surface_t* a_value)
 {
 	if (!a_value) return 0;
@@ -21,10 +41,50 @@ t_surface* t_surface::f_wrap(cairo_surface_t* a_value)
 	}
 }
 
+void t_surface::f_write_to_png_stream(t_object* a_write) const
+{
+	t_scoped buffer = t_bytes::f_instantiate(1024);
+	t_object* closure[] = {
+		a_write, buffer
+	};
+	cairo_surface_write_to_png_stream(v_value, f_write_stream, closure);
+}
+
+cairo_status_t t_image_surface::f_read_stream(void* a_closure, unsigned char* a_data, unsigned int a_length)
+{
+	t_object* read = static_cast<t_object**>(a_closure)[0];
+	t_object* buffer = static_cast<t_object**>(a_closure)[1];
+	t_bytes& bytes = f_as<t_bytes&>(buffer);
+	t_scoped zero = f_global()->f_as(0);
+	try {
+		while (a_length > 0) {
+			size_t m = std::min(bytes.f_size(), a_length);
+			t_transfer p = read->f_call(buffer, zero, f_global()->f_as(m));
+			f_check<size_t>(p, L"result of read");
+			size_t n = f_as<size_t>(p);
+			if (n <= 0 || n > m) return CAIRO_STATUS_READ_ERROR;
+			a_data = std::copy(&bytes[0], &bytes[n], a_data);
+			a_length -= n;
+		}
+		return CAIRO_STATUS_SUCCESS;
+	} catch (...) {
+		return CAIRO_STATUS_READ_ERROR;
+	}
+}
+
 void t_image_surface::f_destroy()
 {
 	v_data = 0;
 	t_surface::f_destroy();
+}
+
+t_transfer t_image_surface::f_create_from_png_stream(t_object* a_read)
+{
+	t_scoped buffer = t_bytes::f_instantiate(1024);
+	t_object* closure[] = {
+		a_read, buffer
+	};
+	return f_transfer(new t_image_surface(cairo_image_surface_create_from_png_stream(f_read_stream, closure)));
 }
 
 }
@@ -55,6 +115,7 @@ void t_type_of<t_surface>::f_define(t_extension* a_extension)
 		(L"show_page", t_member<void (t_surface::*)(), &t_surface::f_show_page>())
 		(L"has_show_text_glyphs", t_member<bool (t_surface::*)() const, &t_surface::f_has_show_text_glyphs>())
 		(L"write_to_png", t_member<void (t_surface::*)(const std::wstring&) const, &t_surface::f_write_to_png>())
+		(L"write_to_png_stream", t_member<void (t_surface::*)(t_object*) const, &t_surface::f_write_to_png_stream>())
 	;
 }
 
@@ -117,7 +178,8 @@ void t_type_of<t_image_surface>::f_define(t_extension* a_extension)
 		(L"get_width", t_member<int (t_image_surface::*)() const, &t_image_surface::f_get_width>())
 		(L"get_height", t_member<int (t_image_surface::*)() const, &t_image_surface::f_get_height>())
 		(L"get_stride", t_member<int (t_image_surface::*)() const, &t_image_surface::f_get_stride>())
-		(L"create_from_png", t_static<t_transfer (*)(const std::wstring&), t_image_surface::f_construct>())
+		(L"create_from_png", t_static<t_transfer (*)(const std::wstring&), t_image_surface::f_create_from_png>())
+		(L"create_from_png_stream", t_static<t_transfer (*)(t_object*), t_image_surface::f_create_from_png_stream>())
 	;
 }
 

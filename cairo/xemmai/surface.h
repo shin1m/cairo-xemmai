@@ -29,6 +29,7 @@ class t_surface : public t_proxy_of<t_surface, cairo_surface_t>
 	{
 		cairo_surface_destroy(a_value);
 	}
+	static cairo_status_t f_write_stream(void* a_closure, const unsigned char* a_data, unsigned int a_length);
 
 	t_surface(cairo_surface_t* a_value) : t_base(t_session::f_instance()->f_extension()->f_type<t_surface>(), a_value)
 	{
@@ -127,11 +128,14 @@ public:
 	{
 		cairo_surface_write_to_png(v_value, f_convert(a_path).c_str());
 	}
+	void f_write_to_png_stream(t_object* a_write) const;
 };
 
 class t_image_surface : public t_surface
 {
 	friend class t_surface;
+
+	static cairo_status_t f_read_stream(void* a_closure, unsigned char* a_data, unsigned int a_length);
 
 	t_scoped v_data;
 
@@ -154,10 +158,11 @@ public:
 		t_bytes& data = f_as<t_bytes&>(a_data);
 		return f_transfer(new t_image_surface(cairo_image_surface_create_for_data(&data[0], a_format, a_width, a_height, a_stride), a_data));
 	}
-	static t_transfer f_construct(const std::wstring& a_path)
+	static t_transfer f_create_from_png(const std::wstring& a_path)
 	{
 		return f_transfer(new t_image_surface(cairo_image_surface_create_from_png(f_convert(a_path).c_str())));
 	}
+	static t_transfer f_create_from_png_stream(t_object* a_read);
 
 	t_object* f_get_data()
 	{
