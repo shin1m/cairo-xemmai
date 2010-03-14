@@ -50,20 +50,43 @@ void t_surface::f_write_to_png_stream(t_object* a_write) const
 	cairo_surface_write_to_png_stream(v_value, f_write_stream, closure);
 }
 
+void t_image_source::f_read_buffer()
+{
+	f_rewind();
+	f_fill();
+	if (v_head >= v_tail) t_throwable::f_throw(L"unexpected end of stream.");
+}
+
+void t_image_source::f_prefetch_buffer()
+{
+	t_bytes& bytes = f_as<t_bytes&>(v_buffer);
+	if (v_tail >= &bytes[bytes.f_size()]) t_throwable::f_throw(L"too match prefetching.");
+	f_fill();
+	if (v_head >= v_tail) t_throwable::f_throw(L"unexpected end of stream.");
+}
+
+size_t t_file_source::f_read(size_t a_offset)
+{
+	t_bytes& bytes = f_as<t_bytes&>(v_buffer);
+	return ::xemmai::io::t_file::f_read(bytes, a_offset, bytes.f_size() - a_offset);
+}
+
+size_t t_stream_source::f_read(size_t a_offset)
+{
+	t_bytes& bytes = f_as<t_bytes&>(v_buffer);
+	t_transfer p = v_read->f_call(v_buffer, f_global()->f_as(a_offset), f_global()->f_as(bytes.f_size() - a_offset));
+	f_check<size_t>(p, L"result of read");
+	return f_as<size_t>(p);
+}
+
 cairo_status_t t_image_surface::f_read_stream(void* a_closure, unsigned char* a_data, unsigned int a_length)
 {
-	t_object* read = static_cast<t_object**>(a_closure)[0];
-	t_object* buffer = static_cast<t_object**>(a_closure)[1];
-	t_bytes& bytes = f_as<t_bytes&>(buffer);
-	t_scoped zero = f_global()->f_as(0);
+	t_image_source& source = *static_cast<t_image_source*>(a_closure);
 	try {
 		while (a_length > 0) {
-			size_t m = std::min(bytes.f_size(), a_length);
-			t_transfer p = read->f_call(buffer, zero, f_global()->f_as(m));
-			f_check<size_t>(p, L"result of read");
-			size_t n = f_as<size_t>(p);
-			if (n <= 0 || n > m) return CAIRO_STATUS_READ_ERROR;
-			a_data = std::copy(&bytes[0], &bytes[n], a_data);
+			size_t n = source.f_read_bytes(a_data, a_length);
+			if (n < 0) return CAIRO_STATUS_READ_ERROR;
+			a_data += n;
 			a_length -= n;
 		}
 		return CAIRO_STATUS_SUCCESS;
@@ -78,13 +101,55 @@ void t_image_surface::f_destroy()
 	t_surface::f_destroy();
 }
 
+t_transfer t_image_surface::f_create_from_png_source(t_image_source& a_source)
+{
+	return f_transfer(new t_image_surface(cairo_image_surface_create_from_png_stream(f_read_stream, &a_source)));
+}
+
 t_transfer t_image_surface::f_create_from_png_stream(t_object* a_read)
 {
-	t_scoped buffer = t_bytes::f_instantiate(1024);
-	t_object* closure[] = {
-		a_read, buffer
-	};
-	return f_transfer(new t_image_surface(cairo_image_surface_create_from_png_stream(f_read_stream, closure)));
+	t_stream_source source(a_read);
+	return f_create_from_png_source(source);
+}
+
+t_transfer t_image_surface::f_create_from_source(t_image_source& a_source)
+{
+	switch (a_source.f_prefetch_byte()) {
+	case 'G':
+		if (a_source.f_prefetch_byte() == 'I')
+		if (a_source.f_prefetch_byte() == 'F')
+		if (a_source.f_prefetch_byte() == '8')
+			switch (a_source.f_prefetch_byte()) {
+			case '7':
+			case '9':
+				if (a_source.f_prefetch_byte() == 'a') {
+					a_source.f_rewind();
+					return f_create_from_gif_source(a_source);
+				}
+				break;
+			}
+		break;
+	case 0x89:
+		if (a_source.f_prefetch_byte() == 'P')
+		if (a_source.f_prefetch_byte() == 'N')
+		if (a_source.f_prefetch_byte() == 'G')
+		if (a_source.f_prefetch_byte() == '\r')
+		if (a_source.f_prefetch_byte() == '\n')
+		if (a_source.f_prefetch_byte() == 0x1a)
+		if (a_source.f_prefetch_byte() == '\n') {
+			a_source.f_rewind();
+			return f_create_from_png_source(a_source);
+		}
+		break;
+	case 0xff:
+		if (a_source.f_prefetch_byte() == 0xd8) {
+			a_source.f_rewind();
+			return f_create_from_jpeg_source(a_source);
+		}
+		break;
+	}
+	t_throwable::f_throw(L"unknown source.");
+	return 0;
 }
 
 }
@@ -180,6 +245,14 @@ void t_type_of<t_image_surface>::f_define(t_extension* a_extension)
 		(L"get_stride", t_member<int (t_image_surface::*)() const, &t_image_surface::f_get_stride>())
 		(L"create_from_png", t_static<t_transfer (*)(const std::wstring&), t_image_surface::f_create_from_png>())
 		(L"create_from_png_stream", t_static<t_transfer (*)(t_object*), t_image_surface::f_create_from_png_stream>())
+		(L"create_from_jpeg", t_static<t_transfer (*)(const std::wstring&), t_image_surface::f_create_from_jpeg>())
+		(L"create_from_jpeg_stream", t_static<t_transfer (*)(t_object*), t_image_surface::f_create_from_jpeg_stream>())
+		(L"create_from_gif", t_static<t_transfer (*)(const std::wstring&), t_image_surface::f_create_from_gif>())
+		(L"create_from_gif_stream", t_static<t_transfer (*)(t_object*), t_image_surface::f_create_from_gif_stream>())
+		(L"create_all_from_gif", t_static<t_transfer (*)(const std::wstring&), t_image_surface::f_create_all_from_gif>())
+		(L"create_all_from_gif_stream", t_static<t_transfer (*)(t_object*), t_image_surface::f_create_all_from_gif_stream>())
+		(L"create_from_file", t_static<t_transfer (*)(const std::wstring&), t_image_surface::f_create_from_file>())
+		(L"create_from_stream", t_static<t_transfer (*)(t_object*), t_image_surface::f_create_from_stream>())
 	;
 }
 

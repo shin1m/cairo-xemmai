@@ -3,6 +3,8 @@
 
 #include "font_options.h"
 
+#include <xemmai/io/file.h>
+
 namespace cairo
 {
 
@@ -131,6 +133,86 @@ public:
 	void f_write_to_png_stream(t_object* a_write) const;
 };
 
+class t_image_source
+{
+protected:
+	t_scoped v_buffer;
+	unsigned char* v_head;
+	unsigned char* v_tail;
+
+	virtual size_t f_read(size_t a_offset) = 0;
+	void f_read_buffer();
+	void f_prefetch_buffer();
+
+public:
+	t_image_source() : v_buffer(t_bytes::f_instantiate(1024))
+	{
+		f_rewind();
+		v_tail = v_head;
+	}
+	unsigned char* f_head()
+	{
+		return v_head;
+	}
+	unsigned char* f_tail()
+	{
+		return v_tail;
+	}
+	void f_rewind()
+	{
+		v_head = &f_as<t_bytes&>(v_buffer)[0];
+	}
+	void f_fill()
+	{
+		v_tail = v_head + f_read(v_head - &f_as<t_bytes&>(v_buffer)[0]);
+	}
+	unsigned char f_read_byte()
+	{
+		if (v_head >= v_tail) f_read_buffer();
+		return *v_head++;
+	}
+	unsigned char f_prefetch_byte()
+	{
+		if (v_head >= v_tail) f_prefetch_buffer();
+		return *v_head++;
+	}
+	size_t f_read_bytes(unsigned char* a_bytes, size_t a_size)
+	{
+		if (v_head >= v_tail) {
+			f_rewind();
+			f_fill();
+		}
+		size_t n = std::min(static_cast<size_t>(v_tail - v_head), a_size);
+		std::copy(v_head, v_head + n, a_bytes);
+		v_head += n;
+		return n;
+	}
+};
+
+class t_file_source : public t_image_source, public ::xemmai::io::t_file
+{
+protected:
+	virtual size_t f_read(size_t a_offset);
+
+public:
+	t_file_source(const std::wstring& a_path) : ::xemmai::io::t_file(a_path, "rb")
+	{
+	}
+};
+
+class t_stream_source : public t_image_source
+{
+	t_object* v_read;
+
+protected:
+	virtual size_t f_read(size_t a_offset);
+
+public:
+	t_stream_source(t_object* a_read) : v_read(a_read)
+	{
+	}
+};
+
 class t_image_surface : public t_surface
 {
 	friend class t_surface;
@@ -156,13 +238,34 @@ public:
 	{
 		f_check<t_bytes>(a_data, L"data");
 		t_bytes& data = f_as<t_bytes&>(a_data);
+		if (a_width < 0 || a_height < 0 || a_stride < 0 || data.f_size() < a_stride * a_height) t_throwable::f_throw(L"invalid arguments.");
 		return f_transfer(new t_image_surface(cairo_image_surface_create_for_data(&data[0], a_format, a_width, a_height, a_stride), a_data));
 	}
+	static t_transfer f_create_from_png_source(t_image_source& a_source);
 	static t_transfer f_create_from_png(const std::wstring& a_path)
 	{
 		return f_transfer(new t_image_surface(cairo_image_surface_create_from_png(f_convert(a_path).c_str())));
 	}
 	static t_transfer f_create_from_png_stream(t_object* a_read);
+	static t_transfer f_create_from_jpeg_source(t_image_source& a_source);
+	static t_transfer f_create_from_jpeg(const std::wstring& a_path);
+	static t_transfer f_create_from_jpeg_stream(t_object* a_read);
+	static t_transfer f_create_from_gif_source(t_image_source& a_source);
+	static t_transfer f_create_from_gif(const std::wstring& a_path);
+	static t_transfer f_create_from_gif_stream(t_object* a_read);
+	static t_transfer f_create_all_from_gif(const std::wstring& a_path);
+	static t_transfer f_create_all_from_gif_stream(t_object* a_read);
+	static t_transfer f_create_from_source(t_image_source& a_source);
+	static t_transfer f_create_from_file(const std::wstring& a_path)
+	{
+		t_file_source source(a_path);
+		return f_create_from_source(source);
+	}
+	static t_transfer f_create_from_stream(t_object* a_read)
+	{
+		t_stream_source source(a_read);
+		return f_create_from_source(source);
+	}
 
 	t_object* f_get_data()
 	{

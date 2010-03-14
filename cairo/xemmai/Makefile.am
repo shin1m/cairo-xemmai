@@ -3,7 +3,7 @@ xemmaidir = $(XEMMAI_MODULE_PATH)
 xemmai_LTLIBRARIES = cairo.la
 AM_CPPFLAGS = $(CAIRO_CFLAGS) $(XEMMAI_CFLAGS)
 AM_CXXFLAGS =
-AM_LDFLAGS = -module -avoid-version
+AM_LDFLAGS = -module -avoid-version -ljpeg
 if DEBUG
 AM_CXXFLAGS += -g
 else
@@ -23,6 +23,8 @@ cairo_la_SOURCES = \
 	cast.h \
 	surface.h \
 	surface.cc \
+	jpeg.cc \
+	gif.cc \
 	pattern.h \
 	pattern.cc \
 	font_face.h \
