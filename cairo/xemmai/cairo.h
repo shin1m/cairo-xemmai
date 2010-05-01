@@ -138,6 +138,18 @@ class t_proxy_of : public t_proxy
 protected:
 	typedef t_proxy_of t_base;
 
+	template<typename T_type>
+	static t_transfer f_construct_shared(T_value* a_value)
+	{
+		T* p = f_from(a_value);
+		if (p) {
+			if (p->v_n > 0) T::f_unreference(a_value);
+			return f_transfer(p);
+		} else {
+			return f_transfer(new T_type(a_value));
+		}
+	}
+
 	T_value* v_value;
 
 	t_proxy_of(t_object* a_class, T_value* a_value) : t_proxy(a_class), v_value(a_value)

@@ -62,6 +62,7 @@ public:
 
 class t_toy_font_face : public t_font_face
 {
+	friend class t_proxy_of<t_font_face, cairo_font_face_t>;
 	friend class t_font_face;
 
 	t_toy_font_face(cairo_font_face_t* a_value) : t_font_face(t_session::f_instance()->f_extension()->f_type<t_toy_font_face>(), a_value)
@@ -71,7 +72,7 @@ class t_toy_font_face : public t_font_face
 public:
 	static t_transfer f_construct(t_object* a_class, const std::wstring& a_family, cairo_font_slant_t a_slant, cairo_font_weight_t a_weight)
 	{
-		return f_transfer(new t_toy_font_face(cairo_toy_font_face_create(f_convert(a_family).c_str(), a_slant, a_weight)));
+		return f_construct_shared<t_toy_font_face>(cairo_toy_font_face_create(f_convert(a_family).c_str(), a_slant, a_weight));
 	}
 
 	std::wstring f_get_family() const

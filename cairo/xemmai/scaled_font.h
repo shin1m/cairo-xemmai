@@ -39,7 +39,7 @@ class t_scaled_font : public t_proxy_of<t_scaled_font, cairo_scaled_font_t>
 public:
 	static t_transfer f_construct(t_object* a_class, t_font_face& a_font_face, const t_matrix& a_font_matrix, const t_matrix& a_ctm, const t_font_options& a_options)
 	{
-		return f_transfer(new t_scaled_font(cairo_scaled_font_create(a_font_face, &a_font_matrix, &a_ctm, t_font_options::f_to(&a_options))));
+		return f_construct_shared<t_scaled_font>(cairo_scaled_font_create(a_font_face, &a_font_matrix, &a_ctm, t_font_options::f_to(&a_options)));
 	}
 	static t_scaled_font* f_wrap(cairo_scaled_font_t* a_value)
 	{
