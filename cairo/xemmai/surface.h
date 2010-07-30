@@ -130,7 +130,7 @@ public:
 	{
 		cairo_surface_write_to_png(v_value, f_convert(a_path).c_str());
 	}
-	void f_write_to_png_stream(t_object* a_write) const;
+	void f_write_to_png_stream(const t_value& a_write) const;
 };
 
 class t_image_source
@@ -246,28 +246,28 @@ public:
 	{
 		return f_transfer(new t_image_surface(cairo_image_surface_create_from_png(f_convert(a_path).c_str())));
 	}
-	static t_transfer f_create_from_png_stream(t_object* a_read);
+	static t_transfer f_create_from_png_stream(const t_value& a_read);
 	static t_transfer f_create_from_jpeg_source(t_image_source& a_source);
 	static t_transfer f_create_from_jpeg(const std::wstring& a_path);
-	static t_transfer f_create_from_jpeg_stream(t_object* a_read);
+	static t_transfer f_create_from_jpeg_stream(const t_value& a_read);
 	static t_transfer f_create_from_gif_source(t_image_source& a_source);
 	static t_transfer f_create_from_gif(const std::wstring& a_path);
-	static t_transfer f_create_from_gif_stream(t_object* a_read);
+	static t_transfer f_create_from_gif_stream(const t_value& a_read);
 	static t_transfer f_create_all_from_gif(const std::wstring& a_path);
-	static t_transfer f_create_all_from_gif_stream(t_object* a_read);
+	static t_transfer f_create_all_from_gif_stream(const t_value& a_read);
 	static t_transfer f_create_from_source(t_image_source& a_source);
 	static t_transfer f_create_from_file(const std::wstring& a_path)
 	{
 		t_file_source source(a_path);
 		return f_create_from_source(source);
 	}
-	static t_transfer f_create_from_stream(t_object* a_read)
+	static t_transfer f_create_from_stream(const t_value& a_read)
 	{
-		t_stream_source source(a_read);
+		t_stream_source source(a_read.f_object());
 		return f_create_from_source(source);
 	}
 
-	t_object* f_get_data()
+	t_transfer f_get_data() const
 	{
 		return v_data;
 	}

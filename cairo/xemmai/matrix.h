@@ -94,7 +94,7 @@ struct t_type_of<t_matrix> : t_type
 	static t_transfer f_transfer(T_extension* a_extension, T a_value)
 	{
 		t_transfer object = t_object::f_allocate(a_extension->template f_type<typename t_fundamental<T>::t_type>());
-		object->v_pointer = new t_matrix(a_value);
+		object.f_pointer__(new t_matrix(a_value));
 		return object;
 	}
 	static void f_define(t_extension* a_extension);

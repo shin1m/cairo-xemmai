@@ -95,10 +95,10 @@ t_proxy::~t_proxy()
 namespace
 {
 
-void f_main(t_extension* a_extension, t_object* a_callable)
+void f_main(t_extension* a_extension, const t_value& a_callable)
 {
 	t_session session(a_extension);
-	a_callable->f_call();
+	a_callable();
 }
 
 }
@@ -137,7 +137,7 @@ t_extension::t_extension(t_object* a_module) : ::xemmai::t_extension(a_module)
 	t_type_of<cairo_line_cap_t>::f_define(this);
 	t_type_of<cairo_line_join_t>::f_define(this);
 	t_type_of<cairo_operator_t>::f_define(this);
-	f_define<void (*)(t_extension*, t_object*), f_main>(this, L"main");
+	f_define<void (*)(t_extension*, const t_value&), f_main>(this, L"main");
 }
 
 void t_extension::f_scan(t_scan a_scan)

@@ -180,9 +180,9 @@ t_transfer t_image_surface::f_create_from_jpeg(const std::wstring& a_path)
 	return source ? f_create_from_jpeg_source(source) : 0;
 }
 
-t_transfer t_image_surface::f_create_from_jpeg_stream(t_object* a_read)
+t_transfer t_image_surface::f_create_from_jpeg_stream(const t_value& a_read)
 {
-	t_stream_source source(a_read);
+	t_stream_source source(a_read.f_object());
 	return f_create_from_jpeg_source(source);
 }
 

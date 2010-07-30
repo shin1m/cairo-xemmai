@@ -53,7 +53,7 @@ t_type* t_type_of<t_pattern>::f_derive(t_object* a_this)
 
 void t_type_of<t_pattern>::f_finalize(t_object* a_this)
 {
-	t_pattern* p = static_cast<t_pattern*>(a_this->v_pointer);
+	t_pattern* p = static_cast<t_pattern*>(a_this->f_pointer());
 	assert(!*p);
 	delete p;
 }

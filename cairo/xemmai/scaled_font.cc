@@ -31,7 +31,7 @@ t_type* t_type_of<t_scaled_font>::f_derive(t_object* a_this)
 
 void t_type_of<t_scaled_font>::f_finalize(t_object* a_this)
 {
-	t_scaled_font* p = static_cast<t_scaled_font*>(a_this->v_pointer);
+	t_scaled_font* p = static_cast<t_scaled_font*>(a_this->f_pointer());
 	assert(!*p);
 	delete p;
 }

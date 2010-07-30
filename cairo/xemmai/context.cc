@@ -144,7 +144,7 @@ t_type* t_type_of<t_context>::f_derive(t_object* a_this)
 
 void t_type_of<t_context>::f_finalize(t_object* a_this)
 {
-	t_context* p = static_cast<t_context*>(a_this->v_pointer);
+	t_context* p = static_cast<t_context*>(a_this->f_pointer());
 	assert(!*p);
 	delete p;
 }

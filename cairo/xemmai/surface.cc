@@ -41,11 +41,11 @@ t_surface* t_surface::f_wrap(cairo_surface_t* a_value)
 	}
 }
 
-void t_surface::f_write_to_png_stream(t_object* a_write) const
+void t_surface::f_write_to_png_stream(const t_value& a_write) const
 {
 	t_scoped buffer = t_bytes::f_instantiate(1024);
 	t_object* closure[] = {
-		a_write, buffer
+		a_write.f_object(), buffer.f_object()
 	};
 	cairo_surface_write_to_png_stream(v_value, f_write_stream, closure);
 }
@@ -106,9 +106,9 @@ t_transfer t_image_surface::f_create_from_png_source(t_image_source& a_source)
 	return f_transfer(new t_image_surface(cairo_image_surface_create_from_png_stream(f_read_stream, &a_source)));
 }
 
-t_transfer t_image_surface::f_create_from_png_stream(t_object* a_read)
+t_transfer t_image_surface::f_create_from_png_stream(const t_value& a_read)
 {
-	t_stream_source source(a_read);
+	t_stream_source source(a_read.f_object());
 	return f_create_from_png_source(source);
 }
 
@@ -180,7 +180,7 @@ void t_type_of<t_surface>::f_define(t_extension* a_extension)
 		(L"show_page", t_member<void (t_surface::*)(), &t_surface::f_show_page>())
 		(L"has_show_text_glyphs", t_member<bool (t_surface::*)() const, &t_surface::f_has_show_text_glyphs>())
 		(L"write_to_png", t_member<void (t_surface::*)(const std::wstring&) const, &t_surface::f_write_to_png>())
-		(L"write_to_png_stream", t_member<void (t_surface::*)(t_object*) const, &t_surface::f_write_to_png_stream>())
+		(L"write_to_png_stream", t_member<void (t_surface::*)(const t_value&) const, &t_surface::f_write_to_png_stream>())
 	;
 }
 
@@ -191,7 +191,7 @@ t_type* t_type_of<t_surface>::f_derive(t_object* a_this)
 
 void t_type_of<t_surface>::f_finalize(t_object* a_this)
 {
-	t_surface* p = static_cast<t_surface*>(a_this->v_pointer);
+	t_surface* p = static_cast<t_surface*>(a_this->f_pointer());
 	assert(!*p);
 	delete p;
 }
@@ -238,21 +238,21 @@ void t_type_of<cairo_surface_type_t>::f_define(t_extension* a_extension)
 void t_type_of<t_image_surface>::f_define(t_extension* a_extension)
 {
 	t_define<t_image_surface, t_surface>(a_extension, L"ImageSurface")
-		(L"get_data", t_member<t_object* (t_image_surface::*)(), &t_image_surface::f_get_data>())
+		(L"get_data", t_member<t_transfer (t_image_surface::*)() const, &t_image_surface::f_get_data>())
 		(L"get_format", t_member<cairo_format_t (t_image_surface::*)() const, &t_image_surface::f_get_format>())
 		(L"get_width", t_member<int (t_image_surface::*)() const, &t_image_surface::f_get_width>())
 		(L"get_height", t_member<int (t_image_surface::*)() const, &t_image_surface::f_get_height>())
 		(L"get_stride", t_member<int (t_image_surface::*)() const, &t_image_surface::f_get_stride>())
 		(L"create_from_png", t_static<t_transfer (*)(const std::wstring&), t_image_surface::f_create_from_png>())
-		(L"create_from_png_stream", t_static<t_transfer (*)(t_object*), t_image_surface::f_create_from_png_stream>())
+		(L"create_from_png_stream", t_static<t_transfer (*)(const t_value&), t_image_surface::f_create_from_png_stream>())
 		(L"create_from_jpeg", t_static<t_transfer (*)(const std::wstring&), t_image_surface::f_create_from_jpeg>())
-		(L"create_from_jpeg_stream", t_static<t_transfer (*)(t_object*), t_image_surface::f_create_from_jpeg_stream>())
+		(L"create_from_jpeg_stream", t_static<t_transfer (*)(const t_value&), t_image_surface::f_create_from_jpeg_stream>())
 		(L"create_from_gif", t_static<t_transfer (*)(const std::wstring&), t_image_surface::f_create_from_gif>())
-		(L"create_from_gif_stream", t_static<t_transfer (*)(t_object*), t_image_surface::f_create_from_gif_stream>())
+		(L"create_from_gif_stream", t_static<t_transfer (*)(const t_value&), t_image_surface::f_create_from_gif_stream>())
 		(L"create_all_from_gif", t_static<t_transfer (*)(const std::wstring&), t_image_surface::f_create_all_from_gif>())
-		(L"create_all_from_gif_stream", t_static<t_transfer (*)(t_object*), t_image_surface::f_create_all_from_gif_stream>())
+		(L"create_all_from_gif_stream", t_static<t_transfer (*)(const t_value&), t_image_surface::f_create_all_from_gif_stream>())
 		(L"create_from_file", t_static<t_transfer (*)(const std::wstring&), t_image_surface::f_create_from_file>())
-		(L"create_from_stream", t_static<t_transfer (*)(t_object*), t_image_surface::f_create_from_stream>())
+		(L"create_from_stream", t_static<t_transfer (*)(const t_value&), t_image_surface::f_create_from_stream>())
 	;
 }
 

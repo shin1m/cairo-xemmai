@@ -62,7 +62,7 @@ t_type* t_type_of<t_font_face>::f_derive(t_object* a_this)
 
 void t_type_of<t_font_face>::f_finalize(t_object* a_this)
 {
-	t_font_face* p = static_cast<t_font_face*>(a_this->v_pointer);
+	t_font_face* p = static_cast<t_font_face*>(a_this->f_pointer());
 	assert(!*p);
 	delete p;
 }

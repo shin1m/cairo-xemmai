@@ -106,13 +106,13 @@ struct t_type_of<t_font_options> : t_type
 	static t_transfer f_construct(t_object* a_class)
 	{
 		t_transfer object = t_object::f_allocate(a_class);
-		object->v_pointer = t_font_options::f_create();
+		object.f_pointer__(t_font_options::f_create());
 		return object;
 	}
 	static t_transfer f_construct(t_object* a_class, const t_font_options* a_original)
 	{
 		t_transfer object = t_object::f_allocate(a_class);
-		object->v_pointer = t_font_options::f_copy(a_original);
+		object.f_pointer__(t_font_options::f_copy(a_original));
 		return object;
 	}
 	static t_transfer f_construct()
