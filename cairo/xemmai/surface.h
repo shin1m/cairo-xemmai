@@ -263,7 +263,7 @@ public:
 	}
 	static t_transfer f_create_from_stream(const t_value& a_read)
 	{
-		t_stream_source source(a_read.f_object());
+		t_stream_source source(a_read);
 		return f_create_from_source(source);
 	}
 

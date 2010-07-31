@@ -128,7 +128,7 @@ public:
 	}
 	t_object* f_object() const
 	{
-		return v_object.f_object();
+		return v_object;
 	}
 };
 
@@ -457,193 +457,193 @@ inline const t_extension* t_extension::f_extension<t_extension>() const
 template<>
 inline t_object* t_extension::f_type<t_matrix>() const
 {
-	return v_type_matrix.f_object();
+	return v_type_matrix;
 }
 
 template<>
 inline t_object* t_extension::f_type<cairo_status_t>() const
 {
-	return v_type_status.f_object();
+	return v_type_status;
 }
 
 template<>
 inline t_object* t_extension::f_type<t_font_options>() const
 {
-	return v_type_font_options.f_object();
+	return v_type_font_options;
 }
 
 template<>
 inline t_object* t_extension::f_type<cairo_antialias_t>() const
 {
-	return v_type_antialias.f_object();
+	return v_type_antialias;
 }
 
 template<>
 inline t_object* t_extension::f_type<cairo_subpixel_order_t>() const
 {
-	return v_type_subpixel_order.f_object();
+	return v_type_subpixel_order;
 }
 
 template<>
 inline t_object* t_extension::f_type<cairo_hint_style_t>() const
 {
-	return v_type_hint_style.f_object();
+	return v_type_hint_style;
 }
 
 template<>
 inline t_object* t_extension::f_type<cairo_hint_metrics_t>() const
 {
-	return v_type_hint_metrics.f_object();
+	return v_type_hint_metrics;
 }
 
 template<>
 inline t_object* t_extension::f_type<t_surface>() const
 {
-	return v_type_surface.f_object();
+	return v_type_surface;
 }
 
 template<>
 inline t_object* t_extension::f_type<cairo_content_t>() const
 {
-	return v_type_content.f_object();
+	return v_type_content;
 }
 
 template<>
 inline t_object* t_extension::f_type<cairo_surface_type_t>() const
 {
-	return v_type_surface_type.f_object();
+	return v_type_surface_type;
 }
 
 template<>
 inline t_object* t_extension::f_type<t_image_surface>() const
 {
-	return v_type_image_surface.f_object();
+	return v_type_image_surface;
 }
 
 template<>
 inline t_object* t_extension::f_type<cairo_format_t>() const
 {
-	return v_type_format.f_object();
+	return v_type_format;
 }
 
 template<>
 inline t_object* t_extension::f_type<t_pattern>() const
 {
-	return v_type_pattern.f_object();
+	return v_type_pattern;
 }
 
 template<>
 inline t_object* t_extension::f_type<t_solid_pattern>() const
 {
-	return v_type_solid_pattern.f_object();
+	return v_type_solid_pattern;
 }
 
 template<>
 inline t_object* t_extension::f_type<t_surface_pattern>() const
 {
-	return v_type_surface_pattern.f_object();
+	return v_type_surface_pattern;
 }
 
 template<>
 inline t_object* t_extension::f_type<t_gradient>() const
 {
-	return v_type_gradient.f_object();
+	return v_type_gradient;
 }
 
 template<>
 inline t_object* t_extension::f_type<t_linear_gradient>() const
 {
-	return v_type_linear_gradient.f_object();
+	return v_type_linear_gradient;
 }
 
 template<>
 inline t_object* t_extension::f_type<t_radial_gradient>() const
 {
-	return v_type_radial_gradient.f_object();
+	return v_type_radial_gradient;
 }
 
 template<>
 inline t_object* t_extension::f_type<cairo_extend_t>() const
 {
-	return v_type_extend.f_object();
+	return v_type_extend;
 }
 
 template<>
 inline t_object* t_extension::f_type<cairo_filter_t>() const
 {
-	return v_type_filter.f_object();
+	return v_type_filter;
 }
 
 template<>
 inline t_object* t_extension::f_type<cairo_pattern_type_t>() const
 {
-	return v_type_pattern_type.f_object();
+	return v_type_pattern_type;
 }
 
 template<>
 inline t_object* t_extension::f_type<t_font_face>() const
 {
-	return v_type_font_face.f_object();
+	return v_type_font_face;
 }
 
 template<>
 inline t_object* t_extension::f_type<cairo_font_type_t>() const
 {
-	return v_type_font_type.f_object();
+	return v_type_font_type;
 }
 
 template<>
 inline t_object* t_extension::f_type<cairo_font_slant_t>() const
 {
-	return v_type_font_slant.f_object();
+	return v_type_font_slant;
 }
 
 template<>
 inline t_object* t_extension::f_type<cairo_font_weight_t>() const
 {
-	return v_type_font_weight.f_object();
+	return v_type_font_weight;
 }
 
 template<>
 inline t_object* t_extension::f_type<t_toy_font_face>() const
 {
-	return v_type_toy_font_face.f_object();
+	return v_type_toy_font_face;
 }
 
 template<>
 inline t_object* t_extension::f_type<t_scaled_font>() const
 {
-	return v_type_scaled_font.f_object();
+	return v_type_scaled_font;
 }
 
 template<>
 inline t_object* t_extension::f_type<t_context>() const
 {
-	return v_type_context.f_object();
+	return v_type_context;
 }
 
 template<>
 inline t_object* t_extension::f_type<cairo_fill_rule_t>() const
 {
-	return v_type_fill_rule.f_object();
+	return v_type_fill_rule;
 }
 
 template<>
 inline t_object* t_extension::f_type<cairo_line_cap_t>() const
 {
-	return v_type_line_cap.f_object();
+	return v_type_line_cap;
 }
 
 template<>
 inline t_object* t_extension::f_type<cairo_line_join_t>() const
 {
-	return v_type_line_join.f_object();
+	return v_type_line_join;
 }
 
 template<>
 inline t_object* t_extension::f_type<cairo_operator_t>() const
 {
-	return v_type_operator.f_object();
+	return v_type_operator;
 }
 
 }

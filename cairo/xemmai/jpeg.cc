@@ -182,7 +182,7 @@ t_transfer t_image_surface::f_create_from_jpeg(const std::wstring& a_path)
 
 t_transfer t_image_surface::f_create_from_jpeg_stream(const t_value& a_read)
 {
-	t_stream_source source(a_read.f_object());
+	t_stream_source source(a_read);
 	return f_create_from_jpeg_source(source);
 }
 

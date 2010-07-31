@@ -45,7 +45,7 @@ void t_surface::f_write_to_png_stream(const t_value& a_write) const
 {
 	t_scoped buffer = t_bytes::f_instantiate(1024);
 	t_object* closure[] = {
-		a_write.f_object(), buffer.f_object()
+		a_write, buffer
 	};
 	cairo_surface_write_to_png_stream(v_value, f_write_stream, closure);
 }
@@ -108,7 +108,7 @@ t_transfer t_image_surface::f_create_from_png_source(t_image_source& a_source)
 
 t_transfer t_image_surface::f_create_from_png_stream(const t_value& a_read)
 {
-	t_stream_source source(a_read.f_object());
+	t_stream_source source(a_read);
 	return f_create_from_png_source(source);
 }
 

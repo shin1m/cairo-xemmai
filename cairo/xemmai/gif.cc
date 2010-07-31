@@ -228,19 +228,19 @@ t_transfer t_gif_decoder::f_read_image()
 	}
 	f_skip_blocks();
 	t_transfer p = t_image_surface::f_construct(0, data, CAIRO_FORMAT_ARGB32, width, height, stride);
-	p.f_put(t_symbol::f_instantiate(L"left").f_object(), f_global()->f_as(left));
-	p.f_put(t_symbol::f_instantiate(L"top").f_object(), f_global()->f_as(top));
-	p.f_put(t_symbol::f_instantiate(L"disposal").f_object(), f_global()->f_as(disposal));
-	p.f_put(t_symbol::f_instantiate(L"user_input").f_object(), f_global()->f_as(user_input));
-	p.f_put(t_symbol::f_instantiate(L"delay").f_object(), f_global()->f_as(delay));
+	p.f_put(t_symbol::f_instantiate(L"left"), f_global()->f_as(left));
+	p.f_put(t_symbol::f_instantiate(L"top"), f_global()->f_as(top));
+	p.f_put(t_symbol::f_instantiate(L"disposal"), f_global()->f_as(disposal));
+	p.f_put(t_symbol::f_instantiate(L"user_input"), f_global()->f_as(user_input));
+	p.f_put(t_symbol::f_instantiate(L"delay"), f_global()->f_as(delay));
 	return p;
 }
 
 t_transfer t_gif_decoder::f_read_images()
 {
 	t_transfer p = t_array::f_instantiate();
-	p.f_put(t_symbol::f_instantiate(L"width").f_object(), f_global()->f_as(v_width));
-	p.f_put(t_symbol::f_instantiate(L"height").f_object(), f_global()->f_as(v_height));
+	p.f_put(t_symbol::f_instantiate(L"width"), f_global()->f_as(v_width));
+	p.f_put(t_symbol::f_instantiate(L"height"), f_global()->f_as(v_height));
 	{
 		t_transfer q = t_array::f_instantiate();
 		t_array& array = f_as<t_array&>(q);
@@ -248,13 +248,13 @@ t_transfer t_gif_decoder::f_read_images()
 		array.f_push(f_global()->f_as((v_background >> 8 & 0xff) / 255.0));
 		array.f_push(f_global()->f_as((v_background & 0xff) / 255.0));
 		array.f_push(f_global()->f_as((v_background >> 24 & 0xff) / 255.0));
-		p.f_put(t_symbol::f_instantiate(L"background").f_object(), q);
+		p.f_put(t_symbol::f_instantiate(L"background"), q);
 	}
-	p.f_put(t_symbol::f_instantiate(L"aspect").f_object(), f_global()->f_as(v_aspect));
+	p.f_put(t_symbol::f_instantiate(L"aspect"), f_global()->f_as(v_aspect));
 	t_array& array = f_as<t_array&>(p);
 	while (true) {
 		t_transfer q = f_read_image();
-		if (!q.f_object()) break;
+		if (!q) break;
 		array.f_push(q);
 	}
 	return p;
@@ -284,7 +284,7 @@ t_transfer t_image_surface::f_create_from_gif(const std::wstring& a_path)
 
 t_transfer t_image_surface::f_create_from_gif_stream(const t_value& a_read)
 {
-	t_stream_source source(a_read.f_object());
+	t_stream_source source(a_read);
 	return f_create_from_gif_source(source);
 }
 
@@ -296,7 +296,7 @@ t_transfer t_image_surface::f_create_all_from_gif(const std::wstring& a_path)
 
 t_transfer t_image_surface::f_create_all_from_gif_stream(const t_value& a_read)
 {
-	t_stream_source source(a_read.f_object());
+	t_stream_source source(a_read);
 	return f_read_images(source);
 }
 
