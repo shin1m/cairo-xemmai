@@ -247,8 +247,8 @@ struct t_type_of<t_pattern> : t_type
 	}
 	virtual t_type* f_derive(t_object* a_this);
 	virtual void f_finalize(t_object* a_this);
-	virtual void f_construct(t_object* a_class, size_t a_n, t_stack& a_stack);
-	virtual void f_instantiate(t_object* a_class, size_t a_n, t_stack& a_stack);
+	virtual void f_construct(t_object* a_class, size_t a_n);
+	virtual void f_instantiate(t_object* a_class, size_t a_n);
 };
 
 template<>
@@ -259,7 +259,7 @@ struct t_type_of<t_solid_pattern> : t_type_of<t_pattern>
 	t_type_of(const t_transfer& a_module, const t_transfer& a_super) : t_type_of<t_pattern>(a_module, a_super)
 	{
 	}
-	virtual void f_construct(t_object* a_class, size_t a_n, t_stack& a_stack);
+	virtual void f_construct(t_object* a_class, size_t a_n);
 };
 
 template<>
@@ -270,7 +270,7 @@ struct t_type_of<t_surface_pattern> : t_type_of<t_pattern>
 	t_type_of(const t_transfer& a_module, const t_transfer& a_super) : t_type_of<t_pattern>(a_module, a_super)
 	{
 	}
-	virtual void f_construct(t_object* a_class, size_t a_n, t_stack& a_stack);
+	virtual void f_construct(t_object* a_class, size_t a_n);
 };
 
 template<>
@@ -321,7 +321,7 @@ struct t_type_of<t_linear_gradient> : t_type_of<t_gradient>
 	t_type_of(const t_transfer& a_module, const t_transfer& a_super) : t_type_of<t_gradient>(a_module, a_super)
 	{
 	}
-	virtual void f_construct(t_object* a_class, size_t a_n, t_stack& a_stack);
+	virtual void f_construct(t_object* a_class, size_t a_n);
 };
 
 template<>
@@ -332,7 +332,7 @@ struct t_type_of<t_radial_gradient> : t_type_of<t_gradient>
 	t_type_of(const t_transfer& a_module, const t_transfer& a_super) : t_type_of<t_gradient>(a_module, a_super)
 	{
 	}
-	virtual void f_construct(t_object* a_class, size_t a_n, t_stack& a_stack);
+	virtual void f_construct(t_object* a_class, size_t a_n);
 };
 
 }

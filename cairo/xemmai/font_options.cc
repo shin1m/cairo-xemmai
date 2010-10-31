@@ -31,16 +31,16 @@ void t_type_of<t_font_options>::f_finalize(t_object* a_this)
 	t_font_options::f_destroy(f_as<t_font_options*>(a_this));
 }
 
-void t_type_of<t_font_options>::f_construct(t_object* a_class, size_t a_n, t_stack& a_stack)
+void t_type_of<t_font_options>::f_construct(t_object* a_class, size_t a_n)
 {
 	t_overload<t_construct_with<t_transfer (*)(t_object*), f_construct>,
 	t_overload<t_construct_with<t_transfer (*)(t_object*, const t_font_options*), f_construct>
-	> >::f_call(a_class, a_n, a_stack);
+	> >::f_call(a_class, a_n);
 }
 
-void t_type_of<t_font_options>::f_instantiate(t_object* a_class, size_t a_n, t_stack& a_stack)
+void t_type_of<t_font_options>::f_instantiate(t_object* a_class, size_t a_n)
 {
-	f_construct(a_class, a_n, a_stack);
+	f_construct(a_class, a_n);
 }
 
 void t_type_of<cairo_antialias_t>::f_define(t_extension* a_extension)

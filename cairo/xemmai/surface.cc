@@ -196,14 +196,14 @@ void t_type_of<t_surface>::f_finalize(t_object* a_this)
 	delete p;
 }
 
-void t_type_of<t_surface>::f_construct(t_object* a_class, size_t a_n, t_stack& a_stack)
+void t_type_of<t_surface>::f_construct(t_object* a_class, size_t a_n)
 {
-	t_construct_with<t_transfer (*)(t_object*, t_surface&, cairo_content_t, int, int), t_surface::f_construct>::f_call(a_class, a_n, a_stack);
+	t_construct_with<t_transfer (*)(t_object*, t_surface&, cairo_content_t, int, int), t_surface::f_construct>::f_call(a_class, a_n);
 }
 
-void t_type_of<t_surface>::f_instantiate(t_object* a_class, size_t a_n, t_stack& a_stack)
+void t_type_of<t_surface>::f_instantiate(t_object* a_class, size_t a_n)
 {
-	f_construct(a_class, a_n, a_stack);
+	f_construct(a_class, a_n);
 }
 
 void t_type_of<cairo_content_t>::f_define(t_extension* a_extension)
@@ -256,11 +256,11 @@ void t_type_of<t_image_surface>::f_define(t_extension* a_extension)
 	;
 }
 
-void t_type_of<t_image_surface>::f_construct(t_object* a_class, size_t a_n, t_stack& a_stack)
+void t_type_of<t_image_surface>::f_construct(t_object* a_class, size_t a_n)
 {
 	t_overload<t_construct_with<t_transfer (*)(t_object*, cairo_format_t, int, int), t_image_surface::f_construct>,
 	t_overload<t_construct_with<t_transfer (*)(t_object*, const t_transfer&, cairo_format_t, int, int, int), t_image_surface::f_construct>
-	> >::f_call(a_class, a_n, a_stack);
+	> >::f_call(a_class, a_n);
 }
 
 void t_type_of<cairo_format_t>::f_define(t_extension* a_extension)

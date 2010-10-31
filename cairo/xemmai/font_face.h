@@ -132,8 +132,8 @@ struct t_type_of<t_font_face> : t_type
 	}
 	virtual t_type* f_derive(t_object* a_this);
 	virtual void f_finalize(t_object* a_this);
-	virtual void f_construct(t_object* a_class, size_t a_n, t_stack& a_stack);
-	virtual void f_instantiate(t_object* a_class, size_t a_n, t_stack& a_stack);
+	virtual void f_construct(t_object* a_class, size_t a_n);
+	virtual void f_instantiate(t_object* a_class, size_t a_n);
 };
 
 template<>
@@ -154,7 +154,7 @@ struct t_type_of<t_toy_font_face> : t_type_of<t_font_face>
 	t_type_of(const t_transfer& a_module, const t_transfer& a_super) : t_type_of<t_font_face>(a_module, a_super)
 	{
 	}
-	virtual void f_construct(t_object* a_class, size_t a_n, t_stack& a_stack);
+	virtual void f_construct(t_object* a_class, size_t a_n);
 };
 
 }
