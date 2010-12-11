@@ -36,14 +36,14 @@ void t_type_of<t_scaled_font>::f_finalize(t_object* a_this)
 	delete p;
 }
 
-void t_type_of<t_scaled_font>::f_construct(t_object* a_class, size_t a_n)
+void t_type_of<t_scaled_font>::f_construct(t_object* a_class, t_slot* a_stack, size_t a_n)
 {
-	t_construct_with<t_transfer (*)(t_object*, t_font_face&, const t_matrix&, const t_matrix&, const t_font_options&), t_scaled_font::f_construct>::f_call(a_class, a_n);
+	t_construct_with<t_transfer (*)(t_object*, t_font_face&, const t_matrix&, const t_matrix&, const t_font_options&), t_scaled_font::f_construct>::f_call(a_class, a_stack, a_n);
 }
 
-void t_type_of<t_scaled_font>::f_instantiate(t_object* a_class, size_t a_n)
+void t_type_of<t_scaled_font>::f_instantiate(t_object* a_class, t_slot* a_stack, size_t a_n)
 {
-	f_construct(a_class, a_n);
+	f_construct(a_class, a_stack, a_n);
 }
 
 }

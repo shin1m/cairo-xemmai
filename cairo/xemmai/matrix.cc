@@ -26,16 +26,16 @@ void t_type_of<t_matrix>::f_finalize(t_object* a_this)
 	delete f_as<t_matrix*>(a_this);
 }
 
-void t_type_of<t_matrix>::f_construct(t_object* a_class, size_t a_n)
+void t_type_of<t_matrix>::f_construct(t_object* a_class, t_slot* a_stack, size_t a_n)
 {
 	t_overload<t_construct<t_matrix, double, double, double, double, double, double>,
 	t_overload<t_construct<t_matrix>
-	> >::f_call(a_class, a_n);
+	> >::f_call(a_class, a_stack, a_n);
 }
 
-void t_type_of<t_matrix>::f_instantiate(t_object* a_class, size_t a_n)
+void t_type_of<t_matrix>::f_instantiate(t_object* a_class, t_slot* a_stack, size_t a_n)
 {
-	f_construct(a_class, a_n);
+	f_construct(a_class, a_stack, a_n);
 }
 
 }
