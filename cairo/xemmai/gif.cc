@@ -242,12 +242,12 @@ t_transfer t_gif_decoder::f_read_images()
 	p.f_put(t_symbol::f_instantiate(L"width"), f_global()->f_as(v_width));
 	p.f_put(t_symbol::f_instantiate(L"height"), f_global()->f_as(v_height));
 	{
-		t_transfer q = t_array::f_instantiate();
-		t_array& array = f_as<t_array&>(q);
-		array.f_push(f_global()->f_as((v_background >> 16 & 0xff) / 255.0));
-		array.f_push(f_global()->f_as((v_background >> 8 & 0xff) / 255.0));
-		array.f_push(f_global()->f_as((v_background & 0xff) / 255.0));
-		array.f_push(f_global()->f_as((v_background >> 24 & 0xff) / 255.0));
+		t_transfer q = t_tuple::f_instantiate(4);
+		t_tuple& tuple = f_as<t_tuple&>(q);
+		tuple[0].f_construct(f_global()->f_as((v_background >> 16 & 0xff) / 255.0));
+		tuple[1].f_construct(f_global()->f_as((v_background >> 8 & 0xff) / 255.0));
+		tuple[2].f_construct(f_global()->f_as((v_background & 0xff) / 255.0));
+		tuple[3].f_construct(f_global()->f_as((v_background >> 24 & 0xff) / 255.0));
 		p.f_put(t_symbol::f_instantiate(L"background"), q);
 	}
 	p.f_put(t_symbol::f_instantiate(L"aspect"), f_global()->f_as(v_aspect));

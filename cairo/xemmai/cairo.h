@@ -24,6 +24,7 @@ using ::xemmai::f_check;
 using ::xemmai::f_as;
 using ::xemmai::t_define;
 using ::xemmai::f_global;
+using ::xemmai::t_tuple;
 using ::xemmai::t_throwable;
 using ::xemmai::t_array;
 using ::xemmai::t_bytes;
@@ -45,10 +46,10 @@ class t_toy_font_face;
 class t_scaled_font;
 class t_context;
 
-t_transfer f_array(const t_transfer& a_0, const t_transfer& a_1);
-t_transfer f_array(const t_transfer& a_0, const t_transfer& a_1, const t_transfer& a_2, const t_transfer& a_3);
-t_transfer f_array(const t_transfer& a_0, const t_transfer& a_1, const t_transfer& a_2, const t_transfer& a_3, const t_transfer& a_4);
-t_transfer f_array(const t_transfer& a_0, const t_transfer& a_1, const t_transfer& a_2, const t_transfer& a_3, const t_transfer& a_4, const t_transfer& a_5);
+t_transfer f_tuple(const t_transfer& a_0, const t_transfer& a_1);
+t_transfer f_tuple(const t_transfer& a_0, const t_transfer& a_1, const t_transfer& a_2, const t_transfer& a_3);
+t_transfer f_tuple(const t_transfer& a_0, const t_transfer& a_1, const t_transfer& a_2, const t_transfer& a_3, const t_transfer& a_4);
+t_transfer f_tuple(const t_transfer& a_0, const t_transfer& a_1, const t_transfer& a_2, const t_transfer& a_3, const t_transfer& a_4, const t_transfer& a_5);
 
 class t_entry
 {

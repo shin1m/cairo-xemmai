@@ -97,7 +97,7 @@ public:
 		double x;
 		double y;
 		cairo_surface_get_device_offset(v_value, &x, &y);
-		return f_array(f_global()->f_as(x), f_global()->f_as(y));
+		return f_tuple(f_global()->f_as(x), f_global()->f_as(y));
 	}
 	void f_set_fallback_resolution(double a_x, double a_y)
 	{
@@ -108,7 +108,7 @@ public:
 		double x;
 		double y;
 		cairo_surface_get_fallback_resolution(v_value, &x, &y);
-		return f_array(f_global()->f_as(x), f_global()->f_as(y));
+		return f_tuple(f_global()->f_as(x), f_global()->f_as(y));
 	}
 	cairo_surface_type_t f_get_type() const
 	{

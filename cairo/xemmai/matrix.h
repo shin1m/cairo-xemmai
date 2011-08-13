@@ -67,12 +67,12 @@ struct t_matrix : cairo_matrix_t
 	t_transfer f_transform_distance(double a_x, double a_y) const
 	{
 		cairo_matrix_transform_distance(this, &a_x, &a_y);
-		return f_array(f_global()->f_as(a_x), f_global()->f_as(a_y));
+		return f_tuple(f_global()->f_as(a_x), f_global()->f_as(a_y));
 	}
 	t_transfer f_transform_point(double a_x, double a_y) const
 	{
 		cairo_matrix_transform_point(this, &a_x, &a_y);
-		return f_array(f_global()->f_as(a_x), f_global()->f_as(a_y));
+		return f_tuple(f_global()->f_as(a_x), f_global()->f_as(a_y));
 	}
 };
 

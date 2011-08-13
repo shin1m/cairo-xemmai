@@ -8,48 +8,48 @@ namespace xemmai
 
 using ::xemmai::f_define;
 
-t_transfer f_array(const t_transfer& a_0, const t_transfer& a_1)
+t_transfer f_tuple(const t_transfer& a_0, const t_transfer& a_1)
 {
-	t_transfer p = t_array::f_instantiate();
-	t_array& array = f_as<t_array&>(p);
-	array.f_push(a_0);
-	array.f_push(a_1);
+	t_transfer p = t_tuple::f_instantiate(2);
+	t_tuple& tuple = f_as<t_tuple&>(p);
+	tuple[0].f_construct(a_0);
+	tuple[1].f_construct(a_1);
 	return p;
 }
 
-t_transfer f_array(const t_transfer& a_0, const t_transfer& a_1, const t_transfer& a_2, const t_transfer& a_3)
+t_transfer f_tuple(const t_transfer& a_0, const t_transfer& a_1, const t_transfer& a_2, const t_transfer& a_3)
 {
-	t_transfer p = t_array::f_instantiate();
-	t_array& array = f_as<t_array&>(p);
-	array.f_push(a_0);
-	array.f_push(a_1);
-	array.f_push(a_2);
-	array.f_push(a_3);
+	t_transfer p = t_tuple::f_instantiate(4);
+	t_tuple& tuple = f_as<t_tuple&>(p);
+	tuple[0].f_construct(a_0);
+	tuple[1].f_construct(a_1);
+	tuple[2].f_construct(a_2);
+	tuple[3].f_construct(a_3);
 	return p;
 }
 
-t_transfer f_array(const t_transfer& a_0, const t_transfer& a_1, const t_transfer& a_2, const t_transfer& a_3, const t_transfer& a_4)
+t_transfer f_tuple(const t_transfer& a_0, const t_transfer& a_1, const t_transfer& a_2, const t_transfer& a_3, const t_transfer& a_4)
 {
-	t_transfer p = t_array::f_instantiate();
-	t_array& array = f_as<t_array&>(p);
-	array.f_push(a_0);
-	array.f_push(a_1);
-	array.f_push(a_2);
-	array.f_push(a_3);
-	array.f_push(a_4);
+	t_transfer p = t_tuple::f_instantiate(5);
+	t_tuple& tuple = f_as<t_tuple&>(p);
+	tuple[0].f_construct(a_0);
+	tuple[1].f_construct(a_1);
+	tuple[2].f_construct(a_2);
+	tuple[3].f_construct(a_3);
+	tuple[4].f_construct(a_4);
 	return p;
 }
 
-t_transfer f_array(const t_transfer& a_0, const t_transfer& a_1, const t_transfer& a_2, const t_transfer& a_3, const t_transfer& a_4, const t_transfer& a_5)
+t_transfer f_tuple(const t_transfer& a_0, const t_transfer& a_1, const t_transfer& a_2, const t_transfer& a_3, const t_transfer& a_4, const t_transfer& a_5)
 {
-	t_transfer p = t_array::f_instantiate();
-	t_array& array = f_as<t_array&>(p);
-	array.f_push(a_0);
-	array.f_push(a_1);
-	array.f_push(a_2);
-	array.f_push(a_3);
-	array.f_push(a_4);
-	array.f_push(a_5);
+	t_transfer p = t_tuple::f_instantiate(6);
+	t_tuple& tuple = f_as<t_tuple&>(p);
+	tuple[0].f_construct(a_0);
+	tuple[1].f_construct(a_1);
+	tuple[2].f_construct(a_2);
+	tuple[3].f_construct(a_3);
+	tuple[4].f_construct(a_4);
+	tuple[5].f_construct(a_5);
 	return p;
 }
 

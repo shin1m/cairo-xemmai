@@ -124,7 +124,7 @@ public:
 		t_transfer p = t_array::f_instantiate();
 		t_array& array = f_as<t_array&>(p);
 		for (int i = 0; i < n; ++i) array.f_push(f_global()->f_as(dashes[i]));
-		return f_array(p, f_global()->f_as(offset));
+		return f_tuple(p, f_global()->f_as(offset));
 	}
 	void f_set_fill_rule(cairo_fill_rule_t a_fill_rule)
 	{
@@ -197,7 +197,7 @@ public:
 		double x1;
 		double y1;
 		cairo_clip_extents(v_value, &x0, &y0, &x1, &y1);
-		return f_array(f_global()->f_as(x0), f_global()->f_as(y0), f_global()->f_as(x1), f_global()->f_as(y1));
+		return f_tuple(f_global()->f_as(x0), f_global()->f_as(y0), f_global()->f_as(x1), f_global()->f_as(y1));
 	}
 	void f_reset_clip()
 	{
@@ -222,7 +222,7 @@ public:
 		double x1;
 		double y1;
 		cairo_fill_extents(v_value, &x0, &y0, &x1, &y1);
-		return f_array(f_global()->f_as(x0), f_global()->f_as(y0), f_global()->f_as(x1), f_global()->f_as(y1));
+		return f_tuple(f_global()->f_as(x0), f_global()->f_as(y0), f_global()->f_as(x1), f_global()->f_as(y1));
 	}
 	bool f_in_fill(double a_x, double a_y) const
 	{
@@ -259,7 +259,7 @@ public:
 		double x1;
 		double y1;
 		cairo_stroke_extents(v_value, &x0, &y0, &x1, &y1);
-		return f_array(f_global()->f_as(x0), f_global()->f_as(y0), f_global()->f_as(x1), f_global()->f_as(y1));
+		return f_tuple(f_global()->f_as(x0), f_global()->f_as(y0), f_global()->f_as(x1), f_global()->f_as(y1));
 	}
 	bool f_in_stroke(double a_x, double a_y) const
 	{
@@ -294,7 +294,7 @@ public:
 		double x;
 		double y;
 		cairo_get_current_point(v_value, &x, &y);
-		return f_array(f_global()->f_as(x), f_global()->f_as(y));
+		return f_tuple(f_global()->f_as(x), f_global()->f_as(y));
 	}
 	void f_new_path()
 	{
@@ -359,7 +359,7 @@ public:
 		double x1;
 		double y1;
 		cairo_path_extents(v_value, &x0, &y0, &x1, &y1);
-		return f_array(f_global()->f_as(x0), f_global()->f_as(y0), f_global()->f_as(x1), f_global()->f_as(y1));
+		return f_tuple(f_global()->f_as(x0), f_global()->f_as(y0), f_global()->f_as(x1), f_global()->f_as(y1));
 	}
 	void f_translate(double a_x, double a_y)
 	{
@@ -394,22 +394,22 @@ public:
 	t_transfer f_user_to_device(double a_x, double a_y) const
 	{
 		cairo_user_to_device(v_value, &a_x, &a_y);
-		return f_array(f_global()->f_as(a_x), f_global()->f_as(a_y));
+		return f_tuple(f_global()->f_as(a_x), f_global()->f_as(a_y));
 	}
 	t_transfer f_user_to_device_distance(double a_x, double a_y) const
 	{
 		cairo_user_to_device_distance(v_value, &a_x, &a_y);
-		return f_array(f_global()->f_as(a_x), f_global()->f_as(a_y));
+		return f_tuple(f_global()->f_as(a_x), f_global()->f_as(a_y));
 	}
 	t_transfer f_device_to_user(double a_x, double a_y) const
 	{
 		cairo_device_to_user(v_value, &a_x, &a_y);
-		return f_array(f_global()->f_as(a_x), f_global()->f_as(a_y));
+		return f_tuple(f_global()->f_as(a_x), f_global()->f_as(a_y));
 	}
 	t_transfer f_device_to_user_distance(double a_x, double a_y) const
 	{
 		cairo_device_to_user_distance(v_value, &a_x, &a_y);
-		return f_array(f_global()->f_as(a_x), f_global()->f_as(a_y));
+		return f_tuple(f_global()->f_as(a_x), f_global()->f_as(a_y));
 	}
 	void f_select_font_face(const std::wstring& a_family, cairo_font_slant_t a_slant, cairo_font_weight_t a_weight)
 	{
@@ -474,19 +474,19 @@ public:
 	{
 		cairo_font_extents_t extents;
 		cairo_font_extents(v_value, &extents);
-		return f_array(f_global()->f_as(extents.ascent), f_global()->f_as(extents.descent), f_global()->f_as(extents.height), f_global()->f_as(extents.max_x_advance), f_global()->f_as(extents.max_y_advance));
+		return f_tuple(f_global()->f_as(extents.ascent), f_global()->f_as(extents.descent), f_global()->f_as(extents.height), f_global()->f_as(extents.max_x_advance), f_global()->f_as(extents.max_y_advance));
 	}
 	t_transfer f_text_extents(const std::wstring& a_text) const
 	{
 		cairo_text_extents_t extents;
 		cairo_text_extents(v_value, f_convert(a_text).c_str(), &extents);
-		return f_array(f_global()->f_as(extents.x_bearing), f_global()->f_as(extents.y_bearing), f_global()->f_as(extents.width), f_global()->f_as(extents.height), f_global()->f_as(extents.x_advance), f_global()->f_as(extents.y_advance));
+		return f_tuple(f_global()->f_as(extents.x_bearing), f_global()->f_as(extents.y_bearing), f_global()->f_as(extents.width), f_global()->f_as(extents.height), f_global()->f_as(extents.x_advance), f_global()->f_as(extents.y_advance));
 	}
 	t_transfer f_glyph_extents(const cairo_glyph_t* a_glyphs, int a_n) const
 	{
 		cairo_text_extents_t extents;
 		cairo_glyph_extents(v_value, a_glyphs, a_n, &extents);
-		return f_array(f_global()->f_as(extents.x_bearing), f_global()->f_as(extents.y_bearing), f_global()->f_as(extents.width), f_global()->f_as(extents.height), f_global()->f_as(extents.x_advance), f_global()->f_as(extents.y_advance));
+		return f_tuple(f_global()->f_as(extents.x_bearing), f_global()->f_as(extents.y_bearing), f_global()->f_as(extents.width), f_global()->f_as(extents.height), f_global()->f_as(extents.x_advance), f_global()->f_as(extents.y_advance));
 	}
 };
 
