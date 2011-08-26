@@ -1,9 +1,9 @@
-AC_INIT([cairo-xemmai], [201106])
+AC_INIT([cairo-xemmai], [201108])
 AM_INIT_AUTOMAKE([foreign nostdinc dist-bzip2 no-dist-gzip])
 AC_CONFIG_SRCDIR([cairo/xemmai/cairo.cc])
 
 PKG_CHECK_MODULES([CAIRO], [cairo >= 1.8])
-XEMMAI_USE=xemmai-201106
+XEMMAI_USE=xemmai-201108
 PKG_CHECK_MODULES([XEMMAI], [${XEMMAI_USE}], [
 	XEMMAI_MODULE_PATH=`pkg-config --variable=module_path ${XEMMAI_USE}`
 ])

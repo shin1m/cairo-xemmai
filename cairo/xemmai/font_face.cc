@@ -67,14 +67,16 @@ void t_type_of<t_font_face>::f_finalize(t_object* a_this)
 	delete p;
 }
 
-void t_type_of<t_font_face>::f_construct(t_object* a_class, t_slot* a_stack, size_t a_n)
+t_transfer t_type_of<t_font_face>::f_construct(t_object* a_class, t_slot* a_stack, size_t a_n)
 {
 	t_throwable::f_throw(L"uninstantiatable.");
+	return t_transfer();
 }
 
 void t_type_of<t_font_face>::f_instantiate(t_object* a_class, t_slot* a_stack, size_t a_n)
 {
-	f_construct(a_class, a_stack, a_n);
+	a_stack[0].f_construct(f_construct(a_class, a_stack, a_n));
+	for (size_t i = 1; i <= a_n; ++i) a_stack[i] = 0;
 }
 
 void t_type_of<cairo_font_type_t>::f_define(t_extension* a_extension)
@@ -97,9 +99,9 @@ void t_type_of<t_toy_font_face>::f_define(t_extension* a_extension)
 	;
 }
 
-void t_type_of<t_toy_font_face>::f_construct(t_object* a_class, t_slot* a_stack, size_t a_n)
+t_transfer t_type_of<t_toy_font_face>::f_construct(t_object* a_class, t_slot* a_stack, size_t a_n)
 {
-	t_construct_with<t_transfer (*)(t_object*, const std::wstring&, cairo_font_slant_t, cairo_font_weight_t), t_toy_font_face::f_construct>::f_call(a_class, a_stack, a_n);
+	return t_construct_with<t_transfer (*)(t_object*, const std::wstring&, cairo_font_slant_t, cairo_font_weight_t), t_toy_font_face::f_construct>::f_call(a_class, a_stack, a_n);
 }
 
 }

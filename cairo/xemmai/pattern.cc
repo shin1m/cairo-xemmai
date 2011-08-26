@@ -58,14 +58,16 @@ void t_type_of<t_pattern>::f_finalize(t_object* a_this)
 	delete p;
 }
 
-void t_type_of<t_pattern>::f_construct(t_object* a_class, t_slot* a_stack, size_t a_n)
+t_transfer t_type_of<t_pattern>::f_construct(t_object* a_class, t_slot* a_stack, size_t a_n)
 {
 	t_throwable::f_throw(L"uninstantiatable.");
+	return t_transfer();
 }
 
 void t_type_of<t_pattern>::f_instantiate(t_object* a_class, t_slot* a_stack, size_t a_n)
 {
-	f_construct(a_class, a_stack, a_n);
+	a_stack[0].f_construct(f_construct(a_class, a_stack, a_n));
+	for (size_t i = 1; i <= a_n; ++i) a_stack[i] = 0;
 }
 
 void t_type_of<t_solid_pattern>::f_define(t_extension* a_extension)
@@ -75,10 +77,11 @@ void t_type_of<t_solid_pattern>::f_define(t_extension* a_extension)
 	;
 }
 
-void t_type_of<t_solid_pattern>::f_construct(t_object* a_class, t_slot* a_stack, size_t a_n)
+t_transfer t_type_of<t_solid_pattern>::f_construct(t_object* a_class, t_slot* a_stack, size_t a_n)
 {
-	t_overload<t_construct_with<t_transfer (*)(t_object*, double, double, double), t_solid_pattern::f_construct>,
-	t_overload<t_construct_with<t_transfer (*)(t_object*, double, double, double, double), t_solid_pattern::f_construct>
+	return
+		t_overload<t_construct_with<t_transfer (*)(t_object*, double, double, double), t_solid_pattern::f_construct>,
+		t_overload<t_construct_with<t_transfer (*)(t_object*, double, double, double, double), t_solid_pattern::f_construct>
 	> >::f_call(a_class, a_stack, a_n);
 }
 
@@ -93,9 +96,9 @@ void t_type_of<t_surface_pattern>::f_define(t_extension* a_extension)
 	;
 }
 
-void t_type_of<t_surface_pattern>::f_construct(t_object* a_class, t_slot* a_stack, size_t a_n)
+t_transfer t_type_of<t_surface_pattern>::f_construct(t_object* a_class, t_slot* a_stack, size_t a_n)
 {
-	t_construct_with<t_transfer (*)(t_object*, t_surface&), t_surface_pattern::f_construct>::f_call(a_class, a_stack, a_n);
+	return t_construct_with<t_transfer (*)(t_object*, t_surface&), t_surface_pattern::f_construct>::f_call(a_class, a_stack, a_n);
 }
 
 void t_type_of<cairo_extend_t>::f_define(t_extension* a_extension)
@@ -147,9 +150,9 @@ void t_type_of<t_linear_gradient>::f_define(t_extension* a_extension)
 	;
 }
 
-void t_type_of<t_linear_gradient>::f_construct(t_object* a_class, t_slot* a_stack, size_t a_n)
+t_transfer t_type_of<t_linear_gradient>::f_construct(t_object* a_class, t_slot* a_stack, size_t a_n)
 {
-	t_construct_with<t_transfer (*)(t_object*, double, double, double, double), t_linear_gradient::f_construct>::f_call(a_class, a_stack, a_n);
+	return t_construct_with<t_transfer (*)(t_object*, double, double, double, double), t_linear_gradient::f_construct>::f_call(a_class, a_stack, a_n);
 }
 
 void t_type_of<t_radial_gradient>::f_define(t_extension* a_extension)
@@ -159,9 +162,9 @@ void t_type_of<t_radial_gradient>::f_define(t_extension* a_extension)
 	;
 }
 
-void t_type_of<t_radial_gradient>::f_construct(t_object* a_class, t_slot* a_stack, size_t a_n)
+t_transfer t_type_of<t_radial_gradient>::f_construct(t_object* a_class, t_slot* a_stack, size_t a_n)
 {
-	t_construct_with<t_transfer (*)(t_object*, double, double, double, double, double, double), t_radial_gradient::f_construct>::f_call(a_class, a_stack, a_n);
+	return t_construct_with<t_transfer (*)(t_object*, double, double, double, double, double, double), t_radial_gradient::f_construct>::f_call(a_class, a_stack, a_n);
 }
 
 }
