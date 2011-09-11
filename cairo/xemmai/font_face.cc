@@ -101,7 +101,7 @@ void t_type_of<t_toy_font_face>::f_define(t_extension* a_extension)
 
 t_transfer t_type_of<t_toy_font_face>::f_construct(t_object* a_class, t_slot* a_stack, size_t a_n)
 {
-	return t_construct_with<t_transfer (*)(t_object*, const std::wstring&, cairo_font_slant_t, cairo_font_weight_t), t_toy_font_face::f_construct>::f_call(a_class, a_stack, a_n);
+	return t_construct_with<t_transfer (*)(t_object*, const std::wstring&, cairo_font_slant_t, cairo_font_weight_t), t_toy_font_face::f_construct>::t_bind<t_toy_font_face>::f_do(a_class, a_stack, a_n);
 }
 
 }

@@ -36,7 +36,7 @@ t_transfer t_type_of<t_font_options>::f_construct(t_object* a_class, t_slot* a_s
 	return
 		t_overload<t_construct_with<t_transfer (*)(t_object*), f_construct>,
 		t_overload<t_construct_with<t_transfer (*)(t_object*, const t_font_options*), f_construct>
-	> >::f_call(a_class, a_stack, a_n);
+	> >::t_bind<t_font_options>::f_do(a_class, a_stack, a_n);
 }
 
 void t_type_of<t_font_options>::f_instantiate(t_object* a_class, t_slot* a_stack, size_t a_n)

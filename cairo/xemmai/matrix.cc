@@ -29,9 +29,9 @@ void t_type_of<t_matrix>::f_finalize(t_object* a_this)
 t_transfer t_type_of<t_matrix>::f_construct(t_object* a_class, t_slot* a_stack, size_t a_n)
 {
 	return
-		t_overload<t_construct<t_matrix, double, double, double, double, double, double>,
-		t_overload<t_construct<t_matrix>
-	> >::f_call(a_class, a_stack, a_n);
+		t_overload<t_construct<double, double, double, double, double, double>,
+		t_overload<t_construct<>
+	> >::t_bind<t_matrix>::f_do(a_class, a_stack, a_n);
 }
 
 void t_type_of<t_matrix>::f_instantiate(t_object* a_class, t_slot* a_stack, size_t a_n)
