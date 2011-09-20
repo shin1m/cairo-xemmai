@@ -223,11 +223,7 @@ void t_type_of<cairo_status_t>::f_define(t_extension* a_extension)
 
 }
 
-#ifdef _MSC_VER
-extern "C" __declspec(dllexport) xemmai::t_extension* f_factory(xemmai::t_object* a_module)
-#else
-extern "C" xemmai::t_extension* f_factory(xemmai::t_object* a_module)
-#endif
+XEMMAI__MODULE__FACTORY(xemmai::t_object* a_module)
 {
 	return new cairo::xemmai::t_extension(a_module);
 }
