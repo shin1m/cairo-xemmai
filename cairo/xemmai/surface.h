@@ -232,7 +232,10 @@ class t_image_surface : public t_surface
 public:
 	static t_transfer f_construct(t_object* a_class, cairo_format_t a_format, int a_width, int a_height)
 	{
-		return f_transfer(new t_image_surface(cairo_image_surface_create(a_format, a_width, a_height)));
+		int stride = cairo_format_stride_for_width(a_format, a_width);
+		if (a_width < 0 || a_height < 0 || stride < 0) t_throwable::f_throw(L"invalid arguments.");
+		t_transfer data = t_bytes::f_instantiate(stride * a_height);
+		return f_transfer(new t_image_surface(cairo_image_surface_create_for_data(&f_as<t_bytes&>(data)[0], a_format, a_width, a_height, stride), data));
 	}
 	static t_transfer f_construct(t_object* a_class, const t_transfer& a_data, cairo_format_t a_format, int a_width, int a_height, int a_stride)
 	{
