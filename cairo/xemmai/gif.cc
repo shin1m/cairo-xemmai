@@ -16,9 +16,9 @@ class t_gif_decoder
 	t_image_source& v_source;
 	size_t v_width;
 	size_t v_height;
-	unsigned long v_background;
+	uint32_t v_background;
 	size_t v_aspect;
-	unsigned long v_global_colors[256];
+	uint32_t v_global_colors[256];
 	unsigned char v_block_data[255];
 	const unsigned char* v_block_p;
 	const unsigned char* v_block_q;
@@ -43,13 +43,13 @@ class t_gif_decoder
 		return f_read_byte() << 8 | a;
 	}
 	void f_skip_blocks();
-	void f_read_colors(unsigned long* a_colors, size_t a_size);
+	void f_read_colors(uint32_t* a_colors, size_t a_size);
 	size_t f_read_code();
 	size_t f_read_index();
-	void f_read_rows(const unsigned long* a_colors, int a_transparent, size_t a_width, size_t a_height, size_t a_base, size_t a_step, unsigned char* a_data, size_t a_stride)
+	void f_read_rows(const uint32_t* a_colors, int a_transparent, size_t a_width, size_t a_height, size_t a_base, size_t a_step, unsigned char* a_data, size_t a_stride)
 	{
 		for (size_t i = a_base; i < a_height; i += a_step) {
-			unsigned long* p = reinterpret_cast<unsigned long*>(a_data);
+			uint32_t* p = reinterpret_cast<uint32_t*>(a_data);
 			for (size_t j = 0; j < a_width; ++j) {
 				size_t index = f_read_index();
 				*p++ = index == a_transparent ? 0 : a_colors[index];
@@ -76,10 +76,10 @@ void t_gif_decoder::f_skip_blocks()
 	}
 };
 
-void t_gif_decoder::f_read_colors(unsigned long* a_colors, size_t a_size)
+void t_gif_decoder::f_read_colors(uint32_t* a_colors, size_t a_size)
 {
 	for (size_t i = 0; i < a_size; ++i) {
-		unsigned long pixel = f_read_byte();
+		uint32_t pixel = f_read_byte();
 		pixel <<= 8;
 		pixel |= f_read_byte();
 		pixel <<= 8;
@@ -195,8 +195,8 @@ t_transfer t_gif_decoder::f_read_image()
 	unsigned char packed = f_read_byte();
 	bool has_colors = (packed & 0x80) != 0;
 	bool interlaced = (packed & 0x40) != 0;
-	unsigned long local_colors[256];
-	const unsigned long* colors = v_global_colors;
+	uint32_t local_colors[256];
+	const uint32_t* colors = v_global_colors;
 	if (has_colors) {
 		f_read_colors(local_colors, 2 << (packed & 0x07));
 		colors = local_colors;

@@ -70,10 +70,10 @@ t_transfer t_scoped_decompress::f_decompress()
 		while (output_scanline < output_height) {
 			jpeg_read_scanlines(this, buffer, 1);
 			JSAMPLE* p = buffer[0];
-			unsigned long* q = reinterpret_cast<unsigned long*>(row);
+			uint32_t* q = reinterpret_cast<uint32_t*>(row);
 			for (size_t i = 0; i < output_width; ++i) {
 				if (out_color_space == JCS_RGB) {
-					unsigned long pixel = *p++ << 16;
+					uint32_t pixel = *p++ << 16;
 					pixel |= *p++ << 8;
 					pixel |= *p++;
 					*q++ = pixel;
@@ -88,7 +88,7 @@ t_transfer t_scoped_decompress::f_decompress()
 						y = 255 - y;
 						k = 255 - k;
 					}
-					unsigned long pixel = k * c / 255 << 16;
+					uint32_t pixel = k * c / 255 << 16;
 					pixel |= k * m / 255 << 8;
 					pixel |= k * y / 255;
 					*q++ = pixel;

@@ -30,7 +30,7 @@ namespace xemmai
 
 void t_type_of<cairo_font_slant_t>::f_define(t_extension* a_extension)
 {
-	t_define<cairo_font_slant_t, int>(a_extension, L"FontSlant")
+	t_define<cairo_font_slant_t, ptrdiff_t>(a_extension, L"FontSlant")
 		(L"NORMAL", CAIRO_FONT_SLANT_NORMAL)
 		(L"ITALIC", CAIRO_FONT_SLANT_ITALIC)
 		(L"OBLIQUE", CAIRO_FONT_SLANT_OBLIQUE)
@@ -39,7 +39,7 @@ void t_type_of<cairo_font_slant_t>::f_define(t_extension* a_extension)
 
 void t_type_of<cairo_font_weight_t>::f_define(t_extension* a_extension)
 {
-	t_define<cairo_font_weight_t, int>(a_extension, L"FontWeight")
+	t_define<cairo_font_weight_t, ptrdiff_t>(a_extension, L"FontWeight")
 		(L"NORMAL", CAIRO_FONT_WEIGHT_NORMAL)
 		(L"BOLD", CAIRO_FONT_WEIGHT_BOLD)
 	;
@@ -81,7 +81,7 @@ void t_type_of<t_font_face>::f_instantiate(t_object* a_class, t_slot* a_stack, s
 
 void t_type_of<cairo_font_type_t>::f_define(t_extension* a_extension)
 {
-	t_define<cairo_font_type_t, int>(a_extension, L"FontType")
+	t_define<cairo_font_type_t, ptrdiff_t>(a_extension, L"FontType")
 		(L"TOY", CAIRO_FONT_TYPE_TOY)
 		(L"FT", CAIRO_FONT_TYPE_FT)
 		(L"WIN32", CAIRO_FONT_TYPE_WIN32)

@@ -185,7 +185,7 @@ namespace xemmai
 
 void t_type_of<cairo_status_t>::f_define(t_extension* a_extension)
 {
-	t_define<cairo_status_t, int>(a_extension, L"Status")
+	t_define<cairo_status_t, ptrdiff_t>(a_extension, L"Status")
 		(L"SUCCESS", CAIRO_STATUS_SUCCESS)
 		(L"NO_MEMORY", CAIRO_STATUS_NO_MEMORY)
 		(L"INVALID_RESTORE", CAIRO_STATUS_INVALID_RESTORE)

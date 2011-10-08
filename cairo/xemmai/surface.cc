@@ -16,7 +16,7 @@ cairo_status_t t_surface::f_write_stream(void* a_closure, const unsigned char* a
 	t_scoped zero = f_global()->f_as(0);
 	try {
 		while (a_length > 0) {
-			size_t m = std::min(bytes.f_size(), a_length);
+			size_t m = std::min(bytes.f_size(), static_cast<size_t>(a_length));
 			std::copy(a_data, a_data + m, &bytes[0]);
 			write->f_call(buffer, zero, f_global()->f_as(m));
 			a_data += m;
@@ -209,7 +209,7 @@ void t_type_of<t_surface>::f_instantiate(t_object* a_class, t_slot* a_stack, siz
 
 void t_type_of<cairo_content_t>::f_define(t_extension* a_extension)
 {
-	t_define<cairo_content_t, int>(a_extension, L"Content")
+	t_define<cairo_content_t, ptrdiff_t>(a_extension, L"Content")
 		(L"COLOR", CAIRO_CONTENT_COLOR)
 		(L"ALPHA", CAIRO_CONTENT_ALPHA)
 		(L"COLOR_ALPHA", CAIRO_CONTENT_COLOR_ALPHA)
@@ -218,7 +218,7 @@ void t_type_of<cairo_content_t>::f_define(t_extension* a_extension)
 
 void t_type_of<cairo_surface_type_t>::f_define(t_extension* a_extension)
 {
-	t_define<cairo_surface_type_t, int>(a_extension, L"SurfaceType")
+	t_define<cairo_surface_type_t, ptrdiff_t>(a_extension, L"SurfaceType")
 		(L"IMAGE", CAIRO_SURFACE_TYPE_IMAGE)
 		(L"PDF", CAIRO_SURFACE_TYPE_PDF)
 		(L"PS", CAIRO_SURFACE_TYPE_PS)
@@ -267,7 +267,7 @@ t_transfer t_type_of<t_image_surface>::f_construct(t_object* a_class, t_slot* a_
 
 void t_type_of<cairo_format_t>::f_define(t_extension* a_extension)
 {
-	t_define<cairo_format_t, int>(a_extension, L"Format")
+	t_define<cairo_format_t, ptrdiff_t>(a_extension, L"Format")
 		(L"ARGB32", CAIRO_FORMAT_ARGB32)
 		(L"RGB24", CAIRO_FORMAT_RGB24)
 		(L"A8", CAIRO_FORMAT_A8)

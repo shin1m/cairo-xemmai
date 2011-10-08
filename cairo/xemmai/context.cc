@@ -162,7 +162,7 @@ void t_type_of<t_context>::f_instantiate(t_object* a_class, t_slot* a_stack, siz
 
 void t_type_of<cairo_fill_rule_t>::f_define(t_extension* a_extension)
 {
-	t_define<cairo_fill_rule_t, int>(a_extension, L"FillRule")
+	t_define<cairo_fill_rule_t, ptrdiff_t>(a_extension, L"FillRule")
 		(L"WINDING", CAIRO_FILL_RULE_WINDING)
 		(L"EVEN_ODD", CAIRO_FILL_RULE_EVEN_ODD)
 	;
@@ -170,7 +170,7 @@ void t_type_of<cairo_fill_rule_t>::f_define(t_extension* a_extension)
 
 void t_type_of<cairo_line_cap_t>::f_define(t_extension* a_extension)
 {
-	t_define<cairo_line_cap_t, int>(a_extension, L"LineCap")
+	t_define<cairo_line_cap_t, ptrdiff_t>(a_extension, L"LineCap")
 		(L"BUTT", CAIRO_LINE_CAP_BUTT)
 		(L"ROUND", CAIRO_LINE_CAP_ROUND)
 		(L"SQUARE", CAIRO_LINE_CAP_SQUARE)
@@ -179,7 +179,7 @@ void t_type_of<cairo_line_cap_t>::f_define(t_extension* a_extension)
 
 void t_type_of<cairo_line_join_t>::f_define(t_extension* a_extension)
 {
-	t_define<cairo_line_join_t, int>(a_extension, L"LineJoin")
+	t_define<cairo_line_join_t, ptrdiff_t>(a_extension, L"LineJoin")
 		(L"MITER", CAIRO_LINE_JOIN_MITER)
 		(L"ROUND", CAIRO_LINE_JOIN_ROUND)
 		(L"BEVEL", CAIRO_LINE_JOIN_BEVEL)
@@ -188,7 +188,7 @@ void t_type_of<cairo_line_join_t>::f_define(t_extension* a_extension)
 
 void t_type_of<cairo_operator_t>::f_define(t_extension* a_extension)
 {
-	t_define<cairo_operator_t, int>(a_extension, L"Operator")
+	t_define<cairo_operator_t, ptrdiff_t>(a_extension, L"Operator")
 		(L"CLEAR", CAIRO_OPERATOR_CLEAR)
 		(L"SOURCE", CAIRO_OPERATOR_SOURCE)
 		(L"OVER", CAIRO_OPERATOR_OVER)

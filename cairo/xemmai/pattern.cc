@@ -103,7 +103,7 @@ t_transfer t_type_of<t_surface_pattern>::f_construct(t_object* a_class, t_slot* 
 
 void t_type_of<cairo_extend_t>::f_define(t_extension* a_extension)
 {
-	t_define<cairo_extend_t, int>(a_extension, L"Extend")
+	t_define<cairo_extend_t, ptrdiff_t>(a_extension, L"Extend")
 		(L"NONE", CAIRO_EXTEND_NONE)
 		(L"REPEAT", CAIRO_EXTEND_REPEAT)
 		(L"REFLECT", CAIRO_EXTEND_REFLECT)
@@ -113,7 +113,7 @@ void t_type_of<cairo_extend_t>::f_define(t_extension* a_extension)
 
 void t_type_of<cairo_filter_t>::f_define(t_extension* a_extension)
 {
-	t_define<cairo_filter_t, int>(a_extension, L"Filter")
+	t_define<cairo_filter_t, ptrdiff_t>(a_extension, L"Filter")
 		(L"FAST", CAIRO_FILTER_FAST)
 		(L"GOOD", CAIRO_FILTER_GOOD)
 		(L"BEST", CAIRO_FILTER_BEST)
@@ -125,7 +125,7 @@ void t_type_of<cairo_filter_t>::f_define(t_extension* a_extension)
 
 void t_type_of<cairo_pattern_type_t>::f_define(t_extension* a_extension)
 {
-	t_define<cairo_pattern_type_t, int>(a_extension, L"PatternType")
+	t_define<cairo_pattern_type_t, ptrdiff_t>(a_extension, L"PatternType")
 		(L"SOLID", CAIRO_PATTERN_TYPE_SOLID)
 		(L"SURFACE", CAIRO_PATTERN_TYPE_SURFACE)
 		(L"LINEAR", CAIRO_PATTERN_TYPE_LINEAR)
