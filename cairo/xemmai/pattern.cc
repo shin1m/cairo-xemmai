@@ -24,6 +24,7 @@ t_pattern* t_pattern::f_wrap(cairo_pattern_t* a_value)
 		return new t_radial_gradient(a_value);
 	default:
 		t_throwable::f_throw(L"unknown pattern.");
+		return 0;
 	}
 }
 

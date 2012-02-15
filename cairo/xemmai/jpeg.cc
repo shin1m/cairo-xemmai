@@ -1,5 +1,6 @@
 #include "surface.h"
 
+#include <cstdint>
 extern "C" {
 #include <jpeglib.h>
 }
@@ -137,7 +138,7 @@ struct t_jpeg_source : jpeg_source_mgr
 	}
 	void f_skip(long a_n)
 	{
-		while (a_n > bytes_in_buffer) {
+		while (a_n > static_cast<long>(bytes_in_buffer)) {
 			a_n -= bytes_in_buffer;
 			f_fill();
 		}

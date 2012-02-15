@@ -1,5 +1,7 @@
 #include "surface.h"
 
+#include <cstdint>
+
 namespace cairo
 {
 

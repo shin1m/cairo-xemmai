@@ -42,7 +42,7 @@ struct t_matrix : cairo_matrix_t
 	}
 	t_matrix(const cairo_matrix_t& a_0)
 	{
-		*this = a_0;
+		*static_cast<cairo_matrix_t*>(this) = a_0;
 	}
 	void f_translate(double a_x, double a_y)
 	{

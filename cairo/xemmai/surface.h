@@ -124,7 +124,7 @@ public:
 	}
 	bool f_has_show_text_glyphs() const
 	{
-		return cairo_surface_has_show_text_glyphs(v_value);
+		return cairo_surface_has_show_text_glyphs(v_value) != 0;
 	}
 	void f_write_to_png(const std::wstring& a_path) const
 	{
@@ -241,7 +241,7 @@ public:
 	{
 		f_check<t_bytes>(a_data, L"data");
 		t_bytes& data = f_as<t_bytes&>(a_data);
-		if (a_width < 0 || a_height < 0 || a_stride < 0 || data.f_size() < a_stride * a_height) t_throwable::f_throw(L"invalid arguments.");
+		if (a_width < 0 || a_height < 0 || a_stride < 0 || static_cast<int>(data.f_size()) < a_stride * a_height) t_throwable::f_throw(L"invalid arguments.");
 		return f_transfer(new t_image_surface(cairo_image_surface_create_for_data(&data[0], a_format, a_width, a_height, a_stride), a_data));
 	}
 	static t_transfer f_create_from_png_source(t_image_source& a_source);

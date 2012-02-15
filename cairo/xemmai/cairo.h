@@ -1,6 +1,14 @@
 #ifndef CAIRO__XEMMAI__CAIRO_H
 #define CAIRO__XEMMAI__CAIRO_H
 
+#ifdef _WIN32
+#ifndef CAIRO__XEMMAI__EXPORT
+#define CAIRO__XEMMAI__EXPORT __declspec(dllimport)
+#endif
+#else
+#define CAIRO__XEMMAI__EXPORT
+#endif
+
 #include <xemmai/convert.h>
 #include <xemmai/array.h>
 #include <xemmai/bytes.h>
@@ -60,7 +68,7 @@ protected:
 	t_entry(bool) : v_previous(this), v_next(this)
 	{
 	}
-	t_entry();
+	CAIRO__XEMMAI__EXPORT t_entry();
 	void f_unlink()
 	{
 		v_previous->v_next = v_next;
@@ -69,7 +77,7 @@ protected:
 	}
 
 public:
-	virtual void f_dispose();
+	CAIRO__XEMMAI__EXPORT virtual void f_dispose();
 };
 
 class t_session : public t_entry
@@ -81,11 +89,15 @@ class t_session : public t_entry
 	t_extension* v_extension;
 
 public:
+#ifdef _WIN32
+	static CAIRO__XEMMAI__EXPORT t_session* f_instance();
+#else
 	static t_session* f_instance()
 	{
 		if (!v_instance) t_throwable::f_throw(L"must be inside main.");
 		return v_instance;
 	}
+#endif
 
 	t_session(t_extension* a_extension);
 	~t_session();
@@ -101,7 +113,7 @@ class t_proxy : public t_entry
 	t_scoped v_object;
 
 protected:
-	static cairo_user_data_key_t v_key;
+	static CAIRO__XEMMAI__EXPORT cairo_user_data_key_t v_key;
 
 	static void f_destroy(void* a_p)
 	{
@@ -119,13 +131,13 @@ protected:
 	{
 		v_object.f_pointer__(this);
 	}
-	virtual void f_destroy();
+	CAIRO__XEMMAI__EXPORT virtual void f_destroy();
 
 public:
-	virtual ~t_proxy();
+	CAIRO__XEMMAI__EXPORT virtual ~t_proxy();
 	bool f_valid() const
 	{
-		return v_session == t_session::v_instance;
+		return v_session == t_session::f_instance();
 	}
 	t_object* f_object() const
 	{

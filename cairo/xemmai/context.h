@@ -226,7 +226,7 @@ public:
 	}
 	bool f_in_fill(double a_x, double a_y) const
 	{
-		return cairo_in_fill(v_value, a_x, a_y);
+		return cairo_in_fill(v_value, a_x, a_y) != 0;
 	}
 	void f_mask(t_pattern& a_pattern)
 	{
@@ -263,7 +263,7 @@ public:
 	}
 	bool f_in_stroke(double a_x, double a_y) const
 	{
-		return cairo_in_stroke(v_value, a_x, a_y);
+		return cairo_in_stroke(v_value, a_x, a_y) != 0;
 	}
 	void f_copy_page()
 	{
@@ -287,7 +287,7 @@ public:
 	}
 	bool f_has_current_point() const
 	{
-		return cairo_has_current_point(v_value);
+		return cairo_has_current_point(v_value) != 0;
 	}
 	t_transfer f_get_current_point() const
 	{

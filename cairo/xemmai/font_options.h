@@ -53,7 +53,7 @@ struct t_font_options
 	}
 	static bool f_equal(const t_font_options* a_this, const t_font_options* a_other)
 	{
-		return cairo_font_options_equal(f_to(a_this), f_to(a_other));
+		return cairo_font_options_equal(f_to(a_this), f_to(a_other)) != 0;
 	}
 	static void f_set_antialias(t_font_options* a_this, cairo_antialias_t a_antialias)
 	{
