@@ -9,6 +9,7 @@
 #define CAIRO__XEMMAI__EXPORT
 #endif
 
+#include <cerrno>
 #include <iterator>
 #include <iconv.h>
 #include <xemmai/convert.h>
