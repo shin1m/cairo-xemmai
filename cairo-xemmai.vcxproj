@@ -52,7 +52,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;CAIRO__XEMMAI__EXPORT=__declspec(dllexport);%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\cairo\src;$(SolutionDir)..\jpeg;$(SolutionDir)..\xemmai\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\win-iconv;$(SolutionDir)..\cairo\src;$(SolutionDir)..\jpeg;$(SolutionDir)..\xemmai\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -70,7 +70,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;CAIRO__XEMMAI__EXPORT=__declspec(dllexport);%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\cairo\src;$(SolutionDir)..\jpeg;$(SolutionDir)..\xemmai\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\win-iconv;$(SolutionDir)..\cairo\src;$(SolutionDir)..\jpeg;$(SolutionDir)..\xemmai\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -82,6 +82,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\win-iconv\win_iconv.c" />
     <ClCompile Include="cairo\xemmai\cairo.cc" />
     <ClCompile Include="cairo\xemmai\context.cc" />
     <ClCompile Include="cairo\xemmai\font_face.cc" />

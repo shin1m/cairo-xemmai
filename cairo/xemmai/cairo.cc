@@ -8,6 +8,20 @@ namespace xemmai
 
 using ::xemmai::f_define;
 
+std::string f_convert(const std::wstring& a_string)
+{
+	std::vector<char> cs;
+	t_session::v_instance->v_encoder(a_string.begin(), a_string.end(), std::back_inserter(cs));
+	return std::string(cs.begin(), cs.end());
+}
+
+std::wstring f_convert(const std::string& a_string)
+{
+	std::vector<wchar_t> cs;
+	t_session::v_instance->v_decoder(a_string.begin(), a_string.end(), std::back_inserter(cs));
+	return std::wstring(cs.begin(), cs.end());
+}
+
 t_transfer f_tuple(const t_transfer& a_0, const t_transfer& a_1)
 {
 	t_transfer p = t_tuple::f_instantiate(2);
@@ -75,7 +89,7 @@ t_session* t_session::f_instance()
 }
 #endif
 
-t_session::t_session(t_extension* a_extension) : t_entry(false), v_extension(a_extension)
+t_session::t_session(t_extension* a_extension) : t_entry(false), v_extension(a_extension), v_encoder("wchar_t", "utf-8"), v_decoder("utf-8", "wchar_t")
 {
 	if (v_instance) t_throwable::f_throw(L"already inside main.");
 	v_instance = this;
