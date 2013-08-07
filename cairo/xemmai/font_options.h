@@ -103,30 +103,28 @@ struct t_type_of<t_font_options> : t_type
 {
 	typedef cairo::xemmai::t_extension t_extension;
 
-	static t_transfer f_construct(t_object* a_class)
+	static t_scoped f_construct(t_object* a_class)
 	{
-		t_transfer object = t_object::f_allocate(a_class);
+		t_scoped object = t_object::f_allocate(a_class);
 		object.f_pointer__(t_font_options::f_create());
 		return object;
 	}
-	static t_transfer f_construct(t_object* a_class, const t_font_options* a_original)
+	static t_scoped f_construct(t_object* a_class, const t_font_options* a_original)
 	{
-		t_transfer object = t_object::f_allocate(a_class);
+		t_scoped object = t_object::f_allocate(a_class);
 		object.f_pointer__(t_font_options::f_copy(a_original));
 		return object;
 	}
-	static t_transfer f_construct()
+	static t_scoped f_construct()
 	{
 		return f_construct(cairo::xemmai::t_session::f_instance()->f_extension()->f_type<t_font_options>());
 	}
 	static void f_define(t_extension* a_extension);
 
-	t_type_of(const t_transfer& a_module, const t_transfer& a_super) : t_type(a_module, a_super)
-	{
-	}
+	using t_type::t_type;
 	virtual t_type* f_derive(t_object* a_this);
 	virtual void f_finalize(t_object* a_this);
-	virtual t_transfer f_construct(t_object* a_class, t_slot* a_stack, size_t a_n);
+	virtual t_scoped f_construct(t_object* a_class, t_slot* a_stack, size_t a_n);
 	virtual void f_instantiate(t_object* a_class, t_slot* a_stack, size_t a_n);
 };
 
@@ -135,9 +133,7 @@ struct t_type_of<cairo_antialias_t> : t_enum_of<cairo_antialias_t, cairo::xemmai
 {
 	static void f_define(t_extension* a_extension);
 
-	t_type_of(const t_transfer& a_module, const t_transfer& a_super) : t_base(a_module, a_super)
-	{
-	}
+	using t_base::t_base;
 };
 
 template<>
@@ -145,9 +141,7 @@ struct t_type_of<cairo_subpixel_order_t> : t_enum_of<cairo_subpixel_order_t, cai
 {
 	static void f_define(t_extension* a_extension);
 
-	t_type_of(const t_transfer& a_module, const t_transfer& a_super) : t_base(a_module, a_super)
-	{
-	}
+	using t_base::t_base;
 };
 
 template<>
@@ -155,9 +149,7 @@ struct t_type_of<cairo_hint_style_t> : t_enum_of<cairo_hint_style_t, cairo::xemm
 {
 	static void f_define(t_extension* a_extension);
 
-	t_type_of(const t_transfer& a_module, const t_transfer& a_super) : t_base(a_module, a_super)
-	{
-	}
+	using t_base::t_base;
 };
 
 template<>
@@ -165,9 +157,7 @@ struct t_type_of<cairo_hint_metrics_t> : t_enum_of<cairo_hint_metrics_t, cairo::
 {
 	static void f_define(t_extension* a_extension);
 
-	t_type_of(const t_transfer& a_module, const t_transfer& a_super) : t_base(a_module, a_super)
-	{
-	}
+	using t_base::t_base;
 };
 
 }

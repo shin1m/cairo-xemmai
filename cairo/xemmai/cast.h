@@ -26,7 +26,7 @@
 
 		static T0* f_call(T1 a_object)
 		{
-			return reinterpret_cast<size_t>(f_object(a_object)) == t_value::e_tag__NULL ? 0 : t_cast<T0, T1>::f_call(a_object);
+			return reinterpret_cast<size_t>(f_object(a_object)) == t_value::e_tag__NULL ? nullptr : t_cast<T0, T1>::f_call(a_object);
 		}
 	};
 	template<typename T0, typename T1>
@@ -45,7 +45,7 @@
 		static bool f_call(T1 a_object)
 		{
 			using namespace ::xemmai;
-			return reinterpret_cast<size_t>(f_object(a_object)) >= t_value::e_tag__OBJECT && dynamic_cast<t_type_of<typename t_fundamental<T0>::t_type>*>(f_as<t_type*>(f_object(a_object)->f_type())) != 0;
+			return reinterpret_cast<size_t>(f_object(a_object)) >= t_value::e_tag__OBJECT && dynamic_cast<t_type_of<typename t_fundamental<T0>::t_type>*>(f_as<t_type*>(f_object(a_object)->f_type())) != nullptr;
 		}
 	};
 	template<typename T0, typename T1>
@@ -62,13 +62,13 @@
 			case t_value::e_tag__FLOAT:
 				return false;
 			default:
-				return dynamic_cast<t_type_of<typename t_fundamental<T0>::t_type>*>(f_as<t_type*>(f_object(a_object)->f_type())) != 0;
+				return dynamic_cast<t_type_of<typename t_fundamental<T0>::t_type>*>(f_as<t_type*>(f_object(a_object)->f_type())) != nullptr;
 			}
 		}
 	};
 
 	template<typename T_extension, typename T>
-	static t_transfer f_transfer(T_extension* a_extension, T a_value)
+	static t_scoped f_transfer(T_extension* a_extension, T a_value)
 	{
 		return a_value->f_object();
 	}

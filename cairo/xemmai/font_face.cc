@@ -10,7 +10,7 @@ namespace xemmai
 
 t_font_face* t_font_face::f_wrap(cairo_font_face_t* a_value)
 {
-	if (!a_value) return 0;
+	if (!a_value) return nullptr;
 	t_font_face* p = f_from(a_value);
 	if (p) return p;
 	switch (cairo_font_face_get_type(a_value)) {
@@ -57,7 +57,7 @@ void t_type_of<t_font_face>::f_define(t_extension* a_extension)
 
 t_type* t_type_of<t_font_face>::f_derive(t_object* a_this)
 {
-	return 0;
+	return nullptr;
 }
 
 void t_type_of<t_font_face>::f_finalize(t_object* a_this)
@@ -67,16 +67,15 @@ void t_type_of<t_font_face>::f_finalize(t_object* a_this)
 	delete p;
 }
 
-t_transfer t_type_of<t_font_face>::f_construct(t_object* a_class, t_slot* a_stack, size_t a_n)
+t_scoped t_type_of<t_font_face>::f_construct(t_object* a_class, t_slot* a_stack, size_t a_n)
 {
 	t_throwable::f_throw(L"uninstantiatable.");
-	return t_transfer();
 }
 
 void t_type_of<t_font_face>::f_instantiate(t_object* a_class, t_slot* a_stack, size_t a_n)
 {
 	a_stack[0].f_construct(f_construct(a_class, a_stack, a_n));
-	for (size_t i = 1; i <= a_n; ++i) a_stack[i] = 0;
+	for (size_t i = 1; i <= a_n; ++i) a_stack[i] = nullptr;
 }
 
 void t_type_of<cairo_font_type_t>::f_define(t_extension* a_extension)
@@ -99,9 +98,9 @@ void t_type_of<t_toy_font_face>::f_define(t_extension* a_extension)
 	;
 }
 
-t_transfer t_type_of<t_toy_font_face>::f_construct(t_object* a_class, t_slot* a_stack, size_t a_n)
+t_scoped t_type_of<t_toy_font_face>::f_construct(t_object* a_class, t_slot* a_stack, size_t a_n)
 {
-	return t_construct_with<t_transfer (*)(t_object*, const std::wstring&, cairo_font_slant_t, cairo_font_weight_t), t_toy_font_face::f_construct>::t_bind<t_toy_font_face>::f_do(a_class, a_stack, a_n);
+	return t_construct_with<t_scoped (*)(t_object*, const std::wstring&, cairo_font_slant_t, cairo_font_weight_t), t_toy_font_face::f_construct>::t_bind<t_toy_font_face>::f_do(a_class, a_stack, a_n);
 }
 
 }

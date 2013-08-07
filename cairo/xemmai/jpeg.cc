@@ -30,7 +30,7 @@ struct t_scoped_decompress : jpeg_decompress_struct
 	{
 		jpeg_destroy_decompress(this);
 	}
-	t_transfer f_decompress();
+	t_scoped f_decompress();
 };
 
 void t_scoped_decompress::f_error(j_common_ptr cinfo)
@@ -40,7 +40,7 @@ void t_scoped_decompress::f_error(j_common_ptr cinfo)
 	t_throwable::f_throw(f_convert(buffer));
 }
 
-t_transfer t_scoped_decompress::f_decompress()
+t_scoped t_scoped_decompress::f_decompress()
 {
 	jpeg_read_header(this, TRUE);
 	jpeg_start_decompress(this);
@@ -57,7 +57,7 @@ t_transfer t_scoped_decompress::f_decompress()
 		t_throwable::f_throw(L"unsupported color space.");
 	}
 	int stride = cairo_format_stride_for_width(format, output_width);
-	t_transfer data = t_bytes::f_instantiate(stride * output_height);
+	t_scoped data = t_bytes::f_instantiate(stride * output_height);
 	t_bytes& bytes = f_as<t_bytes&>(data);
 	unsigned char* row = &bytes[0];
 	if (out_color_space == JCS_GRAYSCALE) {
@@ -99,7 +99,7 @@ t_transfer t_scoped_decompress::f_decompress()
 		}
 	}
 	jpeg_finish_decompress(this);
-	return t_image_surface::f_construct(0, data, format, output_width, output_height, stride);
+	return t_image_surface::f_construct(nullptr, std::move(data), format, output_width, output_height, stride);
 }
 
 struct t_jpeg_source : jpeg_source_mgr
@@ -167,7 +167,7 @@ void t_jpeg_source::f_terminate(j_decompress_ptr cinfo)
 
 }
 
-t_transfer t_image_surface::f_create_from_jpeg_source(t_image_source& a_source)
+t_scoped t_image_surface::f_create_from_jpeg_source(t_image_source& a_source)
 {
 	t_jpeg_source source(a_source);
 	t_scoped_decompress cinfo;
@@ -175,13 +175,13 @@ t_transfer t_image_surface::f_create_from_jpeg_source(t_image_source& a_source)
 	return cinfo.f_decompress();
 }
 
-t_transfer t_image_surface::f_create_from_jpeg(const std::wstring& a_path)
+t_scoped t_image_surface::f_create_from_jpeg(const std::wstring& a_path)
 {
 	t_file_source source(a_path);
-	return source ? f_create_from_jpeg_source(source) : 0;
+	return source ? f_create_from_jpeg_source(source) : nullptr;
 }
 
-t_transfer t_image_surface::f_create_from_jpeg_stream(const t_value& a_read)
+t_scoped t_image_surface::f_create_from_jpeg_stream(const t_value& a_read)
 {
 	t_stream_source source(a_read);
 	return f_create_from_jpeg_source(source);

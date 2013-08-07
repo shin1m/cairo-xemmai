@@ -37,7 +37,7 @@ class t_context : public t_proxy_of<t_context, cairo_t>
 
 public:
 	using t_base::f_construct;
-	static t_transfer f_construct(t_object* a_class, t_surface& a_target)
+	static t_scoped f_construct(t_object* a_class, t_surface& a_target)
 	{
 		return f_transfer(new t_context(cairo_create(a_target)));
 	}
@@ -115,16 +115,16 @@ public:
 		return cairo_get_antialias(v_value);
 	}
 	void f_set_dash(const t_array& a_dashes, double a_offset);
-	t_transfer f_get_dash() const
+	t_scoped f_get_dash() const
 	{
 		int n = cairo_get_dash_count(v_value);
 		std::vector<double> dashes(n);
 		double offset;
 		cairo_get_dash(v_value, &dashes[0], &offset);
-		t_transfer p = t_array::f_instantiate();
+		t_scoped p = t_array::f_instantiate();
 		t_array& array = f_as<t_array&>(p);
 		for (int i = 0; i < n; ++i) array.f_push(f_global()->f_as(dashes[i]));
-		return f_tuple(p, f_global()->f_as(offset));
+		return f_tuple(std::move(p), f_global()->f_as(offset));
 	}
 	void f_set_fill_rule(cairo_fill_rule_t a_fill_rule)
 	{
@@ -190,7 +190,7 @@ public:
 	{
 		cairo_clip_preserve(v_value);
 	}
-	t_transfer f_clip_extents() const
+	t_scoped f_clip_extents() const
 	{
 		double x0;
 		double y0;
@@ -215,7 +215,7 @@ public:
 	{
 		cairo_fill_preserve(v_value);
 	}
-	t_transfer f_fill_extents() const
+	t_scoped f_fill_extents() const
 	{
 		double x0;
 		double y0;
@@ -252,7 +252,7 @@ public:
 	{
 		cairo_stroke_preserve(v_value);
 	}
-	t_transfer f_stroke_extents() const
+	t_scoped f_stroke_extents() const
 	{
 		double x0;
 		double y0;
@@ -289,7 +289,7 @@ public:
 	{
 		return cairo_has_current_point(v_value) != 0;
 	}
-	t_transfer f_get_current_point() const
+	t_scoped f_get_current_point() const
 	{
 		double x;
 		double y;
@@ -352,7 +352,7 @@ public:
 	{
 		cairo_rel_move_to(v_value, a_x, a_y);
 	}
-	t_transfer f_path_extents() const
+	t_scoped f_path_extents() const
 	{
 		double x0;
 		double y0;
@@ -391,22 +391,22 @@ public:
 	{
 		cairo_identity_matrix(v_value);
 	}
-	t_transfer f_user_to_device(double a_x, double a_y) const
+	t_scoped f_user_to_device(double a_x, double a_y) const
 	{
 		cairo_user_to_device(v_value, &a_x, &a_y);
 		return f_tuple(f_global()->f_as(a_x), f_global()->f_as(a_y));
 	}
-	t_transfer f_user_to_device_distance(double a_x, double a_y) const
+	t_scoped f_user_to_device_distance(double a_x, double a_y) const
 	{
 		cairo_user_to_device_distance(v_value, &a_x, &a_y);
 		return f_tuple(f_global()->f_as(a_x), f_global()->f_as(a_y));
 	}
-	t_transfer f_device_to_user(double a_x, double a_y) const
+	t_scoped f_device_to_user(double a_x, double a_y) const
 	{
 		cairo_device_to_user(v_value, &a_x, &a_y);
 		return f_tuple(f_global()->f_as(a_x), f_global()->f_as(a_y));
 	}
-	t_transfer f_device_to_user_distance(double a_x, double a_y) const
+	t_scoped f_device_to_user_distance(double a_x, double a_y) const
 	{
 		cairo_device_to_user_distance(v_value, &a_x, &a_y);
 		return f_tuple(f_global()->f_as(a_x), f_global()->f_as(a_y));
@@ -433,9 +433,9 @@ public:
 	{
 		cairo_set_font_options(v_value, t_font_options::f_to(&a_options));
 	}
-	t_transfer f_get_font_options() const
+	t_scoped f_get_font_options() const
 	{
-		t_transfer options = t_type_of<t_font_options>::f_construct();
+		t_scoped options = t_type_of<t_font_options>::f_construct();
 		cairo_get_font_options(v_value, t_font_options::f_to(f_as<t_font_options*>(options)));
 		return options;
 	}
@@ -470,19 +470,19 @@ public:
 	{
 		cairo_show_text_glyphs(v_value, a_utf8, a_n0, a_glyphs, a_n1, a_clusters, a_n2, a_cluster_flags);
 	}
-	t_transfer f_font_extents() const
+	t_scoped f_font_extents() const
 	{
 		cairo_font_extents_t extents;
 		cairo_font_extents(v_value, &extents);
 		return f_tuple(f_global()->f_as(extents.ascent), f_global()->f_as(extents.descent), f_global()->f_as(extents.height), f_global()->f_as(extents.max_x_advance), f_global()->f_as(extents.max_y_advance));
 	}
-	t_transfer f_text_extents(const std::wstring& a_text) const
+	t_scoped f_text_extents(const std::wstring& a_text) const
 	{
 		cairo_text_extents_t extents;
 		cairo_text_extents(v_value, f_convert(a_text).c_str(), &extents);
 		return f_tuple(f_global()->f_as(extents.x_bearing), f_global()->f_as(extents.y_bearing), f_global()->f_as(extents.width), f_global()->f_as(extents.height), f_global()->f_as(extents.x_advance), f_global()->f_as(extents.y_advance));
 	}
-	t_transfer f_glyph_extents(const cairo_glyph_t* a_glyphs, int a_n) const
+	t_scoped f_glyph_extents(const cairo_glyph_t* a_glyphs, int a_n) const
 	{
 		cairo_text_extents_t extents;
 		cairo_glyph_extents(v_value, a_glyphs, a_n, &extents);
@@ -507,12 +507,10 @@ struct t_type_of<t_context> : t_type
 
 	static void f_define(t_extension* a_extension);
 
-	t_type_of(const t_transfer& a_module, const t_transfer& a_super) : t_type(a_module, a_super)
-	{
-	}
+	using t_type::t_type;
 	virtual t_type* f_derive(t_object* a_this);
 	virtual void f_finalize(t_object* a_this);
-	virtual t_transfer f_construct(t_object* a_class, t_slot* a_stack, size_t a_n);
+	virtual t_scoped f_construct(t_object* a_class, t_slot* a_stack, size_t a_n);
 	virtual void f_instantiate(t_object* a_class, t_slot* a_stack, size_t a_n);
 };
 
@@ -521,9 +519,7 @@ struct t_type_of<cairo_fill_rule_t> : t_enum_of<cairo_fill_rule_t, cairo::xemmai
 {
 	static void f_define(t_extension* a_extension);
 
-	t_type_of(const t_transfer& a_module, const t_transfer& a_super) : t_base(a_module, a_super)
-	{
-	}
+	using t_base::t_base;
 };
 
 template<>
@@ -531,9 +527,7 @@ struct t_type_of<cairo_line_cap_t> : t_enum_of<cairo_line_cap_t, cairo::xemmai::
 {
 	static void f_define(t_extension* a_extension);
 
-	t_type_of(const t_transfer& a_module, const t_transfer& a_super) : t_base(a_module, a_super)
-	{
-	}
+	using t_base::t_base;
 };
 
 template<>
@@ -541,9 +535,7 @@ struct t_type_of<cairo_line_join_t> : t_enum_of<cairo_line_join_t, cairo::xemmai
 {
 	static void f_define(t_extension* a_extension);
 
-	t_type_of(const t_transfer& a_module, const t_transfer& a_super) : t_base(a_module, a_super)
-	{
-	}
+	using t_base::t_base;
 };
 
 template<>
@@ -551,9 +543,7 @@ struct t_type_of<cairo_operator_t> : t_enum_of<cairo_operator_t, cairo::xemmai::
 {
 	static void f_define(t_extension* a_extension);
 
-	t_type_of(const t_transfer& a_module, const t_transfer& a_super) : t_base(a_module, a_super)
-	{
-	}
+	using t_base::t_base;
 };
 
 }

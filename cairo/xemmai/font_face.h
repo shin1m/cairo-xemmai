@@ -70,7 +70,7 @@ class t_toy_font_face : public t_font_face
 	}
 
 public:
-	static t_transfer f_construct(t_object* a_class, const std::wstring& a_family, cairo_font_slant_t a_slant, cairo_font_weight_t a_weight)
+	static t_scoped f_construct(t_object* a_class, const std::wstring& a_family, cairo_font_slant_t a_slant, cairo_font_weight_t a_weight)
 	{
 		return f_construct_shared<t_toy_font_face>(cairo_toy_font_face_create(f_convert(a_family).c_str(), a_slant, a_weight));
 	}
@@ -104,9 +104,7 @@ struct t_type_of<cairo_font_slant_t> : t_enum_of<cairo_font_slant_t, cairo::xemm
 {
 	static void f_define(t_extension* a_extension);
 
-	t_type_of(const t_transfer& a_module, const t_transfer& a_super) : t_base(a_module, a_super)
-	{
-	}
+	using t_base::t_base;
 };
 
 template<>
@@ -114,9 +112,7 @@ struct t_type_of<cairo_font_weight_t> : t_enum_of<cairo_font_weight_t, cairo::xe
 {
 	static void f_define(t_extension* a_extension);
 
-	t_type_of(const t_transfer& a_module, const t_transfer& a_super) : t_base(a_module, a_super)
-	{
-	}
+	using t_base::t_base;
 };
 
 template<>
@@ -127,12 +123,10 @@ struct t_type_of<t_font_face> : t_type
 
 	static void f_define(t_extension* a_extension);
 
-	t_type_of(const t_transfer& a_module, const t_transfer& a_super) : t_type(a_module, a_super)
-	{
-	}
+	using t_type::t_type;
 	virtual t_type* f_derive(t_object* a_this);
 	virtual void f_finalize(t_object* a_this);
-	virtual t_transfer f_construct(t_object* a_class, t_slot* a_stack, size_t a_n);
+	virtual t_scoped f_construct(t_object* a_class, t_slot* a_stack, size_t a_n);
 	virtual void f_instantiate(t_object* a_class, t_slot* a_stack, size_t a_n);
 };
 
@@ -141,9 +135,7 @@ struct t_type_of<cairo_font_type_t> : t_enum_of<cairo_font_type_t, cairo::xemmai
 {
 	static void f_define(t_extension* a_extension);
 
-	t_type_of(const t_transfer& a_module, const t_transfer& a_super) : t_base(a_module, a_super)
-	{
-	}
+	using t_base::t_base;
 };
 
 template<>
@@ -151,10 +143,8 @@ struct t_type_of<t_toy_font_face> : t_type_of<t_font_face>
 {
 	static void f_define(t_extension* a_extension);
 
-	t_type_of(const t_transfer& a_module, const t_transfer& a_super) : t_type_of<t_font_face>(a_module, a_super)
-	{
-	}
-	virtual t_transfer f_construct(t_object* a_class, t_slot* a_stack, size_t a_n);
+	using t_type_of<t_font_face>::t_type_of;
+	virtual t_scoped f_construct(t_object* a_class, t_slot* a_stack, size_t a_n);
 };
 
 }

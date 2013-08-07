@@ -26,9 +26,8 @@ namespace xemmai
 using ::xemmai::t_object;
 using ::xemmai::t_scan;
 using ::xemmai::t_value;
-using ::xemmai::t_transfer;
-using ::xemmai::t_scoped;
 using ::xemmai::t_slot;
+using ::xemmai::t_scoped;
 using ::xemmai::t_fundamental;
 using ::xemmai::t_type_of;
 using ::xemmai::f_check;
@@ -120,10 +119,10 @@ O t_converter<C0, C1, N>::operator()(I f, I l, O d) const
 std::string f_convert(const std::wstring& a_string);
 std::wstring f_convert(const std::string& a_string);
 
-t_transfer f_tuple(const t_transfer& a_0, const t_transfer& a_1);
-t_transfer f_tuple(const t_transfer& a_0, const t_transfer& a_1, const t_transfer& a_2, const t_transfer& a_3);
-t_transfer f_tuple(const t_transfer& a_0, const t_transfer& a_1, const t_transfer& a_2, const t_transfer& a_3, const t_transfer& a_4);
-t_transfer f_tuple(const t_transfer& a_0, const t_transfer& a_1, const t_transfer& a_2, const t_transfer& a_3, const t_transfer& a_4, const t_transfer& a_5);
+t_scoped f_tuple(t_scoped&& a_0, t_scoped&& a_1);
+t_scoped f_tuple(t_scoped&& a_0, t_scoped&& a_1, t_scoped&& a_2, t_scoped&& a_3);
+t_scoped f_tuple(t_scoped&& a_0, t_scoped&& a_1, t_scoped&& a_2, t_scoped&& a_3, t_scoped&& a_4);
+t_scoped f_tuple(t_scoped&& a_0, t_scoped&& a_1, t_scoped&& a_2, t_scoped&& a_3, t_scoped&& a_4, t_scoped&& a_5);
 
 class t_entry
 {
@@ -139,7 +138,7 @@ protected:
 	{
 		v_previous->v_next = v_next;
 		v_next->v_previous = v_previous;
-		v_previous = v_next = 0;
+		v_previous = v_next = nullptr;
 	}
 
 public:
@@ -189,15 +188,15 @@ protected:
 	{
 		static_cast<t_proxy*>(a_p)->f_destroy();
 	}
-	static t_transfer f_transfer(t_proxy* a_proxy)
+	static t_scoped f_transfer(t_proxy* a_proxy)
 	{
 		++a_proxy->v_n;
 		return a_proxy->v_object;
 	}
 
-	size_t v_n;
+	size_t v_n = 0;
 
-	t_proxy(t_object* a_class) : v_session(t_session::f_instance()), v_object(t_object::f_allocate(a_class)), v_n(0)
+	t_proxy(t_object* a_class) : v_session(t_session::f_instance()), v_object(t_object::f_allocate(a_class))
 	{
 		v_object.f_pointer__(this);
 	}
@@ -222,7 +221,7 @@ protected:
 	typedef t_proxy_of t_base;
 
 	template<typename T_type>
-	static t_transfer f_construct_shared(T_value* a_value)
+	static t_scoped f_construct_shared(T_value* a_value)
 	{
 		T* p = f_from(a_value);
 		if (p) {
@@ -241,7 +240,7 @@ protected:
 	}
 	virtual void f_destroy()
 	{
-		v_value = 0;
+		v_value = nullptr;
 		t_proxy::f_destroy();
 	}
 
@@ -250,7 +249,7 @@ public:
 	{
 		return static_cast<T*>(T::f_get_user_data(a_value, &v_key));
 	}
-	static t_transfer f_construct(T_value* a_value)
+	static t_scoped f_construct(T_value* a_value)
 	{
 		return f_transfer(new T(a_value));
 	}
@@ -316,7 +315,7 @@ class t_extension : public ::xemmai::t_extension
 	t_slot v_type_operator;
 
 	template<typename T>
-	void f_type__(const t_transfer& a_type);
+	void f_type__(t_scoped&& a_type);
 
 public:
 	t_extension(t_object* a_module);
@@ -332,7 +331,7 @@ public:
 		return f_global()->f_type<T>();
 	}
 	template<typename T>
-	t_transfer f_as(const T& a_value) const
+	t_scoped f_as(const T& a_value) const
 	{
 		typedef t_type_of<typename t_fundamental<T>::t_type> t;
 		return t::f_transfer(f_extension<typename t::t_extension>(), a_value);
@@ -340,195 +339,195 @@ public:
 };
 
 template<>
-inline void t_extension::f_type__<t_matrix>(const t_transfer& a_type)
+inline void t_extension::f_type__<t_matrix>(t_scoped&& a_type)
 {
-	v_type_matrix = a_type;
+	v_type_matrix = std::move(a_type);
 }
 
 template<>
-inline void t_extension::f_type__<cairo_status_t>(const t_transfer& a_type)
+inline void t_extension::f_type__<cairo_status_t>(t_scoped&& a_type)
 {
-	v_type_status = a_type;
+	v_type_status = std::move(a_type);
 }
 
 template<>
-inline void t_extension::f_type__<t_font_options>(const t_transfer& a_type)
+inline void t_extension::f_type__<t_font_options>(t_scoped&& a_type)
 {
-	v_type_font_options = a_type;
+	v_type_font_options = std::move(a_type);
 }
 
 template<>
-inline void t_extension::f_type__<cairo_antialias_t>(const t_transfer& a_type)
+inline void t_extension::f_type__<cairo_antialias_t>(t_scoped&& a_type)
 {
-	v_type_antialias = a_type;
+	v_type_antialias = std::move(a_type);
 }
 
 template<>
-inline void t_extension::f_type__<cairo_subpixel_order_t>(const t_transfer& a_type)
+inline void t_extension::f_type__<cairo_subpixel_order_t>(t_scoped&& a_type)
 {
-	v_type_subpixel_order = a_type;
+	v_type_subpixel_order = std::move(a_type);
 }
 
 template<>
-inline void t_extension::f_type__<cairo_hint_style_t>(const t_transfer& a_type)
+inline void t_extension::f_type__<cairo_hint_style_t>(t_scoped&& a_type)
 {
-	v_type_hint_style = a_type;
+	v_type_hint_style = std::move(a_type);
 }
 
 template<>
-inline void t_extension::f_type__<cairo_hint_metrics_t>(const t_transfer& a_type)
+inline void t_extension::f_type__<cairo_hint_metrics_t>(t_scoped&& a_type)
 {
-	v_type_hint_metrics = a_type;
+	v_type_hint_metrics = std::move(a_type);
 }
 
 template<>
-inline void t_extension::f_type__<t_surface>(const t_transfer& a_type)
+inline void t_extension::f_type__<t_surface>(t_scoped&& a_type)
 {
-	v_type_surface = a_type;
+	v_type_surface = std::move(a_type);
 }
 
 template<>
-inline void t_extension::f_type__<cairo_content_t>(const t_transfer& a_type)
+inline void t_extension::f_type__<cairo_content_t>(t_scoped&& a_type)
 {
-	v_type_content = a_type;
+	v_type_content = std::move(a_type);
 }
 
 template<>
-inline void t_extension::f_type__<cairo_surface_type_t>(const t_transfer& a_type)
+inline void t_extension::f_type__<cairo_surface_type_t>(t_scoped&& a_type)
 {
-	v_type_surface_type = a_type;
+	v_type_surface_type = std::move(a_type);
 }
 
 template<>
-inline void t_extension::f_type__<t_image_surface>(const t_transfer& a_type)
+inline void t_extension::f_type__<t_image_surface>(t_scoped&& a_type)
 {
-	v_type_image_surface = a_type;
+	v_type_image_surface = std::move(a_type);
 }
 
 template<>
-inline void t_extension::f_type__<cairo_format_t>(const t_transfer& a_type)
+inline void t_extension::f_type__<cairo_format_t>(t_scoped&& a_type)
 {
-	v_type_format = a_type;
+	v_type_format = std::move(a_type);
 }
 
 template<>
-inline void t_extension::f_type__<t_pattern>(const t_transfer& a_type)
+inline void t_extension::f_type__<t_pattern>(t_scoped&& a_type)
 {
-	v_type_pattern = a_type;
+	v_type_pattern = std::move(a_type);
 }
 
 template<>
-inline void t_extension::f_type__<t_solid_pattern>(const t_transfer& a_type)
+inline void t_extension::f_type__<t_solid_pattern>(t_scoped&& a_type)
 {
-	v_type_solid_pattern = a_type;
+	v_type_solid_pattern = std::move(a_type);
 }
 
 template<>
-inline void t_extension::f_type__<t_surface_pattern>(const t_transfer& a_type)
+inline void t_extension::f_type__<t_surface_pattern>(t_scoped&& a_type)
 {
-	v_type_surface_pattern = a_type;
+	v_type_surface_pattern = std::move(a_type);
 }
 
 template<>
-inline void t_extension::f_type__<t_gradient>(const t_transfer& a_type)
+inline void t_extension::f_type__<t_gradient>(t_scoped&& a_type)
 {
-	v_type_gradient = a_type;
+	v_type_gradient = std::move(a_type);
 }
 
 template<>
-inline void t_extension::f_type__<t_linear_gradient>(const t_transfer& a_type)
+inline void t_extension::f_type__<t_linear_gradient>(t_scoped&& a_type)
 {
-	v_type_linear_gradient = a_type;
+	v_type_linear_gradient = std::move(a_type);
 }
 
 template<>
-inline void t_extension::f_type__<t_radial_gradient>(const t_transfer& a_type)
+inline void t_extension::f_type__<t_radial_gradient>(t_scoped&& a_type)
 {
-	v_type_radial_gradient = a_type;
+	v_type_radial_gradient = std::move(a_type);
 }
 
 template<>
-inline void t_extension::f_type__<cairo_extend_t>(const t_transfer& a_type)
+inline void t_extension::f_type__<cairo_extend_t>(t_scoped&& a_type)
 {
-	v_type_extend = a_type;
+	v_type_extend = std::move(a_type);
 }
 
 template<>
-inline void t_extension::f_type__<cairo_filter_t>(const t_transfer& a_type)
+inline void t_extension::f_type__<cairo_filter_t>(t_scoped&& a_type)
 {
-	v_type_filter = a_type;
+	v_type_filter = std::move(a_type);
 }
 
 template<>
-inline void t_extension::f_type__<cairo_pattern_type_t>(const t_transfer& a_type)
+inline void t_extension::f_type__<cairo_pattern_type_t>(t_scoped&& a_type)
 {
-	v_type_pattern_type = a_type;
+	v_type_pattern_type = std::move(a_type);
 }
 
 template<>
-inline void t_extension::f_type__<t_font_face>(const t_transfer& a_type)
+inline void t_extension::f_type__<t_font_face>(t_scoped&& a_type)
 {
-	v_type_font_face = a_type;
+	v_type_font_face = std::move(a_type);
 }
 
 template<>
-inline void t_extension::f_type__<cairo_font_type_t>(const t_transfer& a_type)
+inline void t_extension::f_type__<cairo_font_type_t>(t_scoped&& a_type)
 {
-	v_type_font_type = a_type;
+	v_type_font_type = std::move(a_type);
 }
 
 template<>
-inline void t_extension::f_type__<cairo_font_slant_t>(const t_transfer& a_type)
+inline void t_extension::f_type__<cairo_font_slant_t>(t_scoped&& a_type)
 {
-	v_type_font_slant = a_type;
+	v_type_font_slant = std::move(a_type);
 }
 
 template<>
-inline void t_extension::f_type__<cairo_font_weight_t>(const t_transfer& a_type)
+inline void t_extension::f_type__<cairo_font_weight_t>(t_scoped&& a_type)
 {
-	v_type_font_weight = a_type;
+	v_type_font_weight = std::move(a_type);
 }
 
 template<>
-inline void t_extension::f_type__<t_toy_font_face>(const t_transfer& a_type)
+inline void t_extension::f_type__<t_toy_font_face>(t_scoped&& a_type)
 {
-	v_type_toy_font_face = a_type;
+	v_type_toy_font_face = std::move(a_type);
 }
 
 template<>
-inline void t_extension::f_type__<t_scaled_font>(const t_transfer& a_type)
+inline void t_extension::f_type__<t_scaled_font>(t_scoped&& a_type)
 {
-	v_type_scaled_font = a_type;
+	v_type_scaled_font = std::move(a_type);
 }
 
 template<>
-inline void t_extension::f_type__<t_context>(const t_transfer& a_type)
+inline void t_extension::f_type__<t_context>(t_scoped&& a_type)
 {
-	v_type_context = a_type;
+	v_type_context = std::move(a_type);
 }
 
 template<>
-inline void t_extension::f_type__<cairo_fill_rule_t>(const t_transfer& a_type)
+inline void t_extension::f_type__<cairo_fill_rule_t>(t_scoped&& a_type)
 {
-	v_type_fill_rule = a_type;
+	v_type_fill_rule = std::move(a_type);
 }
 
 template<>
-inline void t_extension::f_type__<cairo_line_cap_t>(const t_transfer& a_type)
+inline void t_extension::f_type__<cairo_line_cap_t>(t_scoped&& a_type)
 {
-	v_type_line_cap = a_type;
+	v_type_line_cap = std::move(a_type);
 }
 
 template<>
-inline void t_extension::f_type__<cairo_line_join_t>(const t_transfer& a_type)
+inline void t_extension::f_type__<cairo_line_join_t>(t_scoped&& a_type)
 {
-	v_type_line_join = a_type;
+	v_type_line_join = std::move(a_type);
 }
 
 template<>
-inline void t_extension::f_type__<cairo_operator_t>(const t_transfer& a_type)
+inline void t_extension::f_type__<cairo_operator_t>(t_scoped&& a_type)
 {
-	v_type_operator = a_type;
+	v_type_operator = std::move(a_type);
 }
 
 template<>
@@ -741,9 +740,7 @@ struct t_type_of<cairo_status_t> : t_enum_of<cairo_status_t, cairo::xemmai::t_ex
 {
 	static void f_define(t_extension* a_extension);
 
-	t_type_of(const t_transfer& a_module, const t_transfer& a_super) : t_base(a_module, a_super)
-	{
-	}
+	using t_base::t_base;
 };
 
 }

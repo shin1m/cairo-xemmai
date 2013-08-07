@@ -23,7 +23,7 @@ void t_type_of<t_font_options>::f_define(t_extension* a_extension)
 
 t_type* t_type_of<t_font_options>::f_derive(t_object* a_this)
 {
-	return 0;
+	return nullptr;
 }
 
 void t_type_of<t_font_options>::f_finalize(t_object* a_this)
@@ -31,18 +31,18 @@ void t_type_of<t_font_options>::f_finalize(t_object* a_this)
 	t_font_options::f_destroy(f_as<t_font_options*>(a_this));
 }
 
-t_transfer t_type_of<t_font_options>::f_construct(t_object* a_class, t_slot* a_stack, size_t a_n)
+t_scoped t_type_of<t_font_options>::f_construct(t_object* a_class, t_slot* a_stack, size_t a_n)
 {
-	return
-		t_overload<t_construct_with<t_transfer (*)(t_object*), f_construct>,
-		t_overload<t_construct_with<t_transfer (*)(t_object*, const t_font_options*), f_construct>
-	> >::t_bind<t_font_options>::f_do(a_class, a_stack, a_n);
+	return t_overload<
+		t_construct_with<t_scoped (*)(t_object*), f_construct>,
+		t_construct_with<t_scoped (*)(t_object*, const t_font_options*), f_construct>
+	>::t_bind<t_font_options>::f_do(a_class, a_stack, a_n);
 }
 
 void t_type_of<t_font_options>::f_instantiate(t_object* a_class, t_slot* a_stack, size_t a_n)
 {
 	a_stack[0].f_construct(f_construct(a_class, a_stack, a_n));
-	for (size_t i = 1; i <= a_n; ++i) a_stack[i] = 0;
+	for (size_t i = 1; i <= a_n; ++i) a_stack[i] = nullptr;
 }
 
 void t_type_of<cairo_antialias_t>::f_define(t_extension* a_extension)

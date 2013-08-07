@@ -65,8 +65,8 @@ public:
 	{
 	}
 	void f_read_header();
-	t_transfer f_read_image();
-	t_transfer f_read_images();
+	t_scoped f_read_image();
+	t_scoped f_read_images();
 };
 
 void t_gif_decoder::f_skip_blocks()
@@ -159,7 +159,7 @@ void t_gif_decoder::f_read_header()
 	}
 }
 
-t_transfer t_gif_decoder::f_read_image()
+t_scoped t_gif_decoder::f_read_image()
 {
 	size_t disposal = 0;
 	bool user_input = false;
@@ -186,7 +186,7 @@ t_transfer t_gif_decoder::f_read_image()
 		case 0x2c:
 			break;
 		default:
-			return 0;
+			return nullptr;
 		}
 		break;
 	}
@@ -218,7 +218,7 @@ t_transfer t_gif_decoder::f_read_image()
 	v_indices[v_eoi] = 0;
 	v_extracted_size = 0;
 	int stride = cairo_format_stride_for_width(CAIRO_FORMAT_ARGB32, width);
-	t_transfer data = t_bytes::f_instantiate(stride * height);
+	t_scoped data = t_bytes::f_instantiate(stride * height);
 	t_bytes& bytes = f_as<t_bytes&>(data);
 	if (interlaced) {
 		f_read_rows(colors, transparent, width, height, 0, 8, &bytes[0], stride);
@@ -229,7 +229,7 @@ t_transfer t_gif_decoder::f_read_image()
 		f_read_rows(colors, transparent, width, height, 0, 1, &bytes[0], stride);
 	}
 	f_skip_blocks();
-	t_transfer p = t_image_surface::f_construct(0, data, CAIRO_FORMAT_ARGB32, width, height, stride);
+	t_scoped p = t_image_surface::f_construct(nullptr, std::move(data), CAIRO_FORMAT_ARGB32, width, height, stride);
 	p.f_put(t_symbol::f_instantiate(L"left"), f_global()->f_as(left));
 	p.f_put(t_symbol::f_instantiate(L"top"), f_global()->f_as(top));
 	p.f_put(t_symbol::f_instantiate(L"disposal"), f_global()->f_as(disposal));
@@ -238,31 +238,31 @@ t_transfer t_gif_decoder::f_read_image()
 	return p;
 }
 
-t_transfer t_gif_decoder::f_read_images()
+t_scoped t_gif_decoder::f_read_images()
 {
-	t_transfer p = t_array::f_instantiate();
+	t_scoped p = t_array::f_instantiate();
 	p.f_put(t_symbol::f_instantiate(L"width"), f_global()->f_as(v_width));
 	p.f_put(t_symbol::f_instantiate(L"height"), f_global()->f_as(v_height));
 	{
-		t_transfer q = t_tuple::f_instantiate(4);
+		t_scoped q = t_tuple::f_instantiate(4);
 		t_tuple& tuple = f_as<t_tuple&>(q);
 		tuple[0].f_construct(f_global()->f_as((v_background >> 16 & 0xff) / 255.0));
 		tuple[1].f_construct(f_global()->f_as((v_background >> 8 & 0xff) / 255.0));
 		tuple[2].f_construct(f_global()->f_as((v_background & 0xff) / 255.0));
 		tuple[3].f_construct(f_global()->f_as((v_background >> 24 & 0xff) / 255.0));
-		p.f_put(t_symbol::f_instantiate(L"background"), q);
+		p.f_put(t_symbol::f_instantiate(L"background"), std::move(q));
 	}
 	p.f_put(t_symbol::f_instantiate(L"aspect"), f_global()->f_as(v_aspect));
 	t_array& array = f_as<t_array&>(p);
 	while (true) {
-		t_transfer q = f_read_image();
+		t_scoped q = f_read_image();
 		if (!q) break;
-		array.f_push(q);
+		array.f_push(std::move(q));
 	}
 	return p;
 }
 
-t_transfer f_read_images(t_image_source& a_source)
+t_scoped f_read_images(t_image_source& a_source)
 {
 	t_gif_decoder decoder(a_source);
 	decoder.f_read_header();
@@ -271,32 +271,32 @@ t_transfer f_read_images(t_image_source& a_source)
 
 }
 
-t_transfer t_image_surface::f_create_from_gif_source(t_image_source& a_source)
+t_scoped t_image_surface::f_create_from_gif_source(t_image_source& a_source)
 {
 	t_gif_decoder decoder(a_source);
 	decoder.f_read_header();
 	return decoder.f_read_image();
 }
 
-t_transfer t_image_surface::f_create_from_gif(const std::wstring& a_path)
+t_scoped t_image_surface::f_create_from_gif(const std::wstring& a_path)
 {
 	t_file_source source(a_path);
-	return source ? f_create_from_gif_source(source) : 0;
+	return source ? f_create_from_gif_source(source) : nullptr;
 }
 
-t_transfer t_image_surface::f_create_from_gif_stream(const t_value& a_read)
+t_scoped t_image_surface::f_create_from_gif_stream(const t_value& a_read)
 {
 	t_stream_source source(a_read);
 	return f_create_from_gif_source(source);
 }
 
-t_transfer t_image_surface::f_create_all_from_gif(const std::wstring& a_path)
+t_scoped t_image_surface::f_create_all_from_gif(const std::wstring& a_path)
 {
 	t_file_source source(a_path);
-	return source ? f_read_images(source) : 0;
+	return source ? f_read_images(source) : nullptr;
 }
 
-t_transfer t_image_surface::f_create_all_from_gif_stream(const t_value& a_read)
+t_scoped t_image_surface::f_create_all_from_gif_stream(const t_value& a_read)
 {
 	t_stream_source source(a_read);
 	return f_read_images(source);

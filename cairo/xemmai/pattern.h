@@ -76,16 +76,16 @@ class t_solid_pattern : public t_pattern
 	}
 
 public:
-	static t_transfer f_construct(t_object* a_class, double a_red, double a_green, double a_blue)
+	static t_scoped f_construct(t_object* a_class, double a_red, double a_green, double a_blue)
 	{
 		return f_transfer(new t_solid_pattern(cairo_pattern_create_rgb(a_red, a_green, a_blue)));
 	}
-	static t_transfer f_construct(t_object* a_class, double a_red, double a_green, double a_blue, double a_alpha)
+	static t_scoped f_construct(t_object* a_class, double a_red, double a_green, double a_blue, double a_alpha)
 	{
 		return f_transfer(new t_solid_pattern(cairo_pattern_create_rgba(a_red, a_green, a_blue, a_alpha)));
 	}
 
-	t_transfer f_get_rgba() const
+	t_scoped f_get_rgba() const
 	{
 		double red;
 		double green;
@@ -105,7 +105,7 @@ class t_surface_pattern : public t_pattern
 	}
 
 public:
-	static t_transfer f_construct(t_object* a_class, t_surface& a_surface)
+	static t_scoped f_construct(t_object* a_class, t_surface& a_surface)
 	{
 		return f_transfer(new t_surface_pattern(cairo_pattern_create_for_surface(a_surface)));
 	}
@@ -156,7 +156,7 @@ public:
 		cairo_pattern_get_color_stop_count(v_value, &count);
 		return count;
 	}
-	t_transfer f_get_color_stop_rgba(int a_index) const
+	t_scoped f_get_color_stop_rgba(int a_index) const
 	{
 		double offset;
 		double red;
@@ -177,12 +177,12 @@ class t_linear_gradient : public t_gradient
 	}
 
 public:
-	static t_transfer f_construct(t_object* a_class, double a_x0, double a_y0, double a_x1, double a_y1)
+	static t_scoped f_construct(t_object* a_class, double a_x0, double a_y0, double a_x1, double a_y1)
 	{
 		return f_transfer(new t_linear_gradient(cairo_pattern_create_linear(a_x0, a_y0, a_x1, a_y1)));
 	}
 
-	t_transfer f_get_linear_points() const
+	t_scoped f_get_linear_points() const
 	{
 		double x0;
 		double y0;
@@ -202,12 +202,12 @@ class t_radial_gradient : public t_gradient
 	}
 
 public:
-	static t_transfer f_construct(t_object* a_class, double a_x0, double a_y0, double a_r0, double a_x1, double a_y1, double a_r1)
+	static t_scoped f_construct(t_object* a_class, double a_x0, double a_y0, double a_r0, double a_x1, double a_y1, double a_r1)
 	{
 		return f_transfer(new t_radial_gradient(cairo_pattern_create_radial(a_x0, a_y0, a_r0, a_x1, a_y1, a_r1)));
 	}
 
-	t_transfer f_get_radial_circles() const
+	t_scoped f_get_radial_circles() const
 	{
 		double x0;
 		double y0;
@@ -242,12 +242,10 @@ struct t_type_of<t_pattern> : t_type
 
 	static void f_define(t_extension* a_extension);
 
-	t_type_of(const t_transfer& a_module, const t_transfer& a_super) : t_type(a_module, a_super)
-	{
-	}
+	using t_type::t_type;
 	virtual t_type* f_derive(t_object* a_this);
 	virtual void f_finalize(t_object* a_this);
-	virtual t_transfer f_construct(t_object* a_class, t_slot* a_stack, size_t a_n);
+	virtual t_scoped f_construct(t_object* a_class, t_slot* a_stack, size_t a_n);
 	virtual void f_instantiate(t_object* a_class, t_slot* a_stack, size_t a_n);
 };
 
@@ -256,10 +254,8 @@ struct t_type_of<t_solid_pattern> : t_type_of<t_pattern>
 {
 	static void f_define(t_extension* a_extension);
 
-	t_type_of(const t_transfer& a_module, const t_transfer& a_super) : t_type_of<t_pattern>(a_module, a_super)
-	{
-	}
-	virtual t_transfer f_construct(t_object* a_class, t_slot* a_stack, size_t a_n);
+	using t_type_of<t_pattern>::t_type_of;
+	virtual t_scoped f_construct(t_object* a_class, t_slot* a_stack, size_t a_n);
 };
 
 template<>
@@ -267,10 +263,8 @@ struct t_type_of<t_surface_pattern> : t_type_of<t_pattern>
 {
 	static void f_define(t_extension* a_extension);
 
-	t_type_of(const t_transfer& a_module, const t_transfer& a_super) : t_type_of<t_pattern>(a_module, a_super)
-	{
-	}
-	virtual t_transfer f_construct(t_object* a_class, t_slot* a_stack, size_t a_n);
+	using t_type_of<t_pattern>::t_type_of;
+	virtual t_scoped f_construct(t_object* a_class, t_slot* a_stack, size_t a_n);
 };
 
 template<>
@@ -278,9 +272,7 @@ struct t_type_of<cairo_extend_t> : t_enum_of<cairo_extend_t, cairo::xemmai::t_ex
 {
 	static void f_define(t_extension* a_extension);
 
-	t_type_of(const t_transfer& a_module, const t_transfer& a_super) : t_base(a_module, a_super)
-	{
-	}
+	using t_base::t_base;
 };
 
 template<>
@@ -288,9 +280,7 @@ struct t_type_of<cairo_filter_t> : t_enum_of<cairo_filter_t, cairo::xemmai::t_ex
 {
 	static void f_define(t_extension* a_extension);
 
-	t_type_of(const t_transfer& a_module, const t_transfer& a_super) : t_base(a_module, a_super)
-	{
-	}
+	using t_base::t_base;
 };
 
 template<>
@@ -298,9 +288,7 @@ struct t_type_of<cairo_pattern_type_t> : t_enum_of<cairo_pattern_type_t, cairo::
 {
 	static void f_define(t_extension* a_extension);
 
-	t_type_of(const t_transfer& a_module, const t_transfer& a_super) : t_base(a_module, a_super)
-	{
-	}
+	using t_base::t_base;
 };
 
 template<>
@@ -308,9 +296,7 @@ struct t_type_of<t_gradient> : t_type_of<t_pattern>
 {
 	static void f_define(t_extension* a_extension);
 
-	t_type_of(const t_transfer& a_module, const t_transfer& a_super) : t_type_of<t_pattern>(a_module, a_super)
-	{
-	}
+	using t_type_of<t_pattern>::t_type_of;
 };
 
 template<>
@@ -318,10 +304,8 @@ struct t_type_of<t_linear_gradient> : t_type_of<t_gradient>
 {
 	static void f_define(t_extension* a_extension);
 
-	t_type_of(const t_transfer& a_module, const t_transfer& a_super) : t_type_of<t_gradient>(a_module, a_super)
-	{
-	}
-	virtual t_transfer f_construct(t_object* a_class, t_slot* a_stack, size_t a_n);
+	using t_type_of<t_gradient>::t_type_of;
+	virtual t_scoped f_construct(t_object* a_class, t_slot* a_stack, size_t a_n);
 };
 
 template<>
@@ -329,10 +313,8 @@ struct t_type_of<t_radial_gradient> : t_type_of<t_gradient>
 {
 	static void f_define(t_extension* a_extension);
 
-	t_type_of(const t_transfer& a_module, const t_transfer& a_super) : t_type_of<t_gradient>(a_module, a_super)
-	{
-	}
-	virtual t_transfer f_construct(t_object* a_class, t_slot* a_stack, size_t a_n);
+	using t_type_of<t_gradient>::t_type_of;
+	virtual t_scoped f_construct(t_object* a_class, t_slot* a_stack, size_t a_n);
 };
 
 }

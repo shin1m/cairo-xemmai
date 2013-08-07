@@ -11,12 +11,12 @@ void t_type_of<t_scaled_font>::f_define(t_extension* a_extension)
 		(L"acquire", t_member<void (t_scaled_font::*)(), &t_scaled_font::f_acquire>())
 		(L"release", t_member<void (t_scaled_font::*)(), &t_scaled_font::f_release>())
 		(L"status", t_member<cairo_status_t (t_scaled_font::*)() const, &t_scaled_font::f_status>())
-		(L"font_extents", t_member<t_transfer (t_scaled_font::*)() const, &t_scaled_font::f_font_extents>())
-		(L"text_extents", t_member<t_transfer (t_scaled_font::*)(const std::wstring&) const, &t_scaled_font::f_text_extents>())
-		//(L"glyph_extents", t_member<t_transfer (t_scaled_font::*)(const cairo_glyph_t*, int) const, &t_scaled_font::f_glyph_extents>())
+		(L"font_extents", t_member<t_scoped (t_scaled_font::*)() const, &t_scaled_font::f_font_extents>())
+		(L"text_extents", t_member<t_scoped (t_scaled_font::*)(const std::wstring&) const, &t_scaled_font::f_text_extents>())
+		//(L"glyph_extents", t_member<t_scoped (t_scaled_font::*)(const cairo_glyph_t*, int) const, &t_scaled_font::f_glyph_extents>())
 		//(L"text_to_glyphs", t_member<cairo_status_t (t_scaled_font::*)(double, double, const char*, int, cairo_glyph_t**, int*, cairo_text_cluster_t**, int*, cairo_text_cluster_flags_t*) const, &t_scaled_font::f_text_to_glyphs>())
 		(L"get_font_face", t_member<t_font_face* (t_scaled_font::*)() const, &t_scaled_font::f_get_font_face>())
-		(L"get_font_options", t_member<t_transfer (t_scaled_font::*)() const, &t_scaled_font::f_get_font_options>())
+		(L"get_font_options", t_member<t_scoped (t_scaled_font::*)() const, &t_scaled_font::f_get_font_options>())
 		(L"get_font_matrix", t_member<t_matrix (t_scaled_font::*)() const, &t_scaled_font::f_get_font_matrix>())
 		(L"get_font_matrix", t_member<t_matrix (t_scaled_font::*)() const, &t_scaled_font::f_get_font_matrix>())
 		(L"get_font_matrix", t_member<t_matrix (t_scaled_font::*)() const, &t_scaled_font::f_get_font_matrix>())
@@ -26,7 +26,7 @@ void t_type_of<t_scaled_font>::f_define(t_extension* a_extension)
 
 t_type* t_type_of<t_scaled_font>::f_derive(t_object* a_this)
 {
-	return 0;
+	return nullptr;
 }
 
 void t_type_of<t_scaled_font>::f_finalize(t_object* a_this)
@@ -36,15 +36,15 @@ void t_type_of<t_scaled_font>::f_finalize(t_object* a_this)
 	delete p;
 }
 
-t_transfer t_type_of<t_scaled_font>::f_construct(t_object* a_class, t_slot* a_stack, size_t a_n)
+t_scoped t_type_of<t_scaled_font>::f_construct(t_object* a_class, t_slot* a_stack, size_t a_n)
 {
-	return t_construct_with<t_transfer (*)(t_object*, t_font_face&, const t_matrix&, const t_matrix&, const t_font_options&), t_scaled_font::f_construct>::t_bind<t_scaled_font>::f_do(a_class, a_stack, a_n);
+	return t_construct_with<t_scoped (*)(t_object*, t_font_face&, const t_matrix&, const t_matrix&, const t_font_options&), t_scaled_font::f_construct>::t_bind<t_scaled_font>::f_do(a_class, a_stack, a_n);
 }
 
 void t_type_of<t_scaled_font>::f_instantiate(t_object* a_class, t_slot* a_stack, size_t a_n)
 {
 	a_stack[0].f_construct(f_construct(a_class, a_stack, a_n));
-	for (size_t i = 1; i <= a_n; ++i) a_stack[i] = 0;
+	for (size_t i = 1; i <= a_n; ++i) a_stack[i] = nullptr;
 }
 
 }

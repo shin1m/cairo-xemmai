@@ -64,12 +64,12 @@ struct t_matrix : cairo_matrix_t
 	{
 		cairo_matrix_multiply(this, &a_0, &a_1);
 	}
-	t_transfer f_transform_distance(double a_x, double a_y) const
+	t_scoped f_transform_distance(double a_x, double a_y) const
 	{
 		cairo_matrix_transform_distance(this, &a_x, &a_y);
 		return f_tuple(f_global()->f_as(a_x), f_global()->f_as(a_y));
 	}
-	t_transfer f_transform_point(double a_x, double a_y) const
+	t_scoped f_transform_point(double a_x, double a_y) const
 	{
 		cairo_matrix_transform_point(this, &a_x, &a_y);
 		return f_tuple(f_global()->f_as(a_x), f_global()->f_as(a_y));
@@ -91,20 +91,18 @@ struct t_type_of<t_matrix> : t_type
 	typedef cairo::xemmai::t_extension t_extension;
 
 	template<typename T_extension, typename T>
-	static t_transfer f_transfer(T_extension* a_extension, T a_value)
+	static t_scoped f_transfer(T_extension* a_extension, T a_value)
 	{
-		t_transfer object = t_object::f_allocate(a_extension->template f_type<typename t_fundamental<T>::t_type>());
+		t_scoped object = t_object::f_allocate(a_extension->template f_type<typename t_fundamental<T>::t_type>());
 		object.f_pointer__(new t_matrix(a_value));
 		return object;
 	}
 	static void f_define(t_extension* a_extension);
 
-	t_type_of(const t_transfer& a_module, const t_transfer& a_super) : t_type(a_module, a_super)
-	{
-	}
+	using t_type::t_type;
 	virtual t_type* f_derive(t_object* a_this);
 	virtual void f_finalize(t_object* a_this);
-	virtual t_transfer f_construct(t_object* a_class, t_slot* a_stack, size_t a_n);
+	virtual t_scoped f_construct(t_object* a_class, t_slot* a_stack, size_t a_n);
 	virtual void f_instantiate(t_object* a_class, t_slot* a_stack, size_t a_n);
 };
 

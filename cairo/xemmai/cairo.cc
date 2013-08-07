@@ -22,48 +22,48 @@ std::wstring f_convert(const std::string& a_string)
 	return std::wstring(cs.begin(), cs.end());
 }
 
-t_transfer f_tuple(const t_transfer& a_0, const t_transfer& a_1)
+t_scoped f_tuple(t_scoped&& a_0, t_scoped&& a_1)
 {
-	t_transfer p = t_tuple::f_instantiate(2);
+	t_scoped p = t_tuple::f_instantiate(2);
 	t_tuple& tuple = f_as<t_tuple&>(p);
-	tuple[0].f_construct(a_0);
-	tuple[1].f_construct(a_1);
+	tuple[0].f_construct(std::move(a_0));
+	tuple[1].f_construct(std::move(a_1));
 	return p;
 }
 
-t_transfer f_tuple(const t_transfer& a_0, const t_transfer& a_1, const t_transfer& a_2, const t_transfer& a_3)
+t_scoped f_tuple(t_scoped&& a_0, t_scoped&& a_1, t_scoped&& a_2, t_scoped&& a_3)
 {
-	t_transfer p = t_tuple::f_instantiate(4);
+	t_scoped p = t_tuple::f_instantiate(4);
 	t_tuple& tuple = f_as<t_tuple&>(p);
-	tuple[0].f_construct(a_0);
-	tuple[1].f_construct(a_1);
-	tuple[2].f_construct(a_2);
-	tuple[3].f_construct(a_3);
+	tuple[0].f_construct(std::move(a_0));
+	tuple[1].f_construct(std::move(a_1));
+	tuple[2].f_construct(std::move(a_2));
+	tuple[3].f_construct(std::move(a_3));
 	return p;
 }
 
-t_transfer f_tuple(const t_transfer& a_0, const t_transfer& a_1, const t_transfer& a_2, const t_transfer& a_3, const t_transfer& a_4)
+t_scoped f_tuple(t_scoped&& a_0, t_scoped&& a_1, t_scoped&& a_2, t_scoped&& a_3, t_scoped&& a_4)
 {
-	t_transfer p = t_tuple::f_instantiate(5);
+	t_scoped p = t_tuple::f_instantiate(5);
 	t_tuple& tuple = f_as<t_tuple&>(p);
-	tuple[0].f_construct(a_0);
-	tuple[1].f_construct(a_1);
-	tuple[2].f_construct(a_2);
-	tuple[3].f_construct(a_3);
-	tuple[4].f_construct(a_4);
+	tuple[0].f_construct(std::move(a_0));
+	tuple[1].f_construct(std::move(a_1));
+	tuple[2].f_construct(std::move(a_2));
+	tuple[3].f_construct(std::move(a_3));
+	tuple[4].f_construct(std::move(a_4));
 	return p;
 }
 
-t_transfer f_tuple(const t_transfer& a_0, const t_transfer& a_1, const t_transfer& a_2, const t_transfer& a_3, const t_transfer& a_4, const t_transfer& a_5)
+t_scoped f_tuple(t_scoped&& a_0, t_scoped&& a_1, t_scoped&& a_2, t_scoped&& a_3, t_scoped&& a_4, t_scoped&& a_5)
 {
-	t_transfer p = t_tuple::f_instantiate(6);
+	t_scoped p = t_tuple::f_instantiate(6);
 	t_tuple& tuple = f_as<t_tuple&>(p);
-	tuple[0].f_construct(a_0);
-	tuple[1].f_construct(a_1);
-	tuple[2].f_construct(a_2);
-	tuple[3].f_construct(a_3);
-	tuple[4].f_construct(a_4);
-	tuple[5].f_construct(a_5);
+	tuple[0].f_construct(std::move(a_0));
+	tuple[1].f_construct(std::move(a_1));
+	tuple[2].f_construct(std::move(a_2));
+	tuple[3].f_construct(std::move(a_3));
+	tuple[4].f_construct(std::move(a_4));
+	tuple[5].f_construct(std::move(a_5));
 	return p;
 }
 
@@ -99,7 +99,7 @@ t_session::~t_session()
 {
 	while (v_next != this) v_next->f_dispose();
 	cairo_debug_reset_static_data();
-	v_instance = 0;
+	v_instance = nullptr;
 }
 
 cairo_user_data_key_t t_proxy::v_key;
@@ -107,7 +107,7 @@ cairo_user_data_key_t t_proxy::v_key;
 void t_proxy::f_destroy()
 {
 	if (v_previous) f_unlink();
-	v_object = 0;
+	v_object = nullptr;
 }
 
 t_proxy::~t_proxy()

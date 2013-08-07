@@ -10,7 +10,7 @@ namespace xemmai
 
 t_pattern* t_pattern::f_wrap(cairo_pattern_t* a_value)
 {
-	if (!a_value) return 0;
+	if (!a_value) return nullptr;
 	t_pattern* p = f_from(a_value);
 	if (p) return p;
 	switch (cairo_pattern_get_type(a_value)) {
@@ -24,7 +24,7 @@ t_pattern* t_pattern::f_wrap(cairo_pattern_t* a_value)
 		return new t_radial_gradient(a_value);
 	default:
 		t_throwable::f_throw(L"unknown pattern.");
-		return 0;
+		return nullptr;
 	}
 }
 
@@ -49,7 +49,7 @@ void t_type_of<t_pattern>::f_define(t_extension* a_extension)
 
 t_type* t_type_of<t_pattern>::f_derive(t_object* a_this)
 {
-	return 0;
+	return nullptr;
 }
 
 void t_type_of<t_pattern>::f_finalize(t_object* a_this)
@@ -59,31 +59,30 @@ void t_type_of<t_pattern>::f_finalize(t_object* a_this)
 	delete p;
 }
 
-t_transfer t_type_of<t_pattern>::f_construct(t_object* a_class, t_slot* a_stack, size_t a_n)
+t_scoped t_type_of<t_pattern>::f_construct(t_object* a_class, t_slot* a_stack, size_t a_n)
 {
 	t_throwable::f_throw(L"uninstantiatable.");
-	return t_transfer();
 }
 
 void t_type_of<t_pattern>::f_instantiate(t_object* a_class, t_slot* a_stack, size_t a_n)
 {
 	a_stack[0].f_construct(f_construct(a_class, a_stack, a_n));
-	for (size_t i = 1; i <= a_n; ++i) a_stack[i] = 0;
+	for (size_t i = 1; i <= a_n; ++i) a_stack[i] = nullptr;
 }
 
 void t_type_of<t_solid_pattern>::f_define(t_extension* a_extension)
 {
 	t_define<t_solid_pattern, t_pattern>(a_extension, L"SolidPattern")
-		(L"get_rgba", t_member<t_transfer (t_solid_pattern::*)() const, &t_solid_pattern::f_get_rgba>())
+		(L"get_rgba", t_member<t_scoped (t_solid_pattern::*)() const, &t_solid_pattern::f_get_rgba>())
 	;
 }
 
-t_transfer t_type_of<t_solid_pattern>::f_construct(t_object* a_class, t_slot* a_stack, size_t a_n)
+t_scoped t_type_of<t_solid_pattern>::f_construct(t_object* a_class, t_slot* a_stack, size_t a_n)
 {
-	return
-		t_overload<t_construct_with<t_transfer (*)(t_object*, double, double, double), t_solid_pattern::f_construct>,
-		t_overload<t_construct_with<t_transfer (*)(t_object*, double, double, double, double), t_solid_pattern::f_construct>
-	> >::t_bind<t_solid_pattern>::f_do(a_class, a_stack, a_n);
+	return t_overload<
+		t_construct_with<t_scoped (*)(t_object*, double, double, double), t_solid_pattern::f_construct>,
+		t_construct_with<t_scoped (*)(t_object*, double, double, double, double), t_solid_pattern::f_construct>
+	>::t_bind<t_solid_pattern>::f_do(a_class, a_stack, a_n);
 }
 
 void t_type_of<t_surface_pattern>::f_define(t_extension* a_extension)
@@ -97,9 +96,9 @@ void t_type_of<t_surface_pattern>::f_define(t_extension* a_extension)
 	;
 }
 
-t_transfer t_type_of<t_surface_pattern>::f_construct(t_object* a_class, t_slot* a_stack, size_t a_n)
+t_scoped t_type_of<t_surface_pattern>::f_construct(t_object* a_class, t_slot* a_stack, size_t a_n)
 {
-	return t_construct_with<t_transfer (*)(t_object*, t_surface&), t_surface_pattern::f_construct>::t_bind<t_surface_pattern>::f_do(a_class, a_stack, a_n);
+	return t_construct_with<t_scoped (*)(t_object*, t_surface&), t_surface_pattern::f_construct>::t_bind<t_surface_pattern>::f_do(a_class, a_stack, a_n);
 }
 
 void t_type_of<cairo_extend_t>::f_define(t_extension* a_extension)
@@ -140,32 +139,32 @@ void t_type_of<t_gradient>::f_define(t_extension* a_extension)
 		(L"add_color_stop_rgb", t_member<void (t_gradient::*)(double, double, double, double), &t_gradient::f_add_color_stop>())
 		(L"add_color_stop_rgba", t_member<void (t_gradient::*)(double, double, double, double, double), &t_gradient::f_add_color_stop>())
 		(L"get_color_stop_count", t_member<int (t_gradient::*)() const, &t_gradient::f_get_color_stop_count>())
-		(L"get_color_stop_rgba", t_member<t_transfer (t_gradient::*)(int) const, &t_gradient::f_get_color_stop_rgba>())
+		(L"get_color_stop_rgba", t_member<t_scoped (t_gradient::*)(int) const, &t_gradient::f_get_color_stop_rgba>())
 	;
 }
 
 void t_type_of<t_linear_gradient>::f_define(t_extension* a_extension)
 {
 	t_define<t_linear_gradient, t_gradient>(a_extension, L"LinearGradient")
-		(L"get_linear_points", t_member<t_transfer (t_linear_gradient::*)() const, &t_linear_gradient::f_get_linear_points>())
+		(L"get_linear_points", t_member<t_scoped (t_linear_gradient::*)() const, &t_linear_gradient::f_get_linear_points>())
 	;
 }
 
-t_transfer t_type_of<t_linear_gradient>::f_construct(t_object* a_class, t_slot* a_stack, size_t a_n)
+t_scoped t_type_of<t_linear_gradient>::f_construct(t_object* a_class, t_slot* a_stack, size_t a_n)
 {
-	return t_construct_with<t_transfer (*)(t_object*, double, double, double, double), t_linear_gradient::f_construct>::t_bind<t_linear_gradient>::f_do(a_class, a_stack, a_n);
+	return t_construct_with<t_scoped (*)(t_object*, double, double, double, double), t_linear_gradient::f_construct>::t_bind<t_linear_gradient>::f_do(a_class, a_stack, a_n);
 }
 
 void t_type_of<t_radial_gradient>::f_define(t_extension* a_extension)
 {
 	t_define<t_radial_gradient, t_gradient>(a_extension, L"RadialGradient")
-		(L"get_radial_circles", t_member<t_transfer (t_radial_gradient::*)() const, &t_radial_gradient::f_get_radial_circles>())
+		(L"get_radial_circles", t_member<t_scoped (t_radial_gradient::*)() const, &t_radial_gradient::f_get_radial_circles>())
 	;
 }
 
-t_transfer t_type_of<t_radial_gradient>::f_construct(t_object* a_class, t_slot* a_stack, size_t a_n)
+t_scoped t_type_of<t_radial_gradient>::f_construct(t_object* a_class, t_slot* a_stack, size_t a_n)
 {
-	return t_construct_with<t_transfer (*)(t_object*, double, double, double, double, double, double), t_radial_gradient::f_construct>::t_bind<t_radial_gradient>::f_do(a_class, a_stack, a_n);
+	return t_construct_with<t_scoped (*)(t_object*, double, double, double, double, double, double), t_radial_gradient::f_construct>::t_bind<t_radial_gradient>::f_do(a_class, a_stack, a_n);
 }
 
 }

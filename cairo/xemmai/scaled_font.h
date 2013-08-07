@@ -37,13 +37,13 @@ class t_scaled_font : public t_proxy_of<t_scaled_font, cairo_scaled_font_t>
 	}
 
 public:
-	static t_transfer f_construct(t_object* a_class, t_font_face& a_font_face, const t_matrix& a_font_matrix, const t_matrix& a_ctm, const t_font_options& a_options)
+	static t_scoped f_construct(t_object* a_class, t_font_face& a_font_face, const t_matrix& a_font_matrix, const t_matrix& a_ctm, const t_font_options& a_options)
 	{
 		return f_construct_shared<t_scaled_font>(cairo_scaled_font_create(a_font_face, &a_font_matrix, &a_ctm, t_font_options::f_to(&a_options)));
 	}
 	static t_scaled_font* f_wrap(cairo_scaled_font_t* a_value)
 	{
-		if (!a_value) return 0;
+		if (!a_value) return nullptr;
 		t_scaled_font* p = f_from(a_value);
 		return p ? p : new t_scaled_font(a_value);
 	}
@@ -60,19 +60,19 @@ public:
 	{
 		return cairo_scaled_font_status(v_value);
 	}
-	t_transfer f_font_extents() const
+	t_scoped f_font_extents() const
 	{
 		cairo_font_extents_t extents;
 		cairo_scaled_font_extents(v_value, &extents);
 		return f_tuple(f_global()->f_as(extents.ascent), f_global()->f_as(extents.descent), f_global()->f_as(extents.height), f_global()->f_as(extents.max_x_advance), f_global()->f_as(extents.max_y_advance));
 	}
-	t_transfer f_text_extents(const std::wstring& a_text) const
+	t_scoped f_text_extents(const std::wstring& a_text) const
 	{
 		cairo_text_extents_t extents;
 		cairo_scaled_font_text_extents(v_value, f_convert(a_text).c_str(), &extents);
 		return f_tuple(f_global()->f_as(extents.x_bearing), f_global()->f_as(extents.y_bearing), f_global()->f_as(extents.width), f_global()->f_as(extents.height), f_global()->f_as(extents.x_advance), f_global()->f_as(extents.y_advance));
 	}
-	t_transfer f_glyph_extents(const cairo_glyph_t* a_glyphs, int a_n) const
+	t_scoped f_glyph_extents(const cairo_glyph_t* a_glyphs, int a_n) const
 	{
 		cairo_text_extents_t extents;
 		cairo_scaled_font_glyph_extents(v_value, a_glyphs, a_n, &extents);
@@ -86,9 +86,9 @@ public:
 	{
 		return t_font_face::f_wrap(cairo_scaled_font_get_font_face(v_value));
 	}
-	t_transfer f_get_font_options() const
+	t_scoped f_get_font_options() const
 	{
-		t_transfer options = t_type_of<t_font_options>::f_construct();
+		t_scoped options = t_type_of<t_font_options>::f_construct();
 		cairo_scaled_font_get_font_options(v_value, t_font_options::f_to(f_as<t_font_options*>(options)));
 		return options;
 	}
@@ -133,12 +133,10 @@ struct t_type_of<t_scaled_font> : t_type
 
 	static void f_define(t_extension* a_extension);
 
-	t_type_of(const t_transfer& a_module, const t_transfer& a_super) : t_type(a_module, a_super)
-	{
-	}
+	using t_type::t_type;
 	virtual t_type* f_derive(t_object* a_this);
 	virtual void f_finalize(t_object* a_this);
-	virtual t_transfer f_construct(t_object* a_class, t_slot* a_stack, size_t a_n);
+	virtual t_scoped f_construct(t_object* a_class, t_slot* a_stack, size_t a_n);
 	virtual void f_instantiate(t_object* a_class, t_slot* a_stack, size_t a_n);
 };
 
