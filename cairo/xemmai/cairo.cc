@@ -79,7 +79,7 @@ void t_entry::f_dispose()
 	f_unlink();
 }
 
-XEMMAI__PORTABLE__THREAD t_session* t_session::v_instance;
+thread_local t_session* t_session::v_instance;
 
 #ifdef _WIN32
 t_session* t_session::f_instance()
