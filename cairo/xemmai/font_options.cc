@@ -8,7 +8,7 @@ void t_type_of<t_font_options>::f_define(t_extension* a_extension)
 	t_define<t_font_options, t_object>(a_extension, L"FontOptions")
 		(L"status", t_member<cairo_status_t (*)(t_font_options*), t_font_options::f_status>())
 		(L"merge", t_member<void (*)(t_font_options*, const t_font_options*), t_font_options::f_merge>())
-		(L"hash", t_member<ptrdiff_t (*)(const t_font_options*), t_font_options::f_hash>())
+		(L"hash", t_member<intptr_t (*)(const t_font_options*), t_font_options::f_hash>())
 		(L"equal", t_member<bool (*)(const t_font_options*, const t_font_options*), t_font_options::f_equal>())
 		(L"set_antialias", t_member<void (*)(t_font_options*, cairo_antialias_t), t_font_options::f_set_antialias>())
 		(L"get_antialias", t_member<cairo_antialias_t (*)(const t_font_options*), t_font_options::f_get_antialias>())
@@ -47,7 +47,7 @@ void t_type_of<t_font_options>::f_instantiate(t_object* a_class, t_slot* a_stack
 
 void t_type_of<cairo_antialias_t>::f_define(t_extension* a_extension)
 {
-	t_define<cairo_antialias_t, ptrdiff_t>(a_extension, L"Antialias")
+	t_define<cairo_antialias_t, intptr_t>(a_extension, L"Antialias")
 		(L"DEFAULT", CAIRO_ANTIALIAS_DEFAULT)
 		(L"NONE", CAIRO_ANTIALIAS_NONE)
 		(L"GRAY", CAIRO_ANTIALIAS_GRAY)
@@ -57,7 +57,7 @@ void t_type_of<cairo_antialias_t>::f_define(t_extension* a_extension)
 
 void t_type_of<cairo_subpixel_order_t>::f_define(t_extension* a_extension)
 {
-	t_define<cairo_subpixel_order_t, ptrdiff_t>(a_extension, L"SubpixelOrder")
+	t_define<cairo_subpixel_order_t, intptr_t>(a_extension, L"SubpixelOrder")
 		(L"DEFAULT", CAIRO_SUBPIXEL_ORDER_DEFAULT)
 		(L"RGB", CAIRO_SUBPIXEL_ORDER_RGB)
 		(L"BGR", CAIRO_SUBPIXEL_ORDER_BGR)
@@ -68,7 +68,7 @@ void t_type_of<cairo_subpixel_order_t>::f_define(t_extension* a_extension)
 
 void t_type_of<cairo_hint_style_t>::f_define(t_extension* a_extension)
 {
-	t_define<cairo_hint_style_t, ptrdiff_t>(a_extension, L"HintStyle")
+	t_define<cairo_hint_style_t, intptr_t>(a_extension, L"HintStyle")
 		(L"DEFAULT", CAIRO_HINT_STYLE_DEFAULT)
 		(L"NONE", CAIRO_HINT_STYLE_NONE)
 		(L"SLIGHT", CAIRO_HINT_STYLE_SLIGHT)
@@ -79,7 +79,7 @@ void t_type_of<cairo_hint_style_t>::f_define(t_extension* a_extension)
 
 void t_type_of<cairo_hint_metrics_t>::f_define(t_extension* a_extension)
 {
-	t_define<cairo_hint_metrics_t, ptrdiff_t>(a_extension, L"HintMetrics")
+	t_define<cairo_hint_metrics_t, intptr_t>(a_extension, L"HintMetrics")
 		(L"DEFAULT", CAIRO_HINT_METRICS_DEFAULT)
 		(L"OFF", CAIRO_HINT_METRICS_OFF)
 		(L"ON", CAIRO_HINT_METRICS_ON)

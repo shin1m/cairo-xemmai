@@ -47,7 +47,7 @@ struct t_font_options
 	{
 		cairo_font_options_merge(f_to(a_this), f_to(a_other));
 	}
-	static ptrdiff_t f_hash(const t_font_options* a_this)
+	static intptr_t f_hash(const t_font_options* a_this)
 	{
 		return cairo_font_options_hash(f_to(a_this));
 	}
