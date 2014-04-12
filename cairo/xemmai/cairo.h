@@ -38,6 +38,7 @@ using ::xemmai::t_tuple;
 using ::xemmai::t_throwable;
 using ::xemmai::t_array;
 using ::xemmai::t_bytes;
+using ::xemmai::t_safe_region;
 
 class t_proxy;
 class t_extension;

@@ -67,6 +67,7 @@ void t_image_source::f_prefetch_buffer()
 
 size_t t_file_source::f_read(size_t a_offset)
 {
+	t_safe_region region;
 	t_bytes& bytes = f_as<t_bytes&>(v_buffer);
 	return ::xemmai::io::t_file::f_read(bytes, a_offset, bytes.f_size() - a_offset);
 }
