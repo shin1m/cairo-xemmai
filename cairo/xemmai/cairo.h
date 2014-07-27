@@ -152,7 +152,7 @@ class t_session : public t_entry
 	friend std::string f_convert(const std::wstring& a_string);
 	friend std::wstring f_convert(const std::string& a_string);
 
-	static thread_local t_session* v_instance;
+	static XEMMAI__PORTABLE__THREAD t_session* v_instance;
 
 	t_extension* v_extension;
 	t_converter<wchar_t, char> v_encoder;
