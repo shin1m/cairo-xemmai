@@ -202,13 +202,13 @@ public:
 
 class t_stream_source : public t_image_source
 {
-	t_object* v_read;
+	const t_value& v_read;
 
 protected:
 	virtual size_t f_read(size_t a_offset);
 
 public:
-	t_stream_source(t_object* a_read) : v_read(a_read)
+	t_stream_source(const t_value& a_read) : v_read(a_read)
 	{
 	}
 };

@@ -10,15 +10,15 @@ namespace xemmai
 
 cairo_status_t t_surface::f_write_stream(void* a_closure, const unsigned char* a_data, unsigned int a_length)
 {
-	t_object* write = static_cast<t_object**>(a_closure)[0];
-	t_object* buffer = static_cast<t_object**>(a_closure)[1];
+	const t_value& write = *static_cast<const t_value**>(a_closure)[0];
+	const t_value& buffer = *static_cast<const t_value**>(a_closure)[1];
 	t_bytes& bytes = f_as<t_bytes&>(buffer);
 	t_scoped zero = f_global()->f_as(0);
 	try {
 		while (a_length > 0) {
 			size_t m = std::min(bytes.f_size(), static_cast<size_t>(a_length));
 			std::copy(a_data, a_data + m, &bytes[0]);
-			write->f_call(buffer, zero, f_global()->f_as(m));
+			write(buffer, zero, f_global()->f_as(m));
 			a_data += m;
 			a_length -= m;
 		}
@@ -44,8 +44,8 @@ t_surface* t_surface::f_wrap(cairo_surface_t* a_value)
 void t_surface::f_write_to_png_stream(const t_value& a_write) const
 {
 	t_scoped buffer = t_bytes::f_instantiate(1024);
-	t_object* closure[] = {
-		a_write, buffer
+	const t_value* closure[] = {
+		&a_write, &buffer
 	};
 	cairo_surface_write_to_png_stream(v_value, f_write_stream, closure);
 }
@@ -75,7 +75,7 @@ size_t t_file_source::f_read(size_t a_offset)
 size_t t_stream_source::f_read(size_t a_offset)
 {
 	t_bytes& bytes = f_as<t_bytes&>(v_buffer);
-	t_scoped p = v_read->f_call(v_buffer, f_global()->f_as(a_offset), f_global()->f_as(bytes.f_size() - a_offset));
+	t_scoped p = v_read(v_buffer, f_global()->f_as(a_offset), f_global()->f_as(bytes.f_size() - a_offset));
 	f_check<size_t>(p, L"result of read");
 	return f_as<size_t>(p);
 }
