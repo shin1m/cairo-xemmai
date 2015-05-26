@@ -9,9 +9,9 @@
 #define CAIRO__XEMMAI__EXPORT
 #endif
 
-#include <cerrno>
+#include <codecvt>
 #include <iterator>
-#include <iconv.h>
+#include <locale>
 #include <xemmai/convert.h>
 #include <xemmai/array.h>
 #include <xemmai/bytes.h>
@@ -57,66 +57,6 @@ class t_toy_font_face;
 class t_scaled_font;
 class t_context;
 
-template<typename C0, typename C1, size_t N = 256>
-class t_converter
-{
-	iconv_t v_cd;
-
-public:
-	t_converter(const char* a_from, const char* a_to) : v_cd(iconv_open(a_to, a_from))
-	{
-	}
-	~t_converter()
-	{
-		iconv_close(v_cd);
-	}
-	template<typename I, typename O>
-	O operator()(I f, I l, O d) const;
-};
-
-template<typename C0, typename C1, size_t N>
-template<typename I, typename O>
-O t_converter<C0, C1, N>::operator()(I f, I l, O d) const
-{
-	char cs0[N];
-	char cs1[N];
-	char* p0 = cs0;
-	while (f != l || p0 > cs0) {
-		while (f != l && p0 + sizeof(C0) <= cs0 + sizeof(cs0)) {
-			*reinterpret_cast<C0*>(p0) = *f;
-			p0 += sizeof(C0);
-			++f;
-		}
-		size_t n0 = p0 - cs0;
-		p0 = cs0;
-		char* p1 = cs1;
-		size_t n1 = sizeof(cs1);
-		do {
-			size_t n = iconv(v_cd, &p0, &n0, &p1, &n1);
-			if (n == static_cast<size_t>(-1)) {
-				if (errno == EILSEQ) {
-					if (n1 < sizeof(C1)) break;
-					*reinterpret_cast<C1*>(p1) = '?';
-					p1 += sizeof(C1);
-					n1 -= sizeof(C1);
-				} else if (errno == EINVAL) {
-					if (p0 > cs0) break;
-				} else {
-					break;
-				}
-				p0 += sizeof(C0);
-				n0 -= sizeof(C0);
-			}
-		} while (n0 > 0);
-		d = std::copy(reinterpret_cast<const C1*>(cs1), reinterpret_cast<const C1*>(p1), d);
-		p0 = std::copy(p0, p0 + n0, static_cast<char*>(cs0));
-	}
-	char* p1 = cs1;
-	size_t n1 = sizeof(cs1);
-	if (iconv(v_cd, NULL, NULL, &p1, &n1) != static_cast<size_t>(-1)) d = std::copy(reinterpret_cast<const C1*>(cs1), reinterpret_cast<const C1*>(p1), d);
-	return d;
-}
-
 std::string f_convert(const std::wstring& a_string);
 std::wstring f_convert(const std::string& a_string);
 
@@ -155,8 +95,7 @@ class t_session : public t_entry
 	static XEMMAI__PORTABLE__THREAD t_session* v_instance;
 
 	t_extension* v_extension;
-	t_converter<wchar_t, char> v_encoder;
-	t_converter<char, wchar_t> v_decoder;
+	std::wstring_convert<std::codecvt_utf8<wchar_t>> v_convert;
 
 public:
 #ifdef _WIN32
@@ -204,7 +143,7 @@ protected:
 	CAIRO__XEMMAI__EXPORT virtual void f_destroy();
 
 public:
-	CAIRO__XEMMAI__EXPORT virtual ~t_proxy();
+	CAIRO__XEMMAI__EXPORT virtual ~t_proxy() = default;
 	bool f_valid() const
 	{
 		return v_session == t_session::f_instance();

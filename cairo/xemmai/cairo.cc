@@ -10,16 +10,12 @@ using ::xemmai::f_define;
 
 std::string f_convert(const std::wstring& a_string)
 {
-	std::vector<char> cs;
-	t_session::v_instance->v_encoder(a_string.begin(), a_string.end(), std::back_inserter(cs));
-	return std::string(cs.begin(), cs.end());
+	return t_session::v_instance->v_convert.to_bytes(a_string);
 }
 
 std::wstring f_convert(const std::string& a_string)
 {
-	std::vector<wchar_t> cs;
-	t_session::v_instance->v_decoder(a_string.begin(), a_string.end(), std::back_inserter(cs));
-	return std::wstring(cs.begin(), cs.end());
+	return t_session::v_instance->v_convert.from_bytes(a_string);
 }
 
 t_scoped f_tuple(t_scoped&& a_0, t_scoped&& a_1)
@@ -89,7 +85,7 @@ t_session* t_session::f_instance()
 }
 #endif
 
-t_session::t_session(t_extension* a_extension) : t_entry(false), v_extension(a_extension), v_encoder("wchar_t", "utf-8"), v_decoder("utf-8", "wchar_t")
+t_session::t_session(t_extension* a_extension) : t_entry(false), v_extension(a_extension)
 {
 	if (v_instance) t_throwable::f_throw(L"already inside main.");
 	v_instance = this;
@@ -108,10 +104,6 @@ void t_proxy::f_destroy()
 {
 	if (v_previous) f_unlink();
 	v_object = nullptr;
-}
-
-t_proxy::~t_proxy()
-{
 }
 
 namespace
