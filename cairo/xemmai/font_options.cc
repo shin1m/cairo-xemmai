@@ -42,7 +42,8 @@ t_scoped t_type_of<t_font_options>::f_construct(t_object* a_class, t_scoped* a_s
 void t_type_of<t_font_options>::f_instantiate(t_object* a_class, t_scoped* a_stack, size_t a_n)
 {
 	a_stack[0].f_construct(f_construct(a_class, a_stack, a_n));
-	for (size_t i = 1; i <= a_n; ++i) a_stack[i] = nullptr;
+	a_n += 2;
+	for (size_t i = 2; i < a_n; ++i) a_stack[i] = nullptr;
 }
 
 void t_type_of<cairo_antialias_t>::f_define(t_extension* a_extension)
