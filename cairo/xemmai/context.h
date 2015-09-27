@@ -497,13 +497,12 @@ public:
 namespace xemmai
 {
 
-using cairo::xemmai::t_context;
-
 template<>
-struct t_type_of<t_context> : t_type
+struct t_type_of<cairo::xemmai::t_context> : t_type
 {
 #include "cast.h"
 	typedef cairo::xemmai::t_extension t_extension;
+	typedef cairo::xemmai::t_context t_context;
 
 	static void f_define(t_extension* a_extension);
 

@@ -27,7 +27,7 @@ void t_context::f_set_dash(const t_array& a_dashes, double a_offset)
 namespace xemmai
 {
 
-void t_type_of<t_context>::f_define(t_extension* a_extension)
+void t_type_of<cairo::xemmai::t_context>::f_define(t_extension* a_extension)
 {
 	t_define<t_context, t_object>(a_extension, L"Context")
 		(L"acquire", t_member<void (t_context::*)(), &t_context::f_acquire>())
@@ -137,24 +137,24 @@ void t_type_of<t_context>::f_define(t_extension* a_extension)
 	;
 }
 
-t_type* t_type_of<t_context>::f_derive(t_object* a_this)
+t_type* t_type_of<cairo::xemmai::t_context>::f_derive(t_object* a_this)
 {
 	return nullptr;
 }
 
-void t_type_of<t_context>::f_finalize(t_object* a_this)
+void t_type_of<cairo::xemmai::t_context>::f_finalize(t_object* a_this)
 {
 	t_context* p = static_cast<t_context*>(a_this->f_pointer());
 	assert(!*p);
 	delete p;
 }
 
-t_scoped t_type_of<t_context>::f_construct(t_object* a_class, t_scoped* a_stack, size_t a_n)
+t_scoped t_type_of<cairo::xemmai::t_context>::f_construct(t_object* a_class, t_scoped* a_stack, size_t a_n)
 {
 	return t_construct_with<t_scoped (*)(t_object*, t_surface&), t_context::f_construct>::t_bind<t_context>::f_do(a_class, a_stack, a_n);
 }
 
-void t_type_of<t_context>::f_instantiate(t_object* a_class, t_scoped* a_stack, size_t a_n)
+void t_type_of<cairo::xemmai::t_context>::f_instantiate(t_object* a_class, t_scoped* a_stack, size_t a_n)
 {
 	a_stack[0].f_construct(f_construct(a_class, a_stack, a_n));
 	a_n += 2;
