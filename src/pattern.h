@@ -1,13 +1,13 @@
-#ifndef CAIRO__XEMMAI__PATTERN_H
-#define CAIRO__XEMMAI__PATTERN_H
+#ifndef XEMMAIX__CAIRO__PATTERN_H
+#define XEMMAIX__CAIRO__PATTERN_H
 
 #include "matrix.h"
 #include "surface.h"
 
-namespace cairo
+namespace xemmaix
 {
 
-namespace xemmai
+namespace cairo
 {
 
 class t_pattern : public t_proxy_of<t_pattern, cairo_pattern_t>
@@ -227,18 +227,11 @@ public:
 namespace xemmai
 {
 
-using cairo::xemmai::t_pattern;
-using cairo::xemmai::t_solid_pattern;
-using cairo::xemmai::t_surface_pattern;
-using cairo::xemmai::t_gradient;
-using cairo::xemmai::t_linear_gradient;
-using cairo::xemmai::t_radial_gradient;
-
 template<>
-struct t_type_of<t_pattern> : t_type
+struct t_type_of<xemmaix::cairo::t_pattern> : t_type
 {
 #include "cast.h"
-	typedef cairo::xemmai::t_extension t_extension;
+	typedef xemmaix::cairo::t_extension t_extension;
 
 	static void f_define(t_extension* a_extension);
 
@@ -250,25 +243,25 @@ struct t_type_of<t_pattern> : t_type
 };
 
 template<>
-struct t_type_of<t_solid_pattern> : t_type_of<t_pattern>
+struct t_type_of<xemmaix::cairo::t_solid_pattern> : t_type_of<xemmaix::cairo::t_pattern>
 {
 	static void f_define(t_extension* a_extension);
 
-	using t_type_of<t_pattern>::t_type_of;
+	using t_type_of<xemmaix::cairo::t_pattern>::t_type_of;
 	virtual t_scoped f_construct(t_object* a_class, t_stacked* a_stack, size_t a_n);
 };
 
 template<>
-struct t_type_of<t_surface_pattern> : t_type_of<t_pattern>
+struct t_type_of<xemmaix::cairo::t_surface_pattern> : t_type_of<xemmaix::cairo::t_pattern>
 {
 	static void f_define(t_extension* a_extension);
 
-	using t_type_of<t_pattern>::t_type_of;
+	using t_type_of<xemmaix::cairo::t_pattern>::t_type_of;
 	virtual t_scoped f_construct(t_object* a_class, t_stacked* a_stack, size_t a_n);
 };
 
 template<>
-struct t_type_of<cairo_extend_t> : t_enum_of<cairo_extend_t, cairo::xemmai::t_extension>
+struct t_type_of<cairo_extend_t> : t_enum_of<cairo_extend_t, xemmaix::cairo::t_extension>
 {
 	static void f_define(t_extension* a_extension);
 
@@ -276,7 +269,7 @@ struct t_type_of<cairo_extend_t> : t_enum_of<cairo_extend_t, cairo::xemmai::t_ex
 };
 
 template<>
-struct t_type_of<cairo_filter_t> : t_enum_of<cairo_filter_t, cairo::xemmai::t_extension>
+struct t_type_of<cairo_filter_t> : t_enum_of<cairo_filter_t, xemmaix::cairo::t_extension>
 {
 	static void f_define(t_extension* a_extension);
 
@@ -284,7 +277,7 @@ struct t_type_of<cairo_filter_t> : t_enum_of<cairo_filter_t, cairo::xemmai::t_ex
 };
 
 template<>
-struct t_type_of<cairo_pattern_type_t> : t_enum_of<cairo_pattern_type_t, cairo::xemmai::t_extension>
+struct t_type_of<cairo_pattern_type_t> : t_enum_of<cairo_pattern_type_t, xemmaix::cairo::t_extension>
 {
 	static void f_define(t_extension* a_extension);
 
@@ -292,28 +285,28 @@ struct t_type_of<cairo_pattern_type_t> : t_enum_of<cairo_pattern_type_t, cairo::
 };
 
 template<>
-struct t_type_of<t_gradient> : t_type_of<t_pattern>
+struct t_type_of<xemmaix::cairo::t_gradient> : t_type_of<xemmaix::cairo::t_pattern>
 {
 	static void f_define(t_extension* a_extension);
 
-	using t_type_of<t_pattern>::t_type_of;
+	using t_type_of<xemmaix::cairo::t_pattern>::t_type_of;
 };
 
 template<>
-struct t_type_of<t_linear_gradient> : t_type_of<t_gradient>
+struct t_type_of<xemmaix::cairo::t_linear_gradient> : t_type_of<xemmaix::cairo::t_gradient>
 {
 	static void f_define(t_extension* a_extension);
 
-	using t_type_of<t_gradient>::t_type_of;
+	using t_type_of<xemmaix::cairo::t_gradient>::t_type_of;
 	virtual t_scoped f_construct(t_object* a_class, t_stacked* a_stack, size_t a_n);
 };
 
 template<>
-struct t_type_of<t_radial_gradient> : t_type_of<t_gradient>
+struct t_type_of<xemmaix::cairo::t_radial_gradient> : t_type_of<xemmaix::cairo::t_gradient>
 {
 	static void f_define(t_extension* a_extension);
 
-	using t_type_of<t_gradient>::t_type_of;
+	using t_type_of<xemmaix::cairo::t_gradient>::t_type_of;
 	virtual t_scoped f_construct(t_object* a_class, t_stacked* a_stack, size_t a_n);
 };
 

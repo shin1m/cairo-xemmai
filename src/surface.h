@@ -1,14 +1,14 @@
-#ifndef CAIRO__XEMMAI__SURFACE_H
-#define CAIRO__XEMMAI__SURFACE_H
+#ifndef XEMMAIX__CAIRO__SURFACE_H
+#define XEMMAIX__CAIRO__SURFACE_H
 
 #include "font_options.h"
 
 #include <xemmai/io/file.h>
 
-namespace cairo
+namespace xemmaix
 {
 
-namespace xemmai
+namespace cairo
 {
 
 class t_surface : public t_proxy_of<t_surface, cairo_surface_t>
@@ -189,13 +189,13 @@ public:
 	}
 };
 
-class t_file_source : public t_image_source, public ::xemmai::io::t_file
+class t_file_source : public t_image_source, public io::t_file
 {
 protected:
 	virtual size_t f_read(size_t a_offset);
 
 public:
-	t_file_source(const std::wstring& a_path) : ::xemmai::io::t_file(a_path, "rb")
+	t_file_source(const std::wstring& a_path) : io::t_file(a_path, "rb")
 	{
 	}
 };
@@ -300,14 +300,11 @@ public:
 namespace xemmai
 {
 
-using cairo::xemmai::t_surface;
-using cairo::xemmai::t_image_surface;
-
 template<>
-struct t_type_of<t_surface> : t_type
+struct t_type_of<xemmaix::cairo::t_surface> : t_type
 {
 #include "cast.h"
-	typedef cairo::xemmai::t_extension t_extension;
+	typedef xemmaix::cairo::t_extension t_extension;
 
 	static void f_define(t_extension* a_extension);
 
@@ -319,7 +316,7 @@ struct t_type_of<t_surface> : t_type
 };
 
 template<>
-struct t_type_of<cairo_content_t> : t_enum_of<cairo_content_t, cairo::xemmai::t_extension>
+struct t_type_of<cairo_content_t> : t_enum_of<cairo_content_t, xemmaix::cairo::t_extension>
 {
 	static void f_define(t_extension* a_extension);
 
@@ -327,7 +324,7 @@ struct t_type_of<cairo_content_t> : t_enum_of<cairo_content_t, cairo::xemmai::t_
 };
 
 template<>
-struct t_type_of<cairo_surface_type_t> : t_enum_of<cairo_surface_type_t, cairo::xemmai::t_extension>
+struct t_type_of<cairo_surface_type_t> : t_enum_of<cairo_surface_type_t, xemmaix::cairo::t_extension>
 {
 	static void f_define(t_extension* a_extension);
 
@@ -335,16 +332,16 @@ struct t_type_of<cairo_surface_type_t> : t_enum_of<cairo_surface_type_t, cairo::
 };
 
 template<>
-struct t_type_of<t_image_surface> : t_type_of<t_surface>
+struct t_type_of<xemmaix::cairo::t_image_surface> : t_type_of<xemmaix::cairo::t_surface>
 {
 	static void f_define(t_extension* a_extension);
 
-	using t_type_of<t_surface>::t_type_of;
+	using t_type_of<xemmaix::cairo::t_surface>::t_type_of;
 	virtual t_scoped f_construct(t_object* a_class, t_stacked* a_stack, size_t a_n);
 };
 
 template<>
-struct t_type_of<cairo_format_t> : t_enum_of<cairo_format_t, cairo::xemmai::t_extension>
+struct t_type_of<cairo_format_t> : t_enum_of<cairo_format_t, xemmaix::cairo::t_extension>
 {
 	static void f_define(t_extension* a_extension);
 

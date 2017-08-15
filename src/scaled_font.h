@@ -1,14 +1,14 @@
-#ifndef CAIRO__XEMMAI__SCALED_FONT_H
-#define CAIRO__XEMMAI__SCALED_FONT_H
+#ifndef XEMMAIX__CAIRO__SCALED_FONT_H
+#define XEMMAIX__CAIRO__SCALED_FONT_H
 
 #include "matrix.h"
 #include "font_options.h"
 #include "font_face.h"
 
-namespace cairo
+namespace xemmaix
 {
 
-namespace xemmai
+namespace cairo
 {
 
 class t_scaled_font : public t_proxy_of<t_scaled_font, cairo_scaled_font_t>
@@ -123,13 +123,11 @@ public:
 namespace xemmai
 {
 
-using cairo::xemmai::t_scaled_font;
-
 template<>
-struct t_type_of<t_scaled_font> : t_type
+struct t_type_of<xemmaix::cairo::t_scaled_font> : t_type
 {
 #include "cast.h"
-	typedef cairo::xemmai::t_extension t_extension;
+	typedef xemmaix::cairo::t_extension t_extension;
 
 	static void f_define(t_extension* a_extension);
 

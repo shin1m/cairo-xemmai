@@ -1,13 +1,13 @@
-#ifndef CAIRO__XEMMAI__CONTEXT_H
-#define CAIRO__XEMMAI__CONTEXT_H
+#ifndef XEMMAIX__CAIRO__CONTEXT_H
+#define XEMMAIX__CAIRO__CONTEXT_H
 
 #include "pattern.h"
 #include "scaled_font.h"
 
-namespace cairo
+namespace xemmaix
 {
 
-namespace xemmai
+namespace cairo
 {
 
 class t_context : public t_proxy_of<t_context, cairo_t>
@@ -498,11 +498,11 @@ namespace xemmai
 {
 
 template<>
-struct t_type_of<cairo::xemmai::t_context> : t_type
+struct t_type_of<xemmaix::cairo::t_context> : t_type
 {
 #include "cast.h"
-	typedef cairo::xemmai::t_extension t_extension;
-	typedef cairo::xemmai::t_context t_context;
+	typedef xemmaix::cairo::t_extension t_extension;
+	typedef xemmaix::cairo::t_context t_context;
 
 	static void f_define(t_extension* a_extension);
 
@@ -514,7 +514,7 @@ struct t_type_of<cairo::xemmai::t_context> : t_type
 };
 
 template<>
-struct t_type_of<cairo_fill_rule_t> : t_enum_of<cairo_fill_rule_t, cairo::xemmai::t_extension>
+struct t_type_of<cairo_fill_rule_t> : t_enum_of<cairo_fill_rule_t, xemmaix::cairo::t_extension>
 {
 	static void f_define(t_extension* a_extension);
 
@@ -522,7 +522,7 @@ struct t_type_of<cairo_fill_rule_t> : t_enum_of<cairo_fill_rule_t, cairo::xemmai
 };
 
 template<>
-struct t_type_of<cairo_line_cap_t> : t_enum_of<cairo_line_cap_t, cairo::xemmai::t_extension>
+struct t_type_of<cairo_line_cap_t> : t_enum_of<cairo_line_cap_t, xemmaix::cairo::t_extension>
 {
 	static void f_define(t_extension* a_extension);
 
@@ -530,7 +530,7 @@ struct t_type_of<cairo_line_cap_t> : t_enum_of<cairo_line_cap_t, cairo::xemmai::
 };
 
 template<>
-struct t_type_of<cairo_line_join_t> : t_enum_of<cairo_line_join_t, cairo::xemmai::t_extension>
+struct t_type_of<cairo_line_join_t> : t_enum_of<cairo_line_join_t, xemmaix::cairo::t_extension>
 {
 	static void f_define(t_extension* a_extension);
 
@@ -538,7 +538,7 @@ struct t_type_of<cairo_line_join_t> : t_enum_of<cairo_line_join_t, cairo::xemmai
 };
 
 template<>
-struct t_type_of<cairo_operator_t> : t_enum_of<cairo_operator_t, cairo::xemmai::t_extension>
+struct t_type_of<cairo_operator_t> : t_enum_of<cairo_operator_t, xemmaix::cairo::t_extension>
 {
 	static void f_define(t_extension* a_extension);
 

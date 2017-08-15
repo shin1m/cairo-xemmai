@@ -5,10 +5,10 @@ extern "C" {
 #include <jpeglib.h>
 }
 
-namespace cairo
+namespace xemmaix
 {
 
-namespace xemmai
+namespace cairo
 {
 
 namespace

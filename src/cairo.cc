@@ -1,12 +1,10 @@
 #include "context.h"
 
+namespace xemmaix
+{
+
 namespace cairo
 {
-
-namespace xemmai
-{
-
-using ::xemmai::f_define;
 
 std::string f_convert(const std::wstring& a_string)
 {
@@ -117,7 +115,7 @@ void f_main(t_extension* a_extension, const t_value& a_callable)
 
 }
 
-t_extension::t_extension(t_object* a_module) : ::xemmai::t_extension(a_module)
+t_extension::t_extension(t_object* a_module) : xemmai::t_extension(a_module)
 {
 	t_type_of<t_matrix>::f_define(this);
 	t_type_of<cairo_status_t>::f_define(this);
@@ -239,5 +237,5 @@ void t_type_of<cairo_status_t>::f_define(t_extension* a_extension)
 
 XEMMAI__MODULE__FACTORY(xemmai::t_object* a_module)
 {
-	return new cairo::xemmai::t_extension(a_module);
+	return new xemmaix::cairo::t_extension(a_module);
 }

@@ -1,12 +1,12 @@
-#ifndef CAIRO__XEMMAI__MATRIX_H
-#define CAIRO__XEMMAI__MATRIX_H
+#ifndef XEMMAIX__CAIRO__MATRIX_H
+#define XEMMAIX__CAIRO__MATRIX_H
 
 #include "cairo.h"
 
-namespace cairo
+namespace xemmaix
 {
 
-namespace xemmai
+namespace cairo
 {
 
 struct t_matrix : cairo_matrix_t
@@ -83,18 +83,16 @@ struct t_matrix : cairo_matrix_t
 namespace xemmai
 {
 
-using cairo::xemmai::t_matrix;
-
 template<>
-struct t_type_of<t_matrix> : t_type
+struct t_type_of<xemmaix::cairo::t_matrix> : t_type
 {
-	typedef cairo::xemmai::t_extension t_extension;
+	typedef xemmaix::cairo::t_extension t_extension;
 
 	template<typename T_extension, typename T>
 	static t_scoped f_transfer(T_extension* a_extension, T a_value)
 	{
 		t_scoped object = t_object::f_allocate(a_extension->template f_type<typename t_fundamental<T>::t_type>());
-		object.f_pointer__(new t_matrix(a_value));
+		object.f_pointer__(new xemmaix::cairo::t_matrix(std::forward<T>(a_value)));
 		return object;
 	}
 	static void f_define(t_extension* a_extension);

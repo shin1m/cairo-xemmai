@@ -1,6 +1,19 @@
-xemmaidir = $(XEMMAI_MODULE_PATH)
+xemmaiincludedir = $(XEMMAI_INCLUDE_PATH)/xemmaix/cairo
 
-xemmai_LTLIBRARIES = cairo.la
+xemmaiinclude_HEADERS = \
+	matrix.h \
+	font_options.h \
+	cast.h \
+	surface.h \
+	pattern.h \
+	font_face.h \
+	scaled_font.h \
+	context.h \
+	cairo.h
+
+xemmaimoduledir = $(XEMMAI_MODULE_PATH)
+
+xemmaimodule_LTLIBRARIES = cairo.la
 AM_CPPFLAGS = $(CAIRO_CFLAGS) $(XEMMAI_CFLAGS)
 AM_CXXFLAGS =
 AM_LDFLAGS = -module -avoid-version -ljpeg
@@ -16,22 +29,13 @@ AM_LDFLAGS += -pg
 endif
 cairo_la_LIBADD = $(CAIRO_LIBS) $(XEMMAI_LIBS)
 cairo_la_SOURCES = \
-	matrix.h \
 	matrix.cc \
-	font_options.h \
 	font_options.cc \
-	cast.h \
-	surface.h \
 	surface.cc \
 	jpeg.cc \
 	gif.cc \
-	pattern.h \
 	pattern.cc \
-	font_face.h \
 	font_face.cc \
-	scaled_font.h \
 	scaled_font.cc \
-	context.h \
 	context.cc \
-	cairo.h \
 	cairo.cc

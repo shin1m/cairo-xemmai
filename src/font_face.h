@@ -1,12 +1,12 @@
-#ifndef CAIRO__XEMMAI__FONT_FACE_H
-#define CAIRO__XEMMAI__FONT_FACE_H
+#ifndef XEMMAIX__CAIRO__FONT_FACE_H
+#define XEMMAIX__CAIRO__FONT_FACE_H
 
 #include "cairo.h"
 
-namespace cairo
+namespace xemmaix
 {
 
-namespace xemmai
+namespace cairo
 {
 
 class t_font_face : public t_proxy_of<t_font_face, cairo_font_face_t>
@@ -96,11 +96,8 @@ public:
 namespace xemmai
 {
 
-using cairo::xemmai::t_font_face;
-using cairo::xemmai::t_toy_font_face;
-
 template<>
-struct t_type_of<cairo_font_slant_t> : t_enum_of<cairo_font_slant_t, cairo::xemmai::t_extension>
+struct t_type_of<cairo_font_slant_t> : t_enum_of<cairo_font_slant_t, xemmaix::cairo::t_extension>
 {
 	static void f_define(t_extension* a_extension);
 
@@ -108,7 +105,7 @@ struct t_type_of<cairo_font_slant_t> : t_enum_of<cairo_font_slant_t, cairo::xemm
 };
 
 template<>
-struct t_type_of<cairo_font_weight_t> : t_enum_of<cairo_font_weight_t, cairo::xemmai::t_extension>
+struct t_type_of<cairo_font_weight_t> : t_enum_of<cairo_font_weight_t, xemmaix::cairo::t_extension>
 {
 	static void f_define(t_extension* a_extension);
 
@@ -116,10 +113,10 @@ struct t_type_of<cairo_font_weight_t> : t_enum_of<cairo_font_weight_t, cairo::xe
 };
 
 template<>
-struct t_type_of<t_font_face> : t_type
+struct t_type_of<xemmaix::cairo::t_font_face> : t_type
 {
 #include "cast.h"
-	typedef cairo::xemmai::t_extension t_extension;
+	typedef xemmaix::cairo::t_extension t_extension;
 
 	static void f_define(t_extension* a_extension);
 
@@ -131,7 +128,7 @@ struct t_type_of<t_font_face> : t_type
 };
 
 template<>
-struct t_type_of<cairo_font_type_t> : t_enum_of<cairo_font_type_t, cairo::xemmai::t_extension>
+struct t_type_of<cairo_font_type_t> : t_enum_of<cairo_font_type_t, xemmaix::cairo::t_extension>
 {
 	static void f_define(t_extension* a_extension);
 
@@ -139,11 +136,11 @@ struct t_type_of<cairo_font_type_t> : t_enum_of<cairo_font_type_t, cairo::xemmai
 };
 
 template<>
-struct t_type_of<t_toy_font_face> : t_type_of<t_font_face>
+struct t_type_of<xemmaix::cairo::t_toy_font_face> : t_type_of<xemmaix::cairo::t_font_face>
 {
 	static void f_define(t_extension* a_extension);
 
-	using t_type_of<t_font_face>::t_type_of;
+	using t_type_of<xemmaix::cairo::t_font_face>::t_type_of;
 	virtual t_scoped f_construct(t_object* a_class, t_stacked* a_stack, size_t a_n);
 };
 

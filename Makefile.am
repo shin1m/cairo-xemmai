@@ -1,1 +1,1 @@
-SUBDIRS = cairo/xemmai
+SUBDIRS = src

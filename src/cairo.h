@@ -1,12 +1,12 @@
-#ifndef CAIRO__XEMMAI__CAIRO_H
-#define CAIRO__XEMMAI__CAIRO_H
+#ifndef XEMMAIX__CAIRO__CAIRO_H
+#define XEMMAIX__CAIRO__CAIRO_H
 
 #ifdef _WIN32
-#ifndef CAIRO__XEMMAI__EXPORT
-#define CAIRO__XEMMAI__EXPORT __declspec(dllimport)
+#ifndef XEMMAIX__CAIRO__EXPORT
+#define XEMMAIX__CAIRO__EXPORT __declspec(dllimport)
 #endif
 #else
-#define CAIRO__XEMMAI__EXPORT
+#define XEMMAIX__CAIRO__EXPORT
 #endif
 
 #include <codecvt>
@@ -17,28 +17,13 @@
 #include <xemmai/bytes.h>
 #include <cairo.h>
 
+namespace xemmaix
+{
+
 namespace cairo
 {
 
-namespace xemmai
-{
-
-using ::xemmai::t_object;
-using ::xemmai::t_scan;
-using ::xemmai::t_value;
-using ::xemmai::t_slot;
-using ::xemmai::t_scoped;
-using ::xemmai::t_fundamental;
-using ::xemmai::t_type_of;
-using ::xemmai::f_check;
-using ::xemmai::f_as;
-using ::xemmai::t_define;
-using ::xemmai::f_global;
-using ::xemmai::t_tuple;
-using ::xemmai::t_throwable;
-using ::xemmai::t_array;
-using ::xemmai::t_bytes;
-using ::xemmai::t_safe_region;
+using namespace xemmai;
 
 class t_proxy;
 class t_extension;
@@ -74,7 +59,7 @@ protected:
 	t_entry(bool) : v_previous(this), v_next(this)
 	{
 	}
-	CAIRO__XEMMAI__EXPORT t_entry();
+	XEMMAIX__CAIRO__EXPORT t_entry();
 	void f_unlink()
 	{
 		v_previous->v_next = v_next;
@@ -83,7 +68,7 @@ protected:
 	}
 
 public:
-	CAIRO__XEMMAI__EXPORT virtual void f_dispose();
+	XEMMAIX__CAIRO__EXPORT virtual void f_dispose();
 };
 
 class t_session : public t_entry
@@ -99,7 +84,7 @@ class t_session : public t_entry
 
 public:
 #ifdef _WIN32
-	static CAIRO__XEMMAI__EXPORT t_session* f_instance();
+	static XEMMAIX__CAIRO__EXPORT t_session* f_instance();
 #else
 	static t_session* f_instance()
 	{
@@ -122,7 +107,7 @@ class t_proxy : public t_entry
 	t_scoped v_object;
 
 protected:
-	static CAIRO__XEMMAI__EXPORT cairo_user_data_key_t v_key;
+	static XEMMAIX__CAIRO__EXPORT cairo_user_data_key_t v_key;
 
 	static void f_destroy(void* a_p)
 	{
@@ -140,10 +125,10 @@ protected:
 	{
 		v_object.f_pointer__(this);
 	}
-	CAIRO__XEMMAI__EXPORT virtual void f_destroy();
+	XEMMAIX__CAIRO__EXPORT virtual void f_destroy();
 
 public:
-	CAIRO__XEMMAI__EXPORT virtual ~t_proxy() = default;
+	XEMMAIX__CAIRO__EXPORT virtual ~t_proxy() = default;
 	bool f_valid() const
 	{
 		return v_session == t_session::f_instance();
@@ -217,9 +202,9 @@ public:
 	}
 };
 
-class t_extension : public ::xemmai::t_extension
+class t_extension : public xemmai::t_extension
 {
-	template<typename T, typename T_super> friend class t_define;
+	template<typename T, typename T_super> friend class xemmai::t_define;
 
 	t_slot v_type_matrix;
 	t_slot v_type_status;
@@ -676,7 +661,7 @@ namespace xemmai
 {
 
 template<>
-struct t_type_of<cairo_status_t> : t_enum_of<cairo_status_t, cairo::xemmai::t_extension>
+struct t_type_of<cairo_status_t> : t_enum_of<cairo_status_t, xemmaix::cairo::t_extension>
 {
 	static void f_define(t_extension* a_extension);
 

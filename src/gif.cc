@@ -2,16 +2,14 @@
 
 #include <cstdint>
 
-namespace cairo
+namespace xemmaix
 {
 
-namespace xemmai
+namespace cairo
 {
 
 namespace
 {
-
-using ::xemmai::t_symbol;
 
 class t_gif_decoder
 {
