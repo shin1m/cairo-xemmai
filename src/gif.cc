@@ -2,10 +2,7 @@
 
 #include <cstdint>
 
-namespace xemmaix
-{
-
-namespace cairo
+namespace xemmaix::cairo
 {
 
 namespace
@@ -298,8 +295,6 @@ t_scoped t_image_surface::f_create_all_from_gif_stream(const t_value& a_read)
 {
 	t_stream_source source(a_read);
 	return f_read_images(source);
-}
-
 }
 
 }

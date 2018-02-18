@@ -5,10 +5,7 @@
 
 #include <xemmai/io/file.h>
 
-namespace xemmaix
-{
-
-namespace cairo
+namespace xemmaix::cairo
 {
 
 class t_surface : public t_proxy_of<t_surface, cairo_surface_t>
@@ -292,8 +289,6 @@ public:
 		return cairo_image_surface_get_stride(v_value);
 	}
 };
-
-}
 
 }
 

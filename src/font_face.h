@@ -3,10 +3,7 @@
 
 #include "cairo.h"
 
-namespace xemmaix
-{
-
-namespace cairo
+namespace xemmaix::cairo
 {
 
 class t_font_face : public t_proxy_of<t_font_face, cairo_font_face_t>
@@ -88,8 +85,6 @@ public:
 		return cairo_toy_font_face_get_weight(v_value);
 	}
 };
-
-}
 
 }
 

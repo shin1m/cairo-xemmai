@@ -2,10 +2,7 @@
 
 #include <cassert>
 
-namespace xemmaix
-{
-
-namespace cairo
+namespace xemmaix::cairo
 {
 
 t_pattern* t_pattern::f_wrap(cairo_pattern_t* a_value)
@@ -26,8 +23,6 @@ t_pattern* t_pattern::f_wrap(cairo_pattern_t* a_value)
 		t_throwable::f_throw(L"unknown pattern.");
 		return nullptr;
 	}
-}
-
 }
 
 }

@@ -5,10 +5,7 @@
 #include "font_options.h"
 #include "font_face.h"
 
-namespace xemmaix
-{
-
-namespace cairo
+namespace xemmaix::cairo
 {
 
 class t_scaled_font : public t_proxy_of<t_scaled_font, cairo_scaled_font_t>
@@ -115,8 +112,6 @@ public:
 		return cairo_scaled_font_get_type(v_value);
 	}
 };
-
-}
 
 }
 

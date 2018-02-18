@@ -2,10 +2,7 @@
 
 #include <cassert>
 
-namespace xemmaix
-{
-
-namespace cairo
+namespace xemmaix::cairo
 {
 
 t_font_face* t_font_face::f_wrap(cairo_font_face_t* a_value)
@@ -19,8 +16,6 @@ t_font_face* t_font_face::f_wrap(cairo_font_face_t* a_value)
 	default:
 		return new t_font_face(a_value);
 	}
-}
-
 }
 
 }

@@ -2,10 +2,7 @@
 
 #include <cassert>
 
-namespace xemmaix
-{
-
-namespace cairo
+namespace xemmaix::cairo
 {
 
 cairo_status_t t_surface::f_write_stream(void* a_closure, const unsigned char* a_data, unsigned int a_length)
@@ -151,8 +148,6 @@ t_scoped t_image_surface::f_create_from_source(t_image_source& a_source)
 	}
 	t_throwable::f_throw(L"unknown source.");
 	return nullptr;
-}
-
 }
 
 }

@@ -17,10 +17,7 @@
 #include <xemmai/bytes.h>
 #include <cairo.h>
 
-namespace xemmaix
-{
-
-namespace cairo
+namespace xemmaix::cairo
 {
 
 using namespace xemmai;
@@ -651,8 +648,6 @@ template<>
 inline t_object* t_extension::f_type<cairo_operator_t>() const
 {
 	return v_type_operator;
-}
-
 }
 
 }

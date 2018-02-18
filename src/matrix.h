@@ -3,10 +3,7 @@
 
 #include "cairo.h"
 
-namespace xemmaix
-{
-
-namespace cairo
+namespace xemmaix::cairo
 {
 
 struct t_matrix : cairo_matrix_t
@@ -75,8 +72,6 @@ struct t_matrix : cairo_matrix_t
 		return f_tuple(f_global()->f_as(a_x), f_global()->f_as(a_y));
 	}
 };
-
-}
 
 }
 

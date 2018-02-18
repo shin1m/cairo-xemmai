@@ -4,10 +4,7 @@
 #include "matrix.h"
 #include "surface.h"
 
-namespace xemmaix
-{
-
-namespace cairo
+namespace xemmaix::cairo
 {
 
 class t_pattern : public t_proxy_of<t_pattern, cairo_pattern_t>
@@ -219,8 +216,6 @@ public:
 		return f_tuple(f_global()->f_as(x0), f_global()->f_as(y0), f_global()->f_as(r0), f_global()->f_as(x1), f_global()->f_as(y1), f_global()->f_as(r1));
 	}
 };
-
-}
 
 }
 

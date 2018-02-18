@@ -4,10 +4,7 @@
 #include "pattern.h"
 #include "scaled_font.h"
 
-namespace xemmaix
-{
-
-namespace cairo
+namespace xemmaix::cairo
 {
 
 class t_context : public t_proxy_of<t_context, cairo_t>
@@ -489,8 +486,6 @@ public:
 		return f_tuple(f_global()->f_as(extents.x_bearing), f_global()->f_as(extents.y_bearing), f_global()->f_as(extents.width), f_global()->f_as(extents.height), f_global()->f_as(extents.x_advance), f_global()->f_as(extents.y_advance));
 	}
 };
-
-}
 
 }
 

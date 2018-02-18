@@ -2,10 +2,7 @@
 
 #include <cassert>
 
-namespace xemmaix
-{
-
-namespace cairo
+namespace xemmaix::cairo
 {
 
 void t_context::f_set_dash(const t_array& a_dashes, double a_offset)
@@ -18,8 +15,6 @@ void t_context::f_set_dash(const t_array& a_dashes, double a_offset)
 		dashes[i] = f_as<double>(dash);
 	}
 	cairo_set_dash(v_value, &dashes[0], n, a_offset);
-}
-
 }
 
 }

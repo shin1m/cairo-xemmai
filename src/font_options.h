@@ -3,10 +3,7 @@
 
 #include "cairo.h"
 
-namespace xemmaix
-{
-
-namespace cairo
+namespace xemmaix::cairo
 {
 
 struct t_font_options
@@ -88,8 +85,6 @@ struct t_font_options
 		return cairo_font_options_get_hint_metrics(f_to(a_this));
 	}
 };
-
-}
 
 }
 

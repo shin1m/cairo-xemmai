@@ -5,10 +5,7 @@ extern "C" {
 #include <jpeglib.h>
 }
 
-namespace xemmaix
-{
-
-namespace cairo
+namespace xemmaix::cairo
 {
 
 namespace
@@ -185,8 +182,6 @@ t_scoped t_image_surface::f_create_from_jpeg_stream(const t_value& a_read)
 {
 	t_stream_source source(a_read);
 	return f_create_from_jpeg_source(source);
-}
-
 }
 
 }
