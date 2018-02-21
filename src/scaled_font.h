@@ -61,19 +61,19 @@ public:
 	{
 		cairo_font_extents_t extents;
 		cairo_scaled_font_extents(v_value, &extents);
-		return f_tuple(f_global()->f_as(extents.ascent), f_global()->f_as(extents.descent), f_global()->f_as(extents.height), f_global()->f_as(extents.max_x_advance), f_global()->f_as(extents.max_y_advance));
+		return f_tuple(extents.ascent, extents.descent, extents.height, extents.max_x_advance, extents.max_y_advance);
 	}
 	t_scoped f_text_extents(const std::wstring& a_text) const
 	{
 		cairo_text_extents_t extents;
 		cairo_scaled_font_text_extents(v_value, f_convert(a_text).c_str(), &extents);
-		return f_tuple(f_global()->f_as(extents.x_bearing), f_global()->f_as(extents.y_bearing), f_global()->f_as(extents.width), f_global()->f_as(extents.height), f_global()->f_as(extents.x_advance), f_global()->f_as(extents.y_advance));
+		return f_tuple(extents.x_bearing, extents.y_bearing, extents.width, extents.height, extents.x_advance, extents.y_advance);
 	}
 	t_scoped f_glyph_extents(const cairo_glyph_t* a_glyphs, int a_n) const
 	{
 		cairo_text_extents_t extents;
 		cairo_scaled_font_glyph_extents(v_value, a_glyphs, a_n, &extents);
-		return f_tuple(f_global()->f_as(extents.x_bearing), f_global()->f_as(extents.y_bearing), f_global()->f_as(extents.width), f_global()->f_as(extents.height), f_global()->f_as(extents.x_advance), f_global()->f_as(extents.y_advance));
+		return f_tuple(extents.x_bearing, extents.y_bearing, extents.width, extents.height, extents.x_advance, extents.y_advance);
 	}
 	cairo_status_t f_text_to_glyphs(double a_x, double a_y, const char* a_utf8, int a_n0, cairo_glyph_t** a_glyphs, int* a_n1, cairo_text_cluster_t** a_clusters, int* a_n2, cairo_text_cluster_flags_t* a_cluster_flags) const
 	{

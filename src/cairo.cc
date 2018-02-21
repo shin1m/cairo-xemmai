@@ -13,51 +13,6 @@ std::wstring f_convert(const std::string& a_string)
 	return t_session::v_instance->v_convert.from_bytes(a_string);
 }
 
-t_scoped f_tuple(t_scoped&& a_0, t_scoped&& a_1)
-{
-	t_scoped p = t_tuple::f_instantiate(2);
-	t_tuple& tuple = f_as<t_tuple&>(p);
-	tuple[0].f_construct(std::move(a_0));
-	tuple[1].f_construct(std::move(a_1));
-	return p;
-}
-
-t_scoped f_tuple(t_scoped&& a_0, t_scoped&& a_1, t_scoped&& a_2, t_scoped&& a_3)
-{
-	t_scoped p = t_tuple::f_instantiate(4);
-	t_tuple& tuple = f_as<t_tuple&>(p);
-	tuple[0].f_construct(std::move(a_0));
-	tuple[1].f_construct(std::move(a_1));
-	tuple[2].f_construct(std::move(a_2));
-	tuple[3].f_construct(std::move(a_3));
-	return p;
-}
-
-t_scoped f_tuple(t_scoped&& a_0, t_scoped&& a_1, t_scoped&& a_2, t_scoped&& a_3, t_scoped&& a_4)
-{
-	t_scoped p = t_tuple::f_instantiate(5);
-	t_tuple& tuple = f_as<t_tuple&>(p);
-	tuple[0].f_construct(std::move(a_0));
-	tuple[1].f_construct(std::move(a_1));
-	tuple[2].f_construct(std::move(a_2));
-	tuple[3].f_construct(std::move(a_3));
-	tuple[4].f_construct(std::move(a_4));
-	return p;
-}
-
-t_scoped f_tuple(t_scoped&& a_0, t_scoped&& a_1, t_scoped&& a_2, t_scoped&& a_3, t_scoped&& a_4, t_scoped&& a_5)
-{
-	t_scoped p = t_tuple::f_instantiate(6);
-	t_tuple& tuple = f_as<t_tuple&>(p);
-	tuple[0].f_construct(std::move(a_0));
-	tuple[1].f_construct(std::move(a_1));
-	tuple[2].f_construct(std::move(a_2));
-	tuple[3].f_construct(std::move(a_3));
-	tuple[4].f_construct(std::move(a_4));
-	tuple[5].f_construct(std::move(a_5));
-	return p;
-}
-
 t_entry::t_entry() : v_previous(t_session::f_instance()), v_next(v_previous->v_next)
 {
 	v_previous->v_next = v_next->v_previous = this;

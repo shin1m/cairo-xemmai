@@ -42,11 +42,6 @@ class t_context;
 std::string f_convert(const std::wstring& a_string);
 std::wstring f_convert(const std::string& a_string);
 
-t_scoped f_tuple(t_scoped&& a_0, t_scoped&& a_1);
-t_scoped f_tuple(t_scoped&& a_0, t_scoped&& a_1, t_scoped&& a_2, t_scoped&& a_3);
-t_scoped f_tuple(t_scoped&& a_0, t_scoped&& a_1, t_scoped&& a_2, t_scoped&& a_3, t_scoped&& a_4);
-t_scoped f_tuple(t_scoped&& a_0, t_scoped&& a_1, t_scoped&& a_2, t_scoped&& a_3, t_scoped&& a_4, t_scoped&& a_5);
-
 class t_entry
 {
 protected:

@@ -89,7 +89,7 @@ public:
 		double blue;
 		double alpha;
 		cairo_pattern_get_rgba(v_value, &red, &green, &blue, &alpha);
-		return f_tuple(f_global()->f_as(red), f_global()->f_as(green), f_global()->f_as(blue), f_global()->f_as(alpha));
+		return f_tuple(red, green, blue, alpha);
 	}
 };
 
@@ -161,7 +161,7 @@ public:
 		double blue;
 		double alpha;
 		cairo_pattern_get_color_stop_rgba(v_value, a_index, &offset, &red, &green, &blue, &alpha);
-		return f_tuple(f_global()->f_as(offset), f_global()->f_as(red), f_global()->f_as(green), f_global()->f_as(blue), f_global()->f_as(alpha));
+		return f_tuple(offset, red, green, blue, alpha);
 	}
 };
 
@@ -186,7 +186,7 @@ public:
 		double x1;
 		double y1;
 		cairo_pattern_get_linear_points(v_value, &x0, &y0, &x1, &y1);
-		return f_tuple(f_global()->f_as(x0), f_global()->f_as(y0), f_global()->f_as(x1), f_global()->f_as(y1));
+		return f_tuple(x0, y0, x1, y1);
 	}
 };
 
@@ -213,7 +213,7 @@ public:
 		double y1;
 		double r1;
 		cairo_pattern_get_radial_circles(v_value, &x0, &y0, &r0, &x1, &y1, &r1);
-		return f_tuple(f_global()->f_as(x0), f_global()->f_as(y0), f_global()->f_as(r0), f_global()->f_as(x1), f_global()->f_as(y1), f_global()->f_as(r1));
+		return f_tuple(x0, y0, r0, x1, y1, r1);
 	}
 };
 
