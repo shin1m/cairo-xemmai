@@ -84,7 +84,7 @@ struct t_type_of<xemmaix::cairo::t_matrix> : t_type
 	typedef xemmaix::cairo::t_extension t_extension;
 
 	template<typename T_extension, typename T>
-	static t_scoped f_transfer(T_extension* a_extension, T a_value)
+	static t_scoped f_transfer(T_extension* a_extension, T&& a_value)
 	{
 		t_scoped object = t_object::f_allocate(a_extension->template f_type<typename t_fundamental<T>::t_type>());
 		object.f_pointer__(new xemmaix::cairo::t_matrix(std::forward<T>(a_value)));

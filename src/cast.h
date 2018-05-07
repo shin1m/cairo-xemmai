@@ -66,7 +66,7 @@
 	};
 
 	template<typename T_extension, typename T>
-	static t_scoped f_transfer(T_extension* a_extension, T a_value)
+	static t_scoped f_transfer(T_extension* a_extension, T&& a_value)
 	{
 		return a_value->f_object();
 	}
