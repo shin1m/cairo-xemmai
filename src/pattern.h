@@ -29,7 +29,7 @@ class t_pattern : public t_proxy_of<t_pattern, cairo_pattern_t>
 	}
 
 protected:
-	t_pattern(t_object* a_class, cairo_pattern_t* a_value) : t_base(a_class, a_value)
+	t_pattern(t_type* a_class, cairo_pattern_t* a_value) : t_base(a_class, a_value)
 	{
 	}
 
@@ -73,11 +73,11 @@ class t_solid_pattern : public t_pattern
 	}
 
 public:
-	static t_scoped f_construct(t_object* a_class, double a_red, double a_green, double a_blue)
+	static t_scoped f_construct(t_type* a_class, double a_red, double a_green, double a_blue)
 	{
 		return f_transfer(new t_solid_pattern(cairo_pattern_create_rgb(a_red, a_green, a_blue)));
 	}
-	static t_scoped f_construct(t_object* a_class, double a_red, double a_green, double a_blue, double a_alpha)
+	static t_scoped f_construct(t_type* a_class, double a_red, double a_green, double a_blue, double a_alpha)
 	{
 		return f_transfer(new t_solid_pattern(cairo_pattern_create_rgba(a_red, a_green, a_blue, a_alpha)));
 	}
@@ -102,7 +102,7 @@ class t_surface_pattern : public t_pattern
 	}
 
 public:
-	static t_scoped f_construct(t_object* a_class, t_surface& a_surface)
+	static t_scoped f_construct(t_type* a_class, t_surface& a_surface)
 	{
 		return f_transfer(new t_surface_pattern(cairo_pattern_create_for_surface(a_surface)));
 	}
@@ -134,7 +134,7 @@ public:
 class t_gradient : public t_pattern
 {
 protected:
-	t_gradient(t_object* a_class, cairo_pattern_t* a_value) : t_pattern(a_class, a_value)
+	t_gradient(t_type* a_class, cairo_pattern_t* a_value) : t_pattern(a_class, a_value)
 	{
 	}
 
@@ -174,7 +174,7 @@ class t_linear_gradient : public t_gradient
 	}
 
 public:
-	static t_scoped f_construct(t_object* a_class, double a_x0, double a_y0, double a_x1, double a_y1)
+	static t_scoped f_construct(t_type* a_class, double a_x0, double a_y0, double a_x1, double a_y1)
 	{
 		return f_transfer(new t_linear_gradient(cairo_pattern_create_linear(a_x0, a_y0, a_x1, a_y1)));
 	}
@@ -199,7 +199,7 @@ class t_radial_gradient : public t_gradient
 	}
 
 public:
-	static t_scoped f_construct(t_object* a_class, double a_x0, double a_y0, double a_r0, double a_x1, double a_y1, double a_r1)
+	static t_scoped f_construct(t_type* a_class, double a_x0, double a_y0, double a_r0, double a_x1, double a_y1, double a_r1)
 	{
 		return f_transfer(new t_radial_gradient(cairo_pattern_create_radial(a_x0, a_y0, a_r0, a_x1, a_y1, a_r1)));
 	}
@@ -231,10 +231,10 @@ struct t_type_of<xemmaix::cairo::t_pattern> : t_type
 	static void f_define(t_extension* a_extension);
 
 	using t_type::t_type;
-	virtual t_type* f_derive(t_object* a_this);
+	virtual t_type* f_derive();
 	virtual void f_finalize(t_object* a_this);
-	virtual t_scoped f_construct(t_object* a_class, t_stacked* a_stack, size_t a_n);
-	virtual void f_instantiate(t_object* a_class, t_stacked* a_stack, size_t a_n);
+	virtual t_scoped f_construct(t_stacked* a_stack, size_t a_n);
+	virtual void f_instantiate(t_stacked* a_stack, size_t a_n);
 };
 
 template<>
@@ -243,7 +243,7 @@ struct t_type_of<xemmaix::cairo::t_solid_pattern> : t_type_of<xemmaix::cairo::t_
 	static void f_define(t_extension* a_extension);
 
 	using t_type_of<xemmaix::cairo::t_pattern>::t_type_of;
-	virtual t_scoped f_construct(t_object* a_class, t_stacked* a_stack, size_t a_n);
+	virtual t_scoped f_construct(t_stacked* a_stack, size_t a_n);
 };
 
 template<>
@@ -252,7 +252,7 @@ struct t_type_of<xemmaix::cairo::t_surface_pattern> : t_type_of<xemmaix::cairo::
 	static void f_define(t_extension* a_extension);
 
 	using t_type_of<xemmaix::cairo::t_pattern>::t_type_of;
-	virtual t_scoped f_construct(t_object* a_class, t_stacked* a_stack, size_t a_n);
+	virtual t_scoped f_construct(t_stacked* a_stack, size_t a_n);
 };
 
 template<>
@@ -293,7 +293,7 @@ struct t_type_of<xemmaix::cairo::t_linear_gradient> : t_type_of<xemmaix::cairo::
 	static void f_define(t_extension* a_extension);
 
 	using t_type_of<xemmaix::cairo::t_gradient>::t_type_of;
-	virtual t_scoped f_construct(t_object* a_class, t_stacked* a_stack, size_t a_n);
+	virtual t_scoped f_construct(t_stacked* a_stack, size_t a_n);
 };
 
 template<>
@@ -302,7 +302,7 @@ struct t_type_of<xemmaix::cairo::t_radial_gradient> : t_type_of<xemmaix::cairo::
 	static void f_define(t_extension* a_extension);
 
 	using t_type_of<xemmaix::cairo::t_gradient>::t_type_of;
-	virtual t_scoped f_construct(t_object* a_class, t_stacked* a_stack, size_t a_n);
+	virtual t_scoped f_construct(t_stacked* a_stack, size_t a_n);
 };
 
 }

@@ -32,7 +32,7 @@ class t_font_face : public t_proxy_of<t_font_face, cairo_font_face_t>
 	}
 
 protected:
-	t_font_face(t_object* a_class, cairo_font_face_t* a_value) : t_base(a_class, a_value)
+	t_font_face(t_type* a_class, cairo_font_face_t* a_value) : t_base(a_class, a_value)
 	{
 	}
 
@@ -67,7 +67,7 @@ class t_toy_font_face : public t_font_face
 	}
 
 public:
-	static t_scoped f_construct(t_object* a_class, const std::wstring& a_family, cairo_font_slant_t a_slant, cairo_font_weight_t a_weight)
+	static t_scoped f_construct(t_type* a_class, const std::wstring& a_family, cairo_font_slant_t a_slant, cairo_font_weight_t a_weight)
 	{
 		return f_construct_shared<t_toy_font_face>(cairo_toy_font_face_create(f_convert(a_family).c_str(), a_slant, a_weight));
 	}
@@ -116,10 +116,10 @@ struct t_type_of<xemmaix::cairo::t_font_face> : t_type
 	static void f_define(t_extension* a_extension);
 
 	using t_type::t_type;
-	virtual t_type* f_derive(t_object* a_this);
+	virtual t_type* f_derive();
 	virtual void f_finalize(t_object* a_this);
-	virtual t_scoped f_construct(t_object* a_class, t_stacked* a_stack, size_t a_n);
-	virtual void f_instantiate(t_object* a_class, t_stacked* a_stack, size_t a_n);
+	virtual t_scoped f_construct(t_stacked* a_stack, size_t a_n);
+	virtual void f_instantiate(t_stacked* a_stack, size_t a_n);
 };
 
 template<>
@@ -136,7 +136,7 @@ struct t_type_of<xemmaix::cairo::t_toy_font_face> : t_type_of<xemmaix::cairo::t_
 	static void f_define(t_extension* a_extension);
 
 	using t_type_of<xemmaix::cairo::t_font_face>::t_type_of;
-	virtual t_scoped f_construct(t_object* a_class, t_stacked* a_stack, size_t a_n);
+	virtual t_scoped f_construct(t_stacked* a_stack, size_t a_n);
 };
 
 }

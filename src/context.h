@@ -34,7 +34,7 @@ class t_context : public t_proxy_of<t_context, cairo_t>
 
 public:
 	using t_base::f_construct;
-	static t_scoped f_construct(t_object* a_class, t_surface& a_target)
+	static t_scoped f_construct(t_type* a_class, t_surface& a_target)
 	{
 		return f_transfer(new t_context(cairo_create(a_target)));
 	}
@@ -502,10 +502,10 @@ struct t_type_of<xemmaix::cairo::t_context> : t_type
 	static void f_define(t_extension* a_extension);
 
 	using t_type::t_type;
-	virtual t_type* f_derive(t_object* a_this);
+	virtual t_type* f_derive();
 	virtual void f_finalize(t_object* a_this);
-	virtual t_scoped f_construct(t_object* a_class, t_stacked* a_stack, size_t a_n);
-	virtual void f_instantiate(t_object* a_class, t_stacked* a_stack, size_t a_n);
+	virtual t_scoped f_construct(t_stacked* a_stack, size_t a_n);
+	virtual void f_instantiate(t_stacked* a_stack, size_t a_n);
 };
 
 template<>

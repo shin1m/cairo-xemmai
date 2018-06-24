@@ -96,13 +96,13 @@ struct t_type_of<xemmaix::cairo::t_font_options> : t_type
 {
 	typedef xemmaix::cairo::t_extension t_extension;
 
-	static t_scoped f_construct(t_object* a_class)
+	static t_scoped f_construct(t_type* a_class)
 	{
 		t_scoped object = t_object::f_allocate(a_class);
 		object.f_pointer__(xemmaix::cairo::t_font_options::f_create());
 		return object;
 	}
-	static t_scoped f_construct(t_object* a_class, const xemmaix::cairo::t_font_options* a_original)
+	static t_scoped f_construct(t_type* a_class, const xemmaix::cairo::t_font_options* a_original)
 	{
 		t_scoped object = t_object::f_allocate(a_class);
 		object.f_pointer__(xemmaix::cairo::t_font_options::f_copy(a_original));
@@ -115,10 +115,10 @@ struct t_type_of<xemmaix::cairo::t_font_options> : t_type
 	static void f_define(t_extension* a_extension);
 
 	using t_type::t_type;
-	virtual t_type* f_derive(t_object* a_this);
+	virtual t_type* f_derive();
 	virtual void f_finalize(t_object* a_this);
-	virtual t_scoped f_construct(t_object* a_class, t_stacked* a_stack, size_t a_n);
-	virtual void f_instantiate(t_object* a_class, t_stacked* a_stack, size_t a_n);
+	virtual t_scoped f_construct(t_stacked* a_stack, size_t a_n);
+	virtual void f_instantiate(t_stacked* a_stack, size_t a_n);
 };
 
 template<>

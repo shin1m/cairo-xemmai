@@ -35,13 +35,13 @@ class t_surface : public t_proxy_of<t_surface, cairo_surface_t>
 	}
 
 protected:
-	t_surface(t_object* a_class, cairo_surface_t* a_value) : t_base(a_class, a_value)
+	t_surface(t_type* a_class, cairo_surface_t* a_value) : t_base(a_class, a_value)
 	{
 	}
 
 public:
 	using t_base::f_construct;
-	static t_scoped f_construct(t_object* a_class, t_surface& a_other, cairo_content_t a_content, int a_width, int a_height)
+	static t_scoped f_construct(t_type* a_class, t_surface& a_other, cairo_content_t a_content, int a_width, int a_height)
 	{
 		return f_transfer(new t_surface(cairo_surface_create_similar(a_other, a_content, a_width, a_height)));
 	}
@@ -227,7 +227,7 @@ class t_image_surface : public t_surface
 	virtual void f_destroy();
 
 public:
-	static t_scoped f_construct(t_object* a_class, cairo_format_t a_format, int a_width, int a_height)
+	static t_scoped f_construct(t_type* a_class, cairo_format_t a_format, int a_width, int a_height)
 	{
 		int stride = cairo_format_stride_for_width(a_format, a_width);
 		if (a_width < 0 || a_height < 0 || stride < 0) t_throwable::f_throw(L"invalid arguments.");
@@ -235,7 +235,7 @@ public:
 		t_bytes& bytes = f_as<t_bytes&>(data);
 		return f_transfer(new t_image_surface(cairo_image_surface_create_for_data(&bytes[0], a_format, a_width, a_height, stride), std::move(data)));
 	}
-	static t_scoped f_construct(t_object* a_class, t_scoped&& a_data, cairo_format_t a_format, int a_width, int a_height, int a_stride)
+	static t_scoped f_construct(t_type* a_class, t_scoped&& a_data, cairo_format_t a_format, int a_width, int a_height, int a_stride)
 	{
 		f_check<t_bytes>(a_data, L"data");
 		t_bytes& bytes = f_as<t_bytes&>(a_data);
@@ -304,10 +304,10 @@ struct t_type_of<xemmaix::cairo::t_surface> : t_type
 	static void f_define(t_extension* a_extension);
 
 	using t_type::t_type;
-	virtual t_type* f_derive(t_object* a_this);
+	virtual t_type* f_derive();
 	virtual void f_finalize(t_object* a_this);
-	virtual t_scoped f_construct(t_object* a_class, t_stacked* a_stack, size_t a_n);
-	virtual void f_instantiate(t_object* a_class, t_stacked* a_stack, size_t a_n);
+	virtual t_scoped f_construct(t_stacked* a_stack, size_t a_n);
+	virtual void f_instantiate(t_stacked* a_stack, size_t a_n);
 };
 
 template<>
@@ -332,7 +332,7 @@ struct t_type_of<xemmaix::cairo::t_image_surface> : t_type_of<xemmaix::cairo::t_
 	static void f_define(t_extension* a_extension);
 
 	using t_type_of<xemmaix::cairo::t_surface>::t_type_of;
-	virtual t_scoped f_construct(t_object* a_class, t_stacked* a_stack, size_t a_n);
+	virtual t_scoped f_construct(t_stacked* a_stack, size_t a_n);
 };
 
 template<>
