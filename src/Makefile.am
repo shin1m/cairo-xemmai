@@ -3,7 +3,6 @@ xemmaiincludedir = $(XEMMAI_INCLUDE_PATH)/xemmaix/cairo
 xemmaiinclude_HEADERS = \
 	matrix.h \
 	font_options.h \
-	cast.h \
 	surface.h \
 	pattern.h \
 	font_face.h \

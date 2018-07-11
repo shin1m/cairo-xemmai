@@ -79,7 +79,7 @@ namespace xemmai
 {
 
 template<>
-struct t_type_of<xemmaix::cairo::t_matrix> : t_type
+struct t_type_of<xemmaix::cairo::t_matrix> : xemmaix::cairo::t_instantiatable<t_underivable<t_holds<xemmaix::cairo::t_matrix>>>
 {
 	typedef xemmaix::cairo::t_extension t_extension;
 
@@ -92,11 +92,8 @@ struct t_type_of<xemmaix::cairo::t_matrix> : t_type
 	}
 	static void f_define(t_extension* a_extension);
 
-	using t_type::t_type;
-	virtual t_type* f_derive();
-	virtual void f_finalize(t_object* a_this);
+	using t_base::t_base;
 	virtual t_scoped f_construct(t_stacked* a_stack, size_t a_n);
-	virtual void f_instantiate(t_stacked* a_stack, size_t a_n);
 };
 
 }

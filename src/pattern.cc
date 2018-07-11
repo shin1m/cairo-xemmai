@@ -1,7 +1,5 @@
 #include "pattern.h"
 
-#include <cassert>
-
 namespace xemmaix::cairo
 {
 
@@ -43,27 +41,9 @@ void t_type_of<xemmaix::cairo::t_pattern>::f_define(t_extension* a_extension)
 	;
 }
 
-t_type* t_type_of<xemmaix::cairo::t_pattern>::f_derive()
-{
-	return nullptr;
-}
-
-void t_type_of<xemmaix::cairo::t_pattern>::f_finalize(t_object* a_this)
-{
-	auto p = static_cast<xemmaix::cairo::t_pattern*>(a_this->f_pointer());
-	assert(!*p);
-	delete p;
-}
-
 t_scoped t_type_of<xemmaix::cairo::t_pattern>::f_construct(t_stacked* a_stack, size_t a_n)
 {
 	t_throwable::f_throw(L"uninstantiatable.");
-}
-
-void t_type_of<xemmaix::cairo::t_pattern>::f_instantiate(t_stacked* a_stack, size_t a_n)
-{
-	t_destruct_n destruct(a_stack, a_n);
-	a_stack[0].f_construct(f_construct(a_stack, a_n));
 }
 
 void t_type_of<xemmaix::cairo::t_solid_pattern>::f_define(t_extension* a_extension)

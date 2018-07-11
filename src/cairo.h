@@ -453,6 +453,99 @@ inline t_slot_of<t_type>& t_extension::f_type_slot<cairo_operator_t>()
 	return v_type_operator;
 }
 
+template<typename T_base>
+struct t_instantiatable : T_base
+{
+	typedef t_instantiatable t_base;
+
+	using T_base::T_base;
+	virtual void f_instantiate(t_stacked* a_stack, size_t a_n)
+	{
+		t_destruct_n destruct(a_stack, a_n);
+		a_stack[0].f_construct(this->f_construct(a_stack, a_n));
+	}
+};
+
+template<typename T>
+struct t_holds : t_instantiatable<t_underivable<t_bears<T>>>
+{
+	template<typename T0>
+	struct t_cast
+	{
+		template<typename T1>
+		static T0* f_call(T1&& a_object)
+		{
+			auto p = static_cast<T0*>(t_base::f_object(std::forward<T1>(a_object))->f_pointer());
+			if (!p->f_valid()) t_throwable::f_throw(L"accessing from other thread.");
+			if (!*p) t_throwable::f_throw(L"already destroyed.");
+			return p;
+		}
+	};
+	template<typename T0>
+	struct t_as
+	{
+		template<typename T1>
+		static T0 f_call(T1&& a_object)
+		{
+			return *t_cast<typename t_fundamental<T0>::t_type>::f_call(std::forward<T1>(a_object));
+		}
+	};
+	template<typename T0>
+	struct t_as<T0*>
+	{
+		template<typename T1>
+		static T0* f_call(T1&& a_object)
+		{
+			return reinterpret_cast<size_t>(t_base::f_object(std::forward<T1>(a_object))) == t_value::e_tag__NULL ? nullptr : t_cast<T0>::f_call(std::forward<T1>(a_object));
+		}
+	};
+	template<typename T0>
+	struct t_is
+	{
+		template<typename T1>
+		static bool f_call(T1&& a_object)
+		{
+			auto p = t_base::f_object(std::forward<T1>(a_object));
+			return reinterpret_cast<size_t>(p) >= t_value::e_tag__OBJECT && p->f_type()->template f_derives<typename t_fundamental<T0>::t_type>();
+		}
+	};
+	template<typename T0>
+	struct t_is<T0*>
+	{
+		template<typename T1>
+		static bool f_call(T1&& a_object)
+		{
+			auto p = t_base::f_object(std::forward<T1>(a_object));
+			switch (reinterpret_cast<size_t>(p)) {
+			case t_value::e_tag__NULL:
+				return true;
+			case t_value::e_tag__BOOLEAN:
+			case t_value::e_tag__INTEGER:
+			case t_value::e_tag__FLOAT:
+				return false;
+			default:
+				return p->f_type()->template f_derives<typename t_fundamental<T0>::t_type>();
+			}
+		}
+	};
+	typedef xemmaix::cairo::t_extension t_extension;
+	typedef t_holds t_base;
+
+	template<typename T_extension, typename T_value>
+	static t_scoped f_transfer(T_extension* a_extension, T_value&& a_value)
+	{
+		return a_value->f_object();
+	}
+
+	using t_instantiatable<t_underivable<t_bears<T>>>::t_instantiatable;
+	virtual void f_finalize(t_object* a_this)
+	{
+		auto p = static_cast<T*>(a_this->f_pointer());
+		assert(!*p);
+		delete p;
+	}
+};
+
 }
 
 namespace xemmai

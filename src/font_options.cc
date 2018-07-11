@@ -22,11 +22,6 @@ void t_type_of<xemmaix::cairo::t_font_options>::f_define(t_extension* a_extensio
 	;
 }
 
-t_type* t_type_of<xemmaix::cairo::t_font_options>::f_derive()
-{
-	return nullptr;
-}
-
 void t_type_of<xemmaix::cairo::t_font_options>::f_finalize(t_object* a_this)
 {
 	xemmaix::cairo::t_font_options::f_destroy(f_as<xemmaix::cairo::t_font_options*>(a_this));
@@ -38,12 +33,6 @@ t_scoped t_type_of<xemmaix::cairo::t_font_options>::f_construct(t_stacked* a_sta
 		t_construct_with<t_scoped(*)(t_type*), f_construct>,
 		t_construct_with<t_scoped(*)(t_type*, const xemmaix::cairo::t_font_options*), f_construct>
 	>::t_bind<xemmaix::cairo::t_font_options>::f_do(this, a_stack, a_n);
-}
-
-void t_type_of<xemmaix::cairo::t_font_options>::f_instantiate(t_stacked* a_stack, size_t a_n)
-{
-	t_destruct_n destruct(a_stack, a_n);
-	a_stack[0].f_construct(f_construct(a_stack, a_n));
 }
 
 void t_type_of<cairo_antialias_t>::f_define(t_extension* a_extension)

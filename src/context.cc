@@ -1,7 +1,5 @@
 #include "context.h"
 
-#include <cassert>
-
 namespace xemmaix::cairo
 {
 
@@ -133,27 +131,9 @@ void t_type_of<xemmaix::cairo::t_context>::f_define(t_extension* a_extension)
 	;
 }
 
-t_type* t_type_of<xemmaix::cairo::t_context>::f_derive()
-{
-	return nullptr;
-}
-
-void t_type_of<xemmaix::cairo::t_context>::f_finalize(t_object* a_this)
-{
-	auto p = static_cast<xemmaix::cairo::t_context*>(a_this->f_pointer());
-	assert(!*p);
-	delete p;
-}
-
 t_scoped t_type_of<xemmaix::cairo::t_context>::f_construct(t_stacked* a_stack, size_t a_n)
 {
 	return t_construct_with<t_scoped(*)(t_type*, xemmaix::cairo::t_surface&), xemmaix::cairo::t_context::f_construct>::t_bind<xemmaix::cairo::t_context>::f_do(this, a_stack, a_n);
-}
-
-void t_type_of<xemmaix::cairo::t_context>::f_instantiate(t_stacked* a_stack, size_t a_n)
-{
-	t_destruct_n destruct(a_stack, a_n);
-	a_stack[0].f_construct(f_construct(a_stack, a_n));
 }
 
 void t_type_of<cairo_fill_rule_t>::f_define(t_extension* a_extension)
