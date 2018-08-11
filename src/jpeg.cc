@@ -34,7 +34,7 @@ void t_scoped_decompress::f_error(j_common_ptr cinfo)
 {
 	char buffer[JMSG_LENGTH_MAX];
 	cinfo->err->format_message(cinfo, buffer);
-	t_throwable::f_throw(f_convert(buffer));
+	f_throw(f_convert(buffer));
 }
 
 t_scoped t_scoped_decompress::f_decompress()
@@ -51,7 +51,7 @@ t_scoped t_scoped_decompress::f_decompress()
 		format = CAIRO_FORMAT_RGB24;
 		break;
 	default:
-		t_throwable::f_throw(L"unsupported color space.");
+		f_throw(L"unsupported color space.");
 	}
 	int stride = cairo_format_stride_for_width(format, output_width);
 	t_scoped data = t_bytes::f_instantiate(stride * output_height);

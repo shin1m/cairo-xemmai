@@ -230,7 +230,7 @@ public:
 	static t_scoped f_construct(t_type* a_class, cairo_format_t a_format, int a_width, int a_height)
 	{
 		int stride = cairo_format_stride_for_width(a_format, a_width);
-		if (a_width < 0 || a_height < 0 || stride < 0) t_throwable::f_throw(L"invalid arguments.");
+		if (a_width < 0 || a_height < 0 || stride < 0) f_throw(L"invalid arguments.");
 		t_scoped data = t_bytes::f_instantiate(stride * a_height);
 		t_bytes& bytes = f_as<t_bytes&>(data);
 		return f_transfer(new t_image_surface(cairo_image_surface_create_for_data(&bytes[0], a_format, a_width, a_height, stride), std::move(data)));
@@ -239,7 +239,7 @@ public:
 	{
 		f_check<t_bytes>(a_data, L"data");
 		t_bytes& bytes = f_as<t_bytes&>(a_data);
-		if (a_width < 0 || a_height < 0 || a_stride < 0 || static_cast<int>(bytes.f_size()) < a_stride * a_height) t_throwable::f_throw(L"invalid arguments.");
+		if (a_width < 0 || a_height < 0 || a_stride < 0 || static_cast<int>(bytes.f_size()) < a_stride * a_height) f_throw(L"invalid arguments.");
 		return f_transfer(new t_image_surface(cairo_image_surface_create_for_data(&bytes[0], a_format, a_width, a_height, a_stride), std::move(a_data)));
 	}
 	static t_scoped f_create_from_png_source(t_image_source& a_source);
@@ -301,7 +301,7 @@ struct t_type_of<xemmaix::cairo::t_surface> : xemmaix::cairo::t_holds<xemmaix::c
 	static void f_define(t_extension* a_extension);
 
 	using t_base::t_base;
-	virtual t_scoped f_construct(t_stacked* a_stack, size_t a_n);
+	t_scoped f_do_construct(t_stacked* a_stack, size_t a_n);
 };
 
 template<>
@@ -326,7 +326,7 @@ struct t_type_of<xemmaix::cairo::t_image_surface> : t_bears<xemmaix::cairo::t_im
 	static void f_define(t_extension* a_extension);
 
 	using t_base::t_base;
-	virtual t_scoped f_construct(t_stacked* a_stack, size_t a_n);
+	t_scoped f_do_construct(t_stacked* a_stack, size_t a_n);
 };
 
 template<>

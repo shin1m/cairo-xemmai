@@ -49,15 +49,15 @@ void t_image_source::f_read_buffer()
 {
 	f_rewind();
 	f_fill();
-	if (v_head >= v_tail) t_throwable::f_throw(L"unexpected end of stream.");
+	if (v_head >= v_tail) f_throw(L"unexpected end of stream.");
 }
 
 void t_image_source::f_prefetch_buffer()
 {
 	t_bytes& bytes = f_as<t_bytes&>(v_buffer);
-	if (v_tail >= &bytes[bytes.f_size()]) t_throwable::f_throw(L"too match prefetching.");
+	if (v_tail >= &bytes[bytes.f_size()]) f_throw(L"too match prefetching.");
 	f_fill();
-	if (v_head >= v_tail) t_throwable::f_throw(L"unexpected end of stream.");
+	if (v_head >= v_tail) f_throw(L"unexpected end of stream.");
 }
 
 size_t t_file_source::f_read(size_t a_offset)
@@ -144,7 +144,7 @@ t_scoped t_image_surface::f_create_from_source(t_image_source& a_source)
 		}
 		break;
 	}
-	t_throwable::f_throw(L"unknown source.");
+	f_throw(L"unknown source.");
 	return nullptr;
 }
 
@@ -179,7 +179,7 @@ void t_type_of<xemmaix::cairo::t_surface>::f_define(t_extension* a_extension)
 	;
 }
 
-t_scoped t_type_of<xemmaix::cairo::t_surface>::f_construct(t_stacked* a_stack, size_t a_n)
+t_scoped t_type_of<xemmaix::cairo::t_surface>::f_do_construct(t_stacked* a_stack, size_t a_n)
 {
 	return t_construct_with<t_scoped(*)(t_type*, xemmaix::cairo::t_surface&, cairo_content_t, int, int), xemmaix::cairo::t_surface::f_construct>::t_bind<xemmaix::cairo::t_surface>::f_do(this, a_stack, a_n);
 }
@@ -235,7 +235,7 @@ void t_type_of<xemmaix::cairo::t_image_surface>::f_define(t_extension* a_extensi
 	;
 }
 
-t_scoped t_type_of<xemmaix::cairo::t_image_surface>::f_construct(t_stacked* a_stack, size_t a_n)
+t_scoped t_type_of<xemmaix::cairo::t_image_surface>::f_do_construct(t_stacked* a_stack, size_t a_n)
 {
 	return t_overload<
 		t_construct_with<t_scoped(*)(t_type*, cairo_format_t, int, int), xemmaix::cairo::t_image_surface::f_construct>,

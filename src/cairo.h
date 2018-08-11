@@ -80,7 +80,7 @@ public:
 #else
 	static t_session* f_instance()
 	{
-		if (!v_instance) t_throwable::f_throw(L"must be inside main.");
+		if (!v_instance) f_throw(L"must be inside main.");
 		return v_instance;
 	}
 #endif
@@ -459,7 +459,7 @@ struct t_instantiatable : T_base
 	typedef t_instantiatable t_base;
 
 	using T_base::T_base;
-	virtual void f_instantiate(t_stacked* a_stack, size_t a_n)
+	void f_do_instantiate(t_stacked* a_stack, size_t a_n)
 	{
 		t_destruct_n destruct(a_stack, a_n);
 		a_stack[0].f_construct(this->f_construct(a_stack, a_n));
@@ -476,8 +476,8 @@ struct t_holds : t_instantiatable<t_underivable<t_bears<T>>>
 		static T0* f_call(T1&& a_object)
 		{
 			auto p = static_cast<T0*>(t_base::f_object(std::forward<T1>(a_object))->f_pointer());
-			if (!p->f_valid()) t_throwable::f_throw(L"accessing from other thread.");
-			if (!*p) t_throwable::f_throw(L"already destroyed.");
+			if (!p->f_valid()) f_throw(L"accessing from other thread.");
+			if (!*p) f_throw(L"already destroyed.");
 			return p;
 		}
 	};
@@ -538,7 +538,7 @@ struct t_holds : t_instantiatable<t_underivable<t_bears<T>>>
 	}
 
 	using t_instantiatable<t_underivable<t_bears<T>>>::t_instantiatable;
-	virtual void f_finalize(t_object* a_this)
+	static void f_do_finalize(t_object* a_this)
 	{
 		auto p = static_cast<T*>(a_this->f_pointer());
 		assert(!*p);

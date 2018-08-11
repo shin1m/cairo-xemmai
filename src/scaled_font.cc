@@ -23,7 +23,7 @@ void t_type_of<xemmaix::cairo::t_scaled_font>::f_define(t_extension* a_extension
 	;
 }
 
-t_scoped t_type_of<xemmaix::cairo::t_scaled_font>::f_construct(t_stacked* a_stack, size_t a_n)
+t_scoped t_type_of<xemmaix::cairo::t_scaled_font>::f_do_construct(t_stacked* a_stack, size_t a_n)
 {
 	return t_construct_with<t_scoped(*)(t_type*, xemmaix::cairo::t_font_face&, const xemmaix::cairo::t_matrix&, const xemmaix::cairo::t_matrix&, const xemmaix::cairo::t_font_options&), xemmaix::cairo::t_scaled_font::f_construct>::t_bind<xemmaix::cairo::t_scaled_font>::f_do(this, a_stack, a_n);
 }

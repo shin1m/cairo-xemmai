@@ -131,7 +131,7 @@ void t_type_of<xemmaix::cairo::t_context>::f_define(t_extension* a_extension)
 	;
 }
 
-t_scoped t_type_of<xemmaix::cairo::t_context>::f_construct(t_stacked* a_stack, size_t a_n)
+t_scoped t_type_of<xemmaix::cairo::t_context>::f_do_construct(t_stacked* a_stack, size_t a_n)
 {
 	return t_construct_with<t_scoped(*)(t_type*, xemmaix::cairo::t_surface&), xemmaix::cairo::t_context::f_construct>::t_bind<xemmaix::cairo::t_context>::f_do(this, a_stack, a_n);
 }

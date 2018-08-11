@@ -92,7 +92,7 @@ size_t t_gif_decoder::f_read_code()
 	do {
 		if (v_block_p >= v_block_q) {
 			size_t n = f_read_byte();
-			if (n <= 0) t_throwable::f_throw(L"unexpected block terminator.");
+			if (n <= 0) f_throw(L"unexpected block terminator.");
 			for (size_t i = 0; i < n; ++i) v_block_data[i] = f_read_byte();
 			v_block_p = v_block_data;
 			v_block_q = v_block_p + n;
@@ -129,7 +129,7 @@ size_t t_gif_decoder::f_read_index()
 			if (code == v_next_code) v_extracted_data[0] = index;
 			break;
 		}
-		if (++v_next_code >= 4096) t_throwable::f_throw(L"invalid sequence.");
+		if (++v_next_code >= 4096) f_throw(L"invalid sequence.");
 		v_predecessors[v_next_code] = code;
 		if (v_next_code == 1 << v_bits_per_code) ++v_bits_per_code;
 	}
@@ -140,8 +140,8 @@ void t_gif_decoder::f_read_header()
 {
 	unsigned char bs[6];
 	for (size_t i = 0; i < 6; ++i) bs[i] = f_read_byte();
-	if (bs[0] != 'G' || bs[1] != 'I' || bs[2] != 'F') t_throwable::f_throw(L"invalid signature.");
-	if (bs[3] != '8' || (bs[4] != '7' && bs[4] != '9') || bs[5] != 'a') t_throwable::f_throw(L"unknown version.");
+	if (bs[0] != 'G' || bs[1] != 'I' || bs[2] != 'F') f_throw(L"invalid signature.");
+	if (bs[3] != '8' || (bs[4] != '7' && bs[4] != '9') || bs[5] != 'a') f_throw(L"unknown version.");
 	v_width = f_read_word();
 	v_height = f_read_word();
 	unsigned char packed = f_read_byte();

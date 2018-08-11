@@ -113,7 +113,7 @@ struct t_type_of<xemmaix::cairo::t_font_face> : xemmaix::cairo::t_holds<xemmaix:
 	static void f_define(t_extension* a_extension);
 
 	using t_base::t_base;
-	virtual t_scoped f_construct(t_stacked* a_stack, size_t a_n);
+	t_scoped f_do_construct(t_stacked* a_stack, size_t a_n);
 };
 
 template<>
@@ -130,7 +130,7 @@ struct t_type_of<xemmaix::cairo::t_toy_font_face> : t_bears<xemmaix::cairo::t_to
 	static void f_define(t_extension* a_extension);
 
 	using t_base::t_base;
-	virtual t_scoped f_construct(t_stacked* a_stack, size_t a_n);
+	t_scoped f_do_construct(t_stacked* a_stack, size_t a_n);
 };
 
 }

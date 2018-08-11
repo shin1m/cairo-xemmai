@@ -228,7 +228,7 @@ struct t_type_of<xemmaix::cairo::t_pattern> : xemmaix::cairo::t_holds<xemmaix::c
 	static void f_define(t_extension* a_extension);
 
 	using t_base::t_base;
-	virtual t_scoped f_construct(t_stacked* a_stack, size_t a_n);
+	t_scoped f_do_construct(t_stacked* a_stack, size_t a_n);
 };
 
 template<>
@@ -237,7 +237,7 @@ struct t_type_of<xemmaix::cairo::t_solid_pattern> : t_bears<xemmaix::cairo::t_so
 	static void f_define(t_extension* a_extension);
 
 	using t_base::t_base;
-	virtual t_scoped f_construct(t_stacked* a_stack, size_t a_n);
+	t_scoped f_do_construct(t_stacked* a_stack, size_t a_n);
 };
 
 template<>
@@ -246,7 +246,7 @@ struct t_type_of<xemmaix::cairo::t_surface_pattern> : t_bears<xemmaix::cairo::t_
 	static void f_define(t_extension* a_extension);
 
 	using t_base::t_base;
-	virtual t_scoped f_construct(t_stacked* a_stack, size_t a_n);
+	t_scoped f_do_construct(t_stacked* a_stack, size_t a_n);
 };
 
 template<>
@@ -287,7 +287,7 @@ struct t_type_of<xemmaix::cairo::t_linear_gradient> : t_bears<xemmaix::cairo::t_
 	static void f_define(t_extension* a_extension);
 
 	using t_base::t_base;
-	virtual t_scoped f_construct(t_stacked* a_stack, size_t a_n);
+	t_scoped f_do_construct(t_stacked* a_stack, size_t a_n);
 };
 
 template<>
@@ -296,7 +296,7 @@ struct t_type_of<xemmaix::cairo::t_radial_gradient> : t_bears<xemmaix::cairo::t_
 	static void f_define(t_extension* a_extension);
 
 	using t_base::t_base;
-	virtual t_scoped f_construct(t_stacked* a_stack, size_t a_n);
+	t_scoped f_do_construct(t_stacked* a_stack, size_t a_n);
 };
 
 }
