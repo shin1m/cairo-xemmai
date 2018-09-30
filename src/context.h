@@ -333,7 +333,7 @@ public:
 	{
 		cairo_glyph_path(v_value, a_glyphs, a_n);
 	}
-	void f_text_path(const std::wstring& a_text)
+	void f_text_path(std::wstring_view a_text)
 	{
 		cairo_text_path(v_value, f_convert(a_text).c_str());
 	}
@@ -408,7 +408,7 @@ public:
 		cairo_device_to_user_distance(v_value, &a_x, &a_y);
 		return f_tuple(a_x, a_y);
 	}
-	void f_select_font_face(const std::wstring& a_family, cairo_font_slant_t a_slant, cairo_font_weight_t a_weight)
+	void f_select_font_face(std::wstring_view a_family, cairo_font_slant_t a_slant, cairo_font_weight_t a_weight)
 	{
 		cairo_select_font_face(v_value, f_convert(a_family).c_str(), a_slant, a_weight);
 	}
@@ -455,7 +455,7 @@ public:
 	{
 		return t_scaled_font::f_wrap(cairo_get_scaled_font(v_value));
 	}
-	void f_show_text(const std::wstring& a_text)
+	void f_show_text(std::wstring_view a_text)
 	{
 		cairo_show_text(v_value, f_convert(a_text).c_str());
 	}
@@ -473,7 +473,7 @@ public:
 		cairo_font_extents(v_value, &extents);
 		return f_tuple(extents.ascent, extents.descent, extents.height, extents.max_x_advance, extents.max_y_advance);
 	}
-	t_scoped f_text_extents(const std::wstring& a_text) const
+	t_scoped f_text_extents(std::wstring_view a_text) const
 	{
 		cairo_text_extents_t extents;
 		cairo_text_extents(v_value, f_convert(a_text).c_str(), &extents);

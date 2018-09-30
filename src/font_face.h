@@ -67,7 +67,7 @@ class t_toy_font_face : public t_font_face
 	}
 
 public:
-	static t_scoped f_construct(t_type* a_class, const std::wstring& a_family, cairo_font_slant_t a_slant, cairo_font_weight_t a_weight)
+	static t_scoped f_construct(t_type* a_class, std::wstring_view a_family, cairo_font_slant_t a_slant, cairo_font_weight_t a_weight)
 	{
 		return f_construct_shared<t_toy_font_face>(cairo_toy_font_face_create(f_convert(a_family).c_str(), a_slant, a_weight));
 	}

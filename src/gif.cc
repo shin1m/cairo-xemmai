@@ -92,7 +92,7 @@ size_t t_gif_decoder::f_read_code()
 	do {
 		if (v_block_p >= v_block_q) {
 			size_t n = f_read_byte();
-			if (n <= 0) f_throw(L"unexpected block terminator.");
+			if (n <= 0) f_throw(L"unexpected block terminator."sv);
 			for (size_t i = 0; i < n; ++i) v_block_data[i] = f_read_byte();
 			v_block_p = v_block_data;
 			v_block_q = v_block_p + n;
@@ -129,7 +129,7 @@ size_t t_gif_decoder::f_read_index()
 			if (code == v_next_code) v_extracted_data[0] = index;
 			break;
 		}
-		if (++v_next_code >= 4096) f_throw(L"invalid sequence.");
+		if (++v_next_code >= 4096) f_throw(L"invalid sequence."sv);
 		v_predecessors[v_next_code] = code;
 		if (v_next_code == 1 << v_bits_per_code) ++v_bits_per_code;
 	}
@@ -140,8 +140,8 @@ void t_gif_decoder::f_read_header()
 {
 	unsigned char bs[6];
 	for (size_t i = 0; i < 6; ++i) bs[i] = f_read_byte();
-	if (bs[0] != 'G' || bs[1] != 'I' || bs[2] != 'F') f_throw(L"invalid signature.");
-	if (bs[3] != '8' || (bs[4] != '7' && bs[4] != '9') || bs[5] != 'a') f_throw(L"unknown version.");
+	if (bs[0] != 'G' || bs[1] != 'I' || bs[2] != 'F') f_throw(L"invalid signature."sv);
+	if (bs[3] != '8' || (bs[4] != '7' && bs[4] != '9') || bs[5] != 'a') f_throw(L"unknown version."sv);
 	v_width = f_read_word();
 	v_height = f_read_word();
 	unsigned char packed = f_read_byte();
@@ -225,19 +225,19 @@ t_scoped t_gif_decoder::f_read_image()
 	}
 	f_skip_blocks();
 	t_scoped p = t_image_surface::f_construct(nullptr, std::move(data), CAIRO_FORMAT_ARGB32, width, height, stride);
-	p.f_put(t_symbol::f_instantiate(L"left"), f_global()->f_as(left));
-	p.f_put(t_symbol::f_instantiate(L"top"), f_global()->f_as(top));
-	p.f_put(t_symbol::f_instantiate(L"disposal"), f_global()->f_as(disposal));
-	p.f_put(t_symbol::f_instantiate(L"user_input"), f_global()->f_as(user_input));
-	p.f_put(t_symbol::f_instantiate(L"delay"), f_global()->f_as(delay));
+	p.f_put(t_symbol::f_instantiate(L"left"sv), f_global()->f_as(left));
+	p.f_put(t_symbol::f_instantiate(L"top"sv), f_global()->f_as(top));
+	p.f_put(t_symbol::f_instantiate(L"disposal"sv), f_global()->f_as(disposal));
+	p.f_put(t_symbol::f_instantiate(L"user_input"sv), f_global()->f_as(user_input));
+	p.f_put(t_symbol::f_instantiate(L"delay"sv), f_global()->f_as(delay));
 	return p;
 }
 
 t_scoped t_gif_decoder::f_read_images()
 {
 	t_scoped p = t_array::f_instantiate();
-	p.f_put(t_symbol::f_instantiate(L"width"), f_global()->f_as(v_width));
-	p.f_put(t_symbol::f_instantiate(L"height"), f_global()->f_as(v_height));
+	p.f_put(t_symbol::f_instantiate(L"width"sv), f_global()->f_as(v_width));
+	p.f_put(t_symbol::f_instantiate(L"height"sv), f_global()->f_as(v_height));
 	{
 		t_scoped q = t_tuple::f_instantiate(4);
 		t_tuple& tuple = f_as<t_tuple&>(q);
@@ -245,9 +245,9 @@ t_scoped t_gif_decoder::f_read_images()
 		tuple[1].f_construct(f_global()->f_as((v_background >> 8 & 0xff) / 255.0));
 		tuple[2].f_construct(f_global()->f_as((v_background & 0xff) / 255.0));
 		tuple[3].f_construct(f_global()->f_as((v_background >> 24 & 0xff) / 255.0));
-		p.f_put(t_symbol::f_instantiate(L"background"), std::move(q));
+		p.f_put(t_symbol::f_instantiate(L"background"sv), std::move(q));
 	}
-	p.f_put(t_symbol::f_instantiate(L"aspect"), f_global()->f_as(v_aspect));
+	p.f_put(t_symbol::f_instantiate(L"aspect"sv), f_global()->f_as(v_aspect));
 	t_array& array = f_as<t_array&>(p);
 	while (true) {
 		t_scoped q = f_read_image();
@@ -273,7 +273,7 @@ t_scoped t_image_surface::f_create_from_gif_source(t_image_source& a_source)
 	return decoder.f_read_image();
 }
 
-t_scoped t_image_surface::f_create_from_gif(const std::wstring& a_path)
+t_scoped t_image_surface::f_create_from_gif(std::wstring_view a_path)
 {
 	t_file_source source(a_path);
 	return source ? f_create_from_gif_source(source) : nullptr;
@@ -285,7 +285,7 @@ t_scoped t_image_surface::f_create_from_gif_stream(const t_value& a_read)
 	return f_create_from_gif_source(source);
 }
 
-t_scoped t_image_surface::f_create_all_from_gif(const std::wstring& a_path)
+t_scoped t_image_surface::f_create_all_from_gif(std::wstring_view a_path)
 {
 	t_file_source source(a_path);
 	return source ? f_read_images(source) : nullptr;

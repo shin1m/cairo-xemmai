@@ -63,7 +63,7 @@ public:
 		cairo_scaled_font_extents(v_value, &extents);
 		return f_tuple(extents.ascent, extents.descent, extents.height, extents.max_x_advance, extents.max_y_advance);
 	}
-	t_scoped f_text_extents(const std::wstring& a_text) const
+	t_scoped f_text_extents(std::wstring_view a_text) const
 	{
 		cairo_text_extents_t extents;
 		cairo_scaled_font_text_extents(v_value, f_convert(a_text).c_str(), &extents);

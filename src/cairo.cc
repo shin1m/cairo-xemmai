@@ -3,14 +3,14 @@
 namespace xemmaix::cairo
 {
 
-std::string f_convert(const std::wstring& a_string)
+std::string f_convert(std::wstring_view a_x)
 {
-	return t_session::v_instance->v_convert.to_bytes(a_string);
+	return t_session::v_instance->v_convert.to_bytes(a_x.data(), a_x.data() + a_x.size());
 }
 
-std::wstring f_convert(const std::string& a_string)
+std::wstring f_convert(std::string_view a_x)
 {
-	return t_session::v_instance->v_convert.from_bytes(a_string);
+	return t_session::v_instance->v_convert.from_bytes(a_x.data(), a_x.data() + a_x.size());
 }
 
 t_entry::t_entry() : v_previous(t_session::f_instance()), v_next(v_previous->v_next)
@@ -28,14 +28,14 @@ XEMMAI__PORTABLE__THREAD t_session* t_session::v_instance;
 #ifdef _WIN32
 t_session* t_session::f_instance()
 {
-	if (!v_instance) f_throw(L"must be inside main.");
+	if (!v_instance) f_throw(L"must be inside main."sv);
 	return v_instance;
 }
 #endif
 
 t_session::t_session(t_extension* a_extension) : t_entry(false), v_extension(a_extension)
 {
-	if (v_instance) f_throw(L"already inside main.");
+	if (v_instance) f_throw(L"already inside main."sv);
 	v_instance = this;
 }
 
@@ -99,7 +99,7 @@ t_extension::t_extension(t_object* a_module) : xemmai::t_extension(a_module)
 	t_type_of<cairo_line_cap_t>::f_define(this);
 	t_type_of<cairo_line_join_t>::f_define(this);
 	t_type_of<cairo_operator_t>::f_define(this);
-	f_define<void (*)(t_extension*, const t_value&), f_main>(this, L"main");
+	f_define<void (*)(t_extension*, const t_value&), f_main>(this, L"main"sv);
 }
 
 void t_extension::f_scan(t_scan a_scan)
@@ -145,39 +145,39 @@ namespace xemmai
 
 void t_type_of<cairo_status_t>::f_define(t_extension* a_extension)
 {
-	t_define<cairo_status_t, intptr_t>(a_extension, L"Status")
-		(L"SUCCESS", CAIRO_STATUS_SUCCESS)
-		(L"NO_MEMORY", CAIRO_STATUS_NO_MEMORY)
-		(L"INVALID_RESTORE", CAIRO_STATUS_INVALID_RESTORE)
-		(L"INVALID_POP_GROUP", CAIRO_STATUS_INVALID_POP_GROUP)
-		(L"NO_CURRENT_POINT", CAIRO_STATUS_NO_CURRENT_POINT)
-		(L"INVALID_MATRIX", CAIRO_STATUS_INVALID_MATRIX)
-		(L"INVALID_STATUS", CAIRO_STATUS_INVALID_STATUS)
-		(L"NULL_POINTER", CAIRO_STATUS_NULL_POINTER)
-		(L"INVALID_STRING", CAIRO_STATUS_INVALID_STRING)
-		(L"INVALID_PATH_DATA", CAIRO_STATUS_INVALID_PATH_DATA)
-		(L"READ_ERROR", CAIRO_STATUS_READ_ERROR)
-		(L"WRITE_ERROR", CAIRO_STATUS_WRITE_ERROR)
-		(L"SURFACE_FINISHED", CAIRO_STATUS_SURFACE_FINISHED)
-		(L"SURFACE_TYPE_MISMATCH", CAIRO_STATUS_SURFACE_TYPE_MISMATCH)
-		(L"PATTERN_TYPE_MISMATCH", CAIRO_STATUS_PATTERN_TYPE_MISMATCH)
-		(L"INVALID_CONTENT", CAIRO_STATUS_INVALID_CONTENT)
-		(L"INVALID_FORMAT", CAIRO_STATUS_INVALID_FORMAT)
-		(L"INVALID_VISUAL", CAIRO_STATUS_INVALID_VISUAL)
-		(L"FILE_NOT_FOUND", CAIRO_STATUS_FILE_NOT_FOUND)
-		(L"INVALID_DASH", CAIRO_STATUS_INVALID_DASH)
-		(L"INVALID_DSC_COMMENT", CAIRO_STATUS_INVALID_DSC_COMMENT)
-		(L"INVALID_INDEX", CAIRO_STATUS_INVALID_INDEX)
-		(L"CLIP_NOT_REPRESENTABLE", CAIRO_STATUS_CLIP_NOT_REPRESENTABLE)
-		(L"TEMP_FILE_ERROR", CAIRO_STATUS_TEMP_FILE_ERROR)
-		(L"INVALID_STRIDE", CAIRO_STATUS_INVALID_STRIDE)
-		(L"FONT_TYPE_MISMATCH", CAIRO_STATUS_FONT_TYPE_MISMATCH)
-		(L"USER_FONT_IMMUTABLE", CAIRO_STATUS_USER_FONT_IMMUTABLE)
-		(L"USER_FONT_ERROR", CAIRO_STATUS_USER_FONT_ERROR)
-		(L"NEGATIVE_COUNT", CAIRO_STATUS_NEGATIVE_COUNT)
-		(L"INVALID_CLUSTERS", CAIRO_STATUS_INVALID_CLUSTERS)
-		(L"INVALID_SLANT", CAIRO_STATUS_INVALID_SLANT)
-		(L"INVALID_WEIGHT", CAIRO_STATUS_INVALID_WEIGHT)
+	t_define<cairo_status_t, intptr_t>(a_extension, L"Status"sv)
+		(L"SUCCESS"sv, CAIRO_STATUS_SUCCESS)
+		(L"NO_MEMORY"sv, CAIRO_STATUS_NO_MEMORY)
+		(L"INVALID_RESTORE"sv, CAIRO_STATUS_INVALID_RESTORE)
+		(L"INVALID_POP_GROUP"sv, CAIRO_STATUS_INVALID_POP_GROUP)
+		(L"NO_CURRENT_POINT"sv, CAIRO_STATUS_NO_CURRENT_POINT)
+		(L"INVALID_MATRIX"sv, CAIRO_STATUS_INVALID_MATRIX)
+		(L"INVALID_STATUS"sv, CAIRO_STATUS_INVALID_STATUS)
+		(L"NULL_POINTER"sv, CAIRO_STATUS_NULL_POINTER)
+		(L"INVALID_STRING"sv, CAIRO_STATUS_INVALID_STRING)
+		(L"INVALID_PATH_DATA"sv, CAIRO_STATUS_INVALID_PATH_DATA)
+		(L"READ_ERROR"sv, CAIRO_STATUS_READ_ERROR)
+		(L"WRITE_ERROR"sv, CAIRO_STATUS_WRITE_ERROR)
+		(L"SURFACE_FINISHED"sv, CAIRO_STATUS_SURFACE_FINISHED)
+		(L"SURFACE_TYPE_MISMATCH"sv, CAIRO_STATUS_SURFACE_TYPE_MISMATCH)
+		(L"PATTERN_TYPE_MISMATCH"sv, CAIRO_STATUS_PATTERN_TYPE_MISMATCH)
+		(L"INVALID_CONTENT"sv, CAIRO_STATUS_INVALID_CONTENT)
+		(L"INVALID_FORMAT"sv, CAIRO_STATUS_INVALID_FORMAT)
+		(L"INVALID_VISUAL"sv, CAIRO_STATUS_INVALID_VISUAL)
+		(L"FILE_NOT_FOUND"sv, CAIRO_STATUS_FILE_NOT_FOUND)
+		(L"INVALID_DASH"sv, CAIRO_STATUS_INVALID_DASH)
+		(L"INVALID_DSC_COMMENT"sv, CAIRO_STATUS_INVALID_DSC_COMMENT)
+		(L"INVALID_INDEX"sv, CAIRO_STATUS_INVALID_INDEX)
+		(L"CLIP_NOT_REPRESENTABLE"sv, CAIRO_STATUS_CLIP_NOT_REPRESENTABLE)
+		(L"TEMP_FILE_ERROR"sv, CAIRO_STATUS_TEMP_FILE_ERROR)
+		(L"INVALID_STRIDE"sv, CAIRO_STATUS_INVALID_STRIDE)
+		(L"FONT_TYPE_MISMATCH"sv, CAIRO_STATUS_FONT_TYPE_MISMATCH)
+		(L"USER_FONT_IMMUTABLE"sv, CAIRO_STATUS_USER_FONT_IMMUTABLE)
+		(L"USER_FONT_ERROR"sv, CAIRO_STATUS_USER_FONT_ERROR)
+		(L"NEGATIVE_COUNT"sv, CAIRO_STATUS_NEGATIVE_COUNT)
+		(L"INVALID_CLUSTERS"sv, CAIRO_STATUS_INVALID_CLUSTERS)
+		(L"INVALID_SLANT"sv, CAIRO_STATUS_INVALID_SLANT)
+		(L"INVALID_WEIGHT"sv, CAIRO_STATUS_INVALID_WEIGHT)
 	;
 }
 

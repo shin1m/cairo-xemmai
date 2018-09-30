@@ -123,7 +123,7 @@ public:
 	{
 		return cairo_surface_has_show_text_glyphs(v_value) != 0;
 	}
-	void f_write_to_png(const std::wstring& a_path) const
+	void f_write_to_png(std::wstring_view a_path) const
 	{
 		cairo_surface_write_to_png(v_value, f_convert(a_path).c_str());
 	}
@@ -192,7 +192,7 @@ protected:
 	virtual size_t f_read(size_t a_offset);
 
 public:
-	t_file_source(const std::wstring& a_path) : io::t_file(a_path, "rb")
+	t_file_source(std::wstring_view a_path) : io::t_file(a_path, "rb")
 	{
 	}
 };
@@ -230,7 +230,7 @@ public:
 	static t_scoped f_construct(t_type* a_class, cairo_format_t a_format, int a_width, int a_height)
 	{
 		int stride = cairo_format_stride_for_width(a_format, a_width);
-		if (a_width < 0 || a_height < 0 || stride < 0) f_throw(L"invalid arguments.");
+		if (a_width < 0 || a_height < 0 || stride < 0) f_throw(L"invalid arguments."sv);
 		t_scoped data = t_bytes::f_instantiate(stride * a_height);
 		t_bytes& bytes = f_as<t_bytes&>(data);
 		return f_transfer(new t_image_surface(cairo_image_surface_create_for_data(&bytes[0], a_format, a_width, a_height, stride), std::move(data)));
@@ -239,25 +239,25 @@ public:
 	{
 		f_check<t_bytes>(a_data, L"data");
 		t_bytes& bytes = f_as<t_bytes&>(a_data);
-		if (a_width < 0 || a_height < 0 || a_stride < 0 || static_cast<int>(bytes.f_size()) < a_stride * a_height) f_throw(L"invalid arguments.");
+		if (a_width < 0 || a_height < 0 || a_stride < 0 || static_cast<int>(bytes.f_size()) < a_stride * a_height) f_throw(L"invalid arguments."sv);
 		return f_transfer(new t_image_surface(cairo_image_surface_create_for_data(&bytes[0], a_format, a_width, a_height, a_stride), std::move(a_data)));
 	}
 	static t_scoped f_create_from_png_source(t_image_source& a_source);
-	static t_scoped f_create_from_png(const std::wstring& a_path)
+	static t_scoped f_create_from_png(std::wstring_view a_path)
 	{
 		return f_transfer(new t_image_surface(cairo_image_surface_create_from_png(f_convert(a_path).c_str())));
 	}
 	static t_scoped f_create_from_png_stream(const t_value& a_read);
 	static t_scoped f_create_from_jpeg_source(t_image_source& a_source);
-	static t_scoped f_create_from_jpeg(const std::wstring& a_path);
+	static t_scoped f_create_from_jpeg(std::wstring_view a_path);
 	static t_scoped f_create_from_jpeg_stream(const t_value& a_read);
 	static t_scoped f_create_from_gif_source(t_image_source& a_source);
-	static t_scoped f_create_from_gif(const std::wstring& a_path);
+	static t_scoped f_create_from_gif(std::wstring_view a_path);
 	static t_scoped f_create_from_gif_stream(const t_value& a_read);
-	static t_scoped f_create_all_from_gif(const std::wstring& a_path);
+	static t_scoped f_create_all_from_gif(std::wstring_view a_path);
 	static t_scoped f_create_all_from_gif_stream(const t_value& a_read);
 	static t_scoped f_create_from_source(t_image_source& a_source);
-	static t_scoped f_create_from_file(const std::wstring& a_path)
+	static t_scoped f_create_from_file(std::wstring_view a_path)
 	{
 		t_file_source source(a_path);
 		return f_create_from_source(source);

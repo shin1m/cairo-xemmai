@@ -98,13 +98,13 @@ struct t_type_of<xemmaix::cairo::t_font_options> : xemmaix::cairo::t_instantiata
 
 	static t_scoped f_construct(t_type* a_class)
 	{
-		t_scoped object = t_object::f_allocate(a_class);
+		t_scoped object = t_object::f_allocate(a_class, false);
 		object.f_pointer__(xemmaix::cairo::t_font_options::f_create());
 		return object;
 	}
 	static t_scoped f_construct(t_type* a_class, const xemmaix::cairo::t_font_options* a_original)
 	{
-		t_scoped object = t_object::f_allocate(a_class);
+		t_scoped object = t_object::f_allocate(a_class, false);
 		object.f_pointer__(xemmaix::cairo::t_font_options::f_copy(a_original));
 		return object;
 	}

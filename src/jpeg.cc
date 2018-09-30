@@ -51,7 +51,7 @@ t_scoped t_scoped_decompress::f_decompress()
 		format = CAIRO_FORMAT_RGB24;
 		break;
 	default:
-		f_throw(L"unsupported color space.");
+		f_throw(L"unsupported color space."sv);
 	}
 	int stride = cairo_format_stride_for_width(format, output_width);
 	t_scoped data = t_bytes::f_instantiate(stride * output_height);
@@ -172,7 +172,7 @@ t_scoped t_image_surface::f_create_from_jpeg_source(t_image_source& a_source)
 	return cinfo.f_decompress();
 }
 
-t_scoped t_image_surface::f_create_from_jpeg(const std::wstring& a_path)
+t_scoped t_image_surface::f_create_from_jpeg(std::wstring_view a_path)
 {
 	t_file_source source(a_path);
 	return source ? f_create_from_jpeg_source(source) : nullptr;
