@@ -7,7 +7,7 @@ cairo_status_t t_surface::f_write_stream(void* a_closure, const unsigned char* a
 {
 	const t_value& write = *static_cast<const t_value**>(a_closure)[0];
 	const t_value& buffer = *static_cast<const t_value**>(a_closure)[1];
-	t_bytes& bytes = f_as<t_bytes&>(buffer);
+	auto& bytes = f_as<t_bytes&>(buffer);
 	t_scoped zero = f_global()->f_as(0);
 	try {
 		while (a_length > 0) {
@@ -28,11 +28,12 @@ t_surface* t_surface::f_wrap(cairo_surface_t* a_value)
 	if (!a_value) return nullptr;
 	t_surface* p = f_from(a_value);
 	if (p) return p;
+	auto extension = t_session::f_instance()->f_extension();
 	switch (cairo_surface_get_type(a_value)) {
 	case CAIRO_SURFACE_TYPE_IMAGE:
-		return new t_image_surface(a_value);
+		return &f_new<t_image_surface>(extension, false, a_value)->f_as<t_surface>();
 	default:
-		return new t_surface(a_value);
+		return &f_new<t_surface>(extension, false, a_value)->f_as<t_surface>();
 	}
 }
 
@@ -54,7 +55,7 @@ void t_image_source::f_read_buffer()
 
 void t_image_source::f_prefetch_buffer()
 {
-	t_bytes& bytes = f_as<t_bytes&>(v_buffer);
+	auto& bytes = f_as<t_bytes&>(v_buffer);
 	if (v_tail >= &bytes[bytes.f_size()]) f_throw(L"too match prefetching."sv);
 	f_fill();
 	if (v_head >= v_tail) f_throw(L"unexpected end of stream."sv);
@@ -63,13 +64,13 @@ void t_image_source::f_prefetch_buffer()
 size_t t_file_source::f_read(size_t a_offset)
 {
 	t_safe_region region;
-	t_bytes& bytes = f_as<t_bytes&>(v_buffer);
+	auto& bytes = f_as<t_bytes&>(v_buffer);
 	return io::t_file::f_read(bytes, a_offset, bytes.f_size() - a_offset);
 }
 
 size_t t_stream_source::f_read(size_t a_offset)
 {
-	t_bytes& bytes = f_as<t_bytes&>(v_buffer);
+	auto& bytes = f_as<t_bytes&>(v_buffer);
 	t_scoped p = v_read(v_buffer, f_global()->f_as(a_offset), f_global()->f_as(bytes.f_size() - a_offset));
 	f_check<size_t>(p, L"result of read");
 	return f_as<size_t>(p);
@@ -99,7 +100,7 @@ void t_image_surface::f_destroy()
 
 t_scoped t_image_surface::f_create_from_png_source(t_image_source& a_source)
 {
-	return f_transfer(new t_image_surface(cairo_image_surface_create_from_png_stream(f_read_stream, &a_source)));
+	return f_transfer(f_new<t_image_surface>(t_session::f_instance()->f_extension(), false, cairo_image_surface_create_from_png_stream(f_read_stream, &a_source)));
 }
 
 t_scoped t_image_surface::f_create_from_png_stream(const t_value& a_read)

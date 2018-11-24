@@ -8,18 +8,18 @@ t_pattern* t_pattern::f_wrap(cairo_pattern_t* a_value)
 	if (!a_value) return nullptr;
 	t_pattern* p = f_from(a_value);
 	if (p) return p;
+	auto extension = t_session::f_instance()->f_extension();
 	switch (cairo_pattern_get_type(a_value)) {
 	case CAIRO_PATTERN_TYPE_SOLID:
-		return new t_solid_pattern(a_value);
+		return &f_new<t_solid_pattern>(extension, false, a_value)->f_as<t_pattern>();
 	case CAIRO_PATTERN_TYPE_SURFACE:
-		return new t_surface_pattern(a_value);
+		return &f_new<t_surface_pattern>(extension, false, a_value)->f_as<t_pattern>();
 	case CAIRO_PATTERN_TYPE_LINEAR:
-		return new t_linear_gradient(a_value);
+		return &f_new<t_linear_gradient>(extension, false, a_value)->f_as<t_pattern>();
 	case CAIRO_PATTERN_TYPE_RADIAL:
-		return new t_radial_gradient(a_value);
+		return &f_new<t_radial_gradient>(extension, false, a_value)->f_as<t_pattern>();
 	default:
 		f_throw(L"unknown pattern."sv);
-		return nullptr;
 	}
 }
 

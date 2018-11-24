@@ -10,6 +10,7 @@ namespace xemmaix::cairo
 
 class t_scaled_font : public t_proxy_of<t_scaled_font, cairo_scaled_font_t>
 {
+	friend class t_type_of<t_object>;
 	friend class t_proxy_of<t_scaled_font, cairo_scaled_font_t>;
 
 	static cairo_status_t f_set_user_data(cairo_scaled_font_t* a_value, const cairo_user_data_key_t* a_key, void* a_user, cairo_destroy_func_t a_destroy)
@@ -29,20 +30,18 @@ class t_scaled_font : public t_proxy_of<t_scaled_font, cairo_scaled_font_t>
 		cairo_scaled_font_destroy(a_value);
 	}
 
-	t_scaled_font(cairo_scaled_font_t* a_value) : t_base(t_session::f_instance()->f_extension()->f_type<t_scaled_font>(), a_value)
-	{
-	}
+	using t_base::t_base;
 
 public:
 	static t_scoped f_construct(t_type* a_class, t_font_face& a_font_face, const t_matrix& a_font_matrix, const t_matrix& a_ctm, const t_font_options& a_options)
 	{
-		return f_construct_shared<t_scaled_font>(cairo_scaled_font_create(a_font_face, &a_font_matrix, &a_ctm, t_font_options::f_to(&a_options)));
+		return f_construct_shared<t_scaled_font>(a_class, cairo_scaled_font_create(a_font_face, &a_font_matrix, &a_ctm, t_font_options::f_to(&a_options)));
 	}
 	static t_scaled_font* f_wrap(cairo_scaled_font_t* a_value)
 	{
 		if (!a_value) return nullptr;
 		t_scaled_font* p = f_from(a_value);
-		return p ? p : new t_scaled_font(a_value);
+		return p ? p : &f_new<t_scaled_font>(t_session::f_instance()->f_extension(), false, a_value)->f_as<t_scaled_font>();
 	}
 
 	void f_acquire()

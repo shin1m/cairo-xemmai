@@ -54,8 +54,8 @@ t_scoped t_scoped_decompress::f_decompress()
 		f_throw(L"unsupported color space."sv);
 	}
 	int stride = cairo_format_stride_for_width(format, output_width);
-	t_scoped data = t_bytes::f_instantiate(stride * output_height);
-	t_bytes& bytes = f_as<t_bytes&>(data);
+	auto data = t_bytes::f_instantiate(stride * output_height);
+	auto& bytes = f_as<t_bytes&>(data);
 	unsigned char* row = &bytes[0];
 	if (out_color_space == JCS_GRAYSCALE) {
 		while (output_scanline < output_height) {
@@ -96,7 +96,7 @@ t_scoped t_scoped_decompress::f_decompress()
 		}
 	}
 	jpeg_finish_decompress(this);
-	return t_image_surface::f_construct(nullptr, std::move(data), format, output_width, output_height, stride);
+	return t_image_surface::f_construct(t_session::f_instance()->f_extension()->f_type<t_image_surface>(), std::move(data), format, output_width, output_height, stride);
 }
 
 struct t_jpeg_source : jpeg_source_mgr

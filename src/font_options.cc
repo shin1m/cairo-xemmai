@@ -24,7 +24,7 @@ void t_type_of<xemmaix::cairo::t_font_options>::f_define(t_extension* a_extensio
 
 void t_type_of<xemmaix::cairo::t_font_options>::f_do_finalize(t_object* a_this)
 {
-	xemmaix::cairo::t_font_options::f_destroy(f_as<xemmaix::cairo::t_font_options*>(a_this));
+	xemmaix::cairo::t_font_options::f_destroy(a_this->f_as<xemmaix::cairo::t_font_options*>());
 }
 
 t_scoped t_type_of<xemmaix::cairo::t_font_options>::f_do_construct(t_stacked* a_stack, size_t a_n)

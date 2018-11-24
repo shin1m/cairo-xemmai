@@ -8,11 +8,12 @@ t_font_face* t_font_face::f_wrap(cairo_font_face_t* a_value)
 	if (!a_value) return nullptr;
 	t_font_face* p = f_from(a_value);
 	if (p) return p;
+	auto extension = t_session::f_instance()->f_extension();
 	switch (cairo_font_face_get_type(a_value)) {
 	case CAIRO_SURFACE_TYPE_IMAGE:
-		return new t_toy_font_face(a_value);
+		return &f_new<t_toy_font_face>(extension, false, a_value)->f_as<t_font_face>();
 	default:
-		return new t_font_face(a_value);
+		return &f_new<t_font_face>(extension, false, a_value)->f_as<t_font_face>();
 	}
 }
 

@@ -8,6 +8,7 @@ namespace xemmaix::cairo
 
 class t_font_face : public t_proxy_of<t_font_face, cairo_font_face_t>
 {
+	friend class t_type_of<t_object>;
 	friend class t_proxy_of<t_font_face, cairo_font_face_t>;
 
 	static cairo_status_t f_set_user_data(cairo_font_face_t* a_value, const cairo_user_data_key_t* a_key, void* a_user, cairo_destroy_func_t a_destroy)
@@ -27,14 +28,8 @@ class t_font_face : public t_proxy_of<t_font_face, cairo_font_face_t>
 		cairo_font_face_destroy(a_value);
 	}
 
-	t_font_face(cairo_font_face_t* a_value) : t_base(t_session::f_instance()->f_extension()->f_type<t_font_face>(), a_value)
-	{
-	}
-
 protected:
-	t_font_face(t_type* a_class, cairo_font_face_t* a_value) : t_base(a_class, a_value)
-	{
-	}
+	using t_base::t_base;
 
 public:
 	static t_font_face* f_wrap(cairo_font_face_t* a_value);
@@ -62,14 +57,12 @@ class t_toy_font_face : public t_font_face
 	friend class t_proxy_of<t_font_face, cairo_font_face_t>;
 	friend class t_font_face;
 
-	t_toy_font_face(cairo_font_face_t* a_value) : t_font_face(t_session::f_instance()->f_extension()->f_type<t_toy_font_face>(), a_value)
-	{
-	}
+	using t_font_face::t_font_face;
 
 public:
 	static t_scoped f_construct(t_type* a_class, std::wstring_view a_family, cairo_font_slant_t a_slant, cairo_font_weight_t a_weight)
 	{
-		return f_construct_shared<t_toy_font_face>(cairo_toy_font_face_create(f_convert(a_family).c_str(), a_slant, a_weight));
+		return f_construct_shared<t_toy_font_face>(a_class, cairo_toy_font_face_create(f_convert(a_family).c_str(), a_slant, a_weight));
 	}
 
 	std::wstring f_get_family() const

@@ -213,8 +213,8 @@ t_scoped t_gif_decoder::f_read_image()
 	v_indices[v_eoi] = 0;
 	v_extracted_size = 0;
 	int stride = cairo_format_stride_for_width(CAIRO_FORMAT_ARGB32, width);
-	t_scoped data = t_bytes::f_instantiate(stride * height);
-	t_bytes& bytes = f_as<t_bytes&>(data);
+	auto data = t_bytes::f_instantiate(stride * height);
+	auto& bytes = f_as<t_bytes&>(data);
 	if (interlaced) {
 		f_read_rows(colors, transparent, width, height, 0, 8, &bytes[0], stride);
 		f_read_rows(colors, transparent, width, height, 4, 8, &bytes[0], stride);
@@ -224,7 +224,7 @@ t_scoped t_gif_decoder::f_read_image()
 		f_read_rows(colors, transparent, width, height, 0, 1, &bytes[0], stride);
 	}
 	f_skip_blocks();
-	t_scoped p = t_image_surface::f_construct(nullptr, std::move(data), CAIRO_FORMAT_ARGB32, width, height, stride);
+	t_scoped p = t_image_surface::f_construct(t_session::f_instance()->f_extension()->f_type<t_image_surface>(), std::move(data), CAIRO_FORMAT_ARGB32, width, height, stride);
 	p.f_put(t_symbol::f_instantiate(L"left"sv), f_global()->f_as(left));
 	p.f_put(t_symbol::f_instantiate(L"top"sv), f_global()->f_as(top));
 	p.f_put(t_symbol::f_instantiate(L"disposal"sv), f_global()->f_as(disposal));
@@ -235,20 +235,17 @@ t_scoped t_gif_decoder::f_read_image()
 
 t_scoped t_gif_decoder::f_read_images()
 {
-	t_scoped p = t_array::f_instantiate();
+	auto p = t_array::f_instantiate();
 	p.f_put(t_symbol::f_instantiate(L"width"sv), f_global()->f_as(v_width));
 	p.f_put(t_symbol::f_instantiate(L"height"sv), f_global()->f_as(v_height));
-	{
-		t_scoped q = t_tuple::f_instantiate(4);
-		t_tuple& tuple = f_as<t_tuple&>(q);
-		tuple[0].f_construct(f_global()->f_as((v_background >> 16 & 0xff) / 255.0));
-		tuple[1].f_construct(f_global()->f_as((v_background >> 8 & 0xff) / 255.0));
-		tuple[2].f_construct(f_global()->f_as((v_background & 0xff) / 255.0));
-		tuple[3].f_construct(f_global()->f_as((v_background >> 24 & 0xff) / 255.0));
-		p.f_put(t_symbol::f_instantiate(L"background"sv), std::move(q));
-	}
+	p.f_put(t_symbol::f_instantiate(L"background"sv), f_tuple(
+		f_global()->f_as((v_background >> 16 & 0xff) / 255.0),
+		f_global()->f_as((v_background >> 8 & 0xff) / 255.0),
+		f_global()->f_as((v_background & 0xff) / 255.0),
+		f_global()->f_as((v_background >> 24 & 0xff) / 255.0)
+	));
 	p.f_put(t_symbol::f_instantiate(L"aspect"sv), f_global()->f_as(v_aspect));
-	t_array& array = f_as<t_array&>(p);
+	auto& array = f_as<t_array&>(p);
 	while (true) {
 		t_scoped q = f_read_image();
 		if (!q) break;

@@ -1,13 +1,15 @@
-AC_INIT([cairo-xemmai], [201809])
+AC_INIT([cairo-xemmai], [201811])
 AM_INIT_AUTOMAKE([foreign nostdinc dist-bzip2 no-dist-gzip])
 AC_CONFIG_SRCDIR([src/cairo.cc])
 
 PKG_CHECK_MODULES([CAIRO], [cairo >= 1.8])
-XEMMAI_USE=xemmai-201809
+XEMMAI_USE=xemmai-201811
 PKG_CHECK_MODULES([XEMMAI], [${XEMMAI_USE}], [
+	XEMMAI_BIN_PATH=`pkg-config --variable=bin_path ${XEMMAI_USE}`
 	XEMMAI_INCLUDE_PATH=`pkg-config --variable=include_path ${XEMMAI_USE}`
 	XEMMAI_MODULE_PATH=`pkg-config --variable=module_path ${XEMMAI_USE}`
 ])
+AC_SUBST(XEMMAI_BIN_PATH)
 AC_SUBST(XEMMAI_INCLUDE_PATH)
 AC_SUBST(XEMMAI_MODULE_PATH)
 
@@ -49,5 +51,6 @@ AC_CONFIG_HEADERS([src/configure.h])
 AC_CONFIG_FILES([
 	Makefile
 	src/Makefile
+	test/Makefile
 ])
 AC_OUTPUT

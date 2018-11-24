@@ -9,6 +9,7 @@ namespace xemmaix::cairo
 
 class t_pattern : public t_proxy_of<t_pattern, cairo_pattern_t>
 {
+	friend class t_type_of<t_object>;
 	friend class t_proxy_of<t_pattern, cairo_pattern_t>;
 
 	static cairo_status_t f_set_user_data(cairo_pattern_t* a_value, const cairo_user_data_key_t* a_key, void* a_user, cairo_destroy_func_t a_destroy)
@@ -29,9 +30,7 @@ class t_pattern : public t_proxy_of<t_pattern, cairo_pattern_t>
 	}
 
 protected:
-	t_pattern(t_type* a_class, cairo_pattern_t* a_value) : t_base(a_class, a_value)
-	{
-	}
+	using t_base::t_base;
 
 public:
 	static t_pattern* f_wrap(cairo_pattern_t* a_value);
@@ -68,18 +67,16 @@ class t_solid_pattern : public t_pattern
 {
 	friend class t_pattern;
 
-	t_solid_pattern(cairo_pattern_t* a_value) : t_pattern(t_session::f_instance()->f_extension()->f_type<t_solid_pattern>(), a_value)
-	{
-	}
+	using t_pattern::t_pattern;
 
 public:
 	static t_scoped f_construct(t_type* a_class, double a_red, double a_green, double a_blue)
 	{
-		return f_transfer(new t_solid_pattern(cairo_pattern_create_rgb(a_red, a_green, a_blue)));
+		return f_transfer(a_class->f_new<t_solid_pattern>(false, cairo_pattern_create_rgb(a_red, a_green, a_blue)));
 	}
 	static t_scoped f_construct(t_type* a_class, double a_red, double a_green, double a_blue, double a_alpha)
 	{
-		return f_transfer(new t_solid_pattern(cairo_pattern_create_rgba(a_red, a_green, a_blue, a_alpha)));
+		return f_transfer(a_class->f_new<t_solid_pattern>(false, cairo_pattern_create_rgba(a_red, a_green, a_blue, a_alpha)));
 	}
 
 	t_scoped f_get_rgba() const
@@ -97,14 +94,12 @@ class t_surface_pattern : public t_pattern
 {
 	friend class t_pattern;
 
-	t_surface_pattern(cairo_pattern_t* a_value) : t_pattern(t_session::f_instance()->f_extension()->f_type<t_surface_pattern>(), a_value)
-	{
-	}
+	using t_pattern::t_pattern;
 
 public:
 	static t_scoped f_construct(t_type* a_class, t_surface& a_surface)
 	{
-		return f_transfer(new t_surface_pattern(cairo_pattern_create_for_surface(a_surface)));
+		return f_transfer(a_class->f_new<t_surface_pattern>(false, cairo_pattern_create_for_surface(a_surface)));
 	}
 
 	t_surface* f_get_surface() const
@@ -134,9 +129,7 @@ public:
 class t_gradient : public t_pattern
 {
 protected:
-	t_gradient(t_type* a_class, cairo_pattern_t* a_value) : t_pattern(a_class, a_value)
-	{
-	}
+	using t_pattern::t_pattern;
 
 public:
 	void f_add_color_stop(double a_offset, double a_red, double a_green, double a_blue)
@@ -169,14 +162,12 @@ class t_linear_gradient : public t_gradient
 {
 	friend class t_pattern;
 
-	t_linear_gradient(cairo_pattern_t* a_value) : t_gradient(t_session::f_instance()->f_extension()->f_type<t_linear_gradient>(), a_value)
-	{
-	}
+	using t_gradient::t_gradient;
 
 public:
 	static t_scoped f_construct(t_type* a_class, double a_x0, double a_y0, double a_x1, double a_y1)
 	{
-		return f_transfer(new t_linear_gradient(cairo_pattern_create_linear(a_x0, a_y0, a_x1, a_y1)));
+		return f_transfer(a_class->f_new<t_linear_gradient>(false, cairo_pattern_create_linear(a_x0, a_y0, a_x1, a_y1)));
 	}
 
 	t_scoped f_get_linear_points() const
@@ -194,14 +185,12 @@ class t_radial_gradient : public t_gradient
 {
 	friend class t_pattern;
 
-	t_radial_gradient(cairo_pattern_t* a_value) : t_gradient(t_session::f_instance()->f_extension()->f_type<t_radial_gradient>(), a_value)
-	{
-	}
+	using t_gradient::t_gradient;
 
 public:
 	static t_scoped f_construct(t_type* a_class, double a_x0, double a_y0, double a_r0, double a_x1, double a_y1, double a_r1)
 	{
-		return f_transfer(new t_radial_gradient(cairo_pattern_create_radial(a_x0, a_y0, a_r0, a_x1, a_y1, a_r1)));
+		return f_transfer(a_class->f_new<t_radial_gradient>(false, cairo_pattern_create_radial(a_x0, a_y0, a_r0, a_x1, a_y1, a_r1)));
 	}
 
 	t_scoped f_get_radial_circles() const

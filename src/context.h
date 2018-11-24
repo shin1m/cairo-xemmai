@@ -9,6 +9,7 @@ namespace xemmaix::cairo
 
 class t_context : public t_proxy_of<t_context, cairo_t>
 {
+	friend class t_type_of<t_object>;
 	friend class t_proxy_of<t_context, cairo_t>;
 
 	static cairo_status_t f_set_user_data(cairo_t* a_value, const cairo_user_data_key_t* a_key, void* a_user, cairo_destroy_func_t a_destroy)
@@ -28,15 +29,13 @@ class t_context : public t_proxy_of<t_context, cairo_t>
 		cairo_destroy(a_value);
 	}
 
-	t_context(cairo_t* a_value) : t_base(t_session::f_instance()->f_extension()->f_type<t_context>(), a_value)
-	{
-	}
+	using t_base::t_base;
 
 public:
 	using t_base::f_construct;
 	static t_scoped f_construct(t_type* a_class, t_surface& a_target)
 	{
-		return f_transfer(new t_context(cairo_create(a_target)));
+		return f_transfer(a_class->f_new<t_context>(false, cairo_create(a_target)));
 	}
 
 	void f_acquire()

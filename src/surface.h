@@ -10,6 +10,7 @@ namespace xemmaix::cairo
 
 class t_surface : public t_proxy_of<t_surface, cairo_surface_t>
 {
+	friend class t_type_of<t_object>;
 	friend class t_proxy_of<t_surface, cairo_surface_t>;
 
 	static cairo_status_t f_set_user_data(cairo_surface_t* a_value, const cairo_user_data_key_t* a_key, void* a_user, cairo_destroy_func_t a_destroy)
@@ -30,20 +31,14 @@ class t_surface : public t_proxy_of<t_surface, cairo_surface_t>
 	}
 	static cairo_status_t f_write_stream(void* a_closure, const unsigned char* a_data, unsigned int a_length);
 
-	t_surface(cairo_surface_t* a_value) : t_base(t_session::f_instance()->f_extension()->f_type<t_surface>(), a_value)
-	{
-	}
-
 protected:
-	t_surface(t_type* a_class, cairo_surface_t* a_value) : t_base(a_class, a_value)
-	{
-	}
+	using t_base::t_base;
 
 public:
 	using t_base::f_construct;
 	static t_scoped f_construct(t_type* a_class, t_surface& a_other, cairo_content_t a_content, int a_width, int a_height)
 	{
-		return f_transfer(new t_surface(cairo_surface_create_similar(a_other, a_content, a_width, a_height)));
+		return f_transfer(a_class->f_new<t_surface>(false, cairo_surface_create_similar(a_other, a_content, a_width, a_height)));
 	}
 	static t_surface* f_wrap(cairo_surface_t* a_value);
 
@@ -213,15 +208,14 @@ public:
 class t_image_surface : public t_surface
 {
 	friend class t_surface;
+	friend class t_type_of<t_object>;
 
 	static cairo_status_t f_read_stream(void* a_closure, unsigned char* a_data, unsigned int a_length);
 
 	t_scoped v_data;
 
-	t_image_surface(cairo_surface_t* a_value) : t_surface(t_session::f_instance()->f_extension()->f_type<t_image_surface>(), a_value)
-	{
-	}
-	t_image_surface(cairo_surface_t* a_value, t_scoped&& a_data) : t_surface(t_session::f_instance()->f_extension()->f_type<t_image_surface>(), a_value), v_data(std::move(a_data))
+	using t_surface::t_surface;
+	t_image_surface(cairo_surface_t* a_value, t_scoped&& a_data) : t_surface(a_value), v_data(std::move(a_data))
 	{
 	}
 	virtual void f_destroy();
@@ -231,21 +225,21 @@ public:
 	{
 		int stride = cairo_format_stride_for_width(a_format, a_width);
 		if (a_width < 0 || a_height < 0 || stride < 0) f_throw(L"invalid arguments."sv);
-		t_scoped data = t_bytes::f_instantiate(stride * a_height);
-		t_bytes& bytes = f_as<t_bytes&>(data);
-		return f_transfer(new t_image_surface(cairo_image_surface_create_for_data(&bytes[0], a_format, a_width, a_height, stride), std::move(data)));
+		auto data = t_bytes::f_instantiate(stride * a_height);
+		auto& bytes = f_as<t_bytes&>(data);
+		return f_transfer(a_class->f_new<t_image_surface>(false, cairo_image_surface_create_for_data(&bytes[0], a_format, a_width, a_height, stride), std::move(data)));
 	}
 	static t_scoped f_construct(t_type* a_class, t_scoped&& a_data, cairo_format_t a_format, int a_width, int a_height, int a_stride)
 	{
 		f_check<t_bytes>(a_data, L"data");
-		t_bytes& bytes = f_as<t_bytes&>(a_data);
+		auto& bytes = f_as<t_bytes&>(a_data);
 		if (a_width < 0 || a_height < 0 || a_stride < 0 || static_cast<int>(bytes.f_size()) < a_stride * a_height) f_throw(L"invalid arguments."sv);
-		return f_transfer(new t_image_surface(cairo_image_surface_create_for_data(&bytes[0], a_format, a_width, a_height, a_stride), std::move(a_data)));
+		return f_transfer(a_class->f_new<t_image_surface>(false, cairo_image_surface_create_for_data(&bytes[0], a_format, a_width, a_height, a_stride), std::move(a_data)));
 	}
 	static t_scoped f_create_from_png_source(t_image_source& a_source);
 	static t_scoped f_create_from_png(std::wstring_view a_path)
 	{
-		return f_transfer(new t_image_surface(cairo_image_surface_create_from_png(f_convert(a_path).c_str())));
+		return f_transfer(f_new<t_image_surface>(t_session::f_instance()->f_extension(), false, cairo_image_surface_create_from_png(f_convert(a_path).c_str())));
 	}
 	static t_scoped f_create_from_png_stream(const t_value& a_read);
 	static t_scoped f_create_from_jpeg_source(t_image_source& a_source);
