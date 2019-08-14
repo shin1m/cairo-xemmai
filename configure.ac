@@ -1,9 +1,9 @@
-AC_INIT([cairo-xemmai], [201811])
+AC_INIT([cairo-xemmai], [201908])
 AM_INIT_AUTOMAKE([foreign nostdinc dist-bzip2 no-dist-gzip])
 AC_CONFIG_SRCDIR([src/cairo.cc])
 
 PKG_CHECK_MODULES([CAIRO], [cairo >= 1.8])
-XEMMAI_USE=xemmai-201811
+XEMMAI_USE=xemmai-201908
 PKG_CHECK_MODULES([XEMMAI], [${XEMMAI_USE}], [
 	XEMMAI_BIN_PATH=`pkg-config --variable=bin_path ${XEMMAI_USE}`
 	XEMMAI_INCLUDE_PATH=`pkg-config --variable=include_path ${XEMMAI_USE}`
