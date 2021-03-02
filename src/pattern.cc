@@ -41,7 +41,7 @@ void t_type_of<xemmaix::cairo::t_pattern>::f_define(t_extension* a_extension)
 	;
 }
 
-t_scoped t_type_of<xemmaix::cairo::t_pattern>::f_do_construct(t_stacked* a_stack, size_t a_n)
+t_pvalue t_type_of<xemmaix::cairo::t_pattern>::f_do_construct(t_pvalue* a_stack, size_t a_n)
 {
 	f_throw(L"uninstantiatable."sv);
 }
@@ -50,15 +50,15 @@ void t_type_of<xemmaix::cairo::t_solid_pattern>::f_define(t_extension* a_extensi
 {
 	using namespace xemmaix::cairo;
 	t_define<t_solid_pattern, t_pattern>(a_extension, L"SolidPattern"sv)
-		(L"get_rgba"sv, t_member<t_scoped(t_solid_pattern::*)() const, &t_solid_pattern::f_get_rgba>())
+		(L"get_rgba"sv, t_member<t_pvalue(t_solid_pattern::*)() const, &t_solid_pattern::f_get_rgba>())
 	;
 }
 
-t_scoped t_type_of<xemmaix::cairo::t_solid_pattern>::f_do_construct(t_stacked* a_stack, size_t a_n)
+t_pvalue t_type_of<xemmaix::cairo::t_solid_pattern>::f_do_construct(t_pvalue* a_stack, size_t a_n)
 {
 	return t_overload<
-		t_construct_with<t_scoped(*)(t_type*, double, double, double), xemmaix::cairo::t_solid_pattern::f_construct>,
-		t_construct_with<t_scoped(*)(t_type*, double, double, double, double), xemmaix::cairo::t_solid_pattern::f_construct>
+		t_construct_with<t_pvalue(*)(t_type*, double, double, double), xemmaix::cairo::t_solid_pattern::f_construct>,
+		t_construct_with<t_pvalue(*)(t_type*, double, double, double, double), xemmaix::cairo::t_solid_pattern::f_construct>
 	>::t_bind<xemmaix::cairo::t_solid_pattern>::f_do(this, a_stack, a_n);
 }
 
@@ -74,9 +74,9 @@ void t_type_of<xemmaix::cairo::t_surface_pattern>::f_define(t_extension* a_exten
 	;
 }
 
-t_scoped t_type_of<xemmaix::cairo::t_surface_pattern>::f_do_construct(t_stacked* a_stack, size_t a_n)
+t_pvalue t_type_of<xemmaix::cairo::t_surface_pattern>::f_do_construct(t_pvalue* a_stack, size_t a_n)
 {
-	return t_construct_with<t_scoped(*)(t_type*, xemmaix::cairo::t_surface&), xemmaix::cairo::t_surface_pattern::f_construct>::t_bind<xemmaix::cairo::t_surface_pattern>::f_do(this, a_stack, a_n);
+	return t_construct_with<t_pvalue(*)(t_type*, xemmaix::cairo::t_surface&), xemmaix::cairo::t_surface_pattern::f_construct>::t_bind<xemmaix::cairo::t_surface_pattern>::f_do(this, a_stack, a_n);
 }
 
 void t_type_of<cairo_extend_t>::f_define(t_extension* a_extension)
@@ -118,7 +118,7 @@ void t_type_of<xemmaix::cairo::t_gradient>::f_define(t_extension* a_extension)
 		(L"add_color_stop_rgb"sv, t_member<void(t_gradient::*)(double, double, double, double), &t_gradient::f_add_color_stop>())
 		(L"add_color_stop_rgba"sv, t_member<void(t_gradient::*)(double, double, double, double, double), &t_gradient::f_add_color_stop>())
 		(L"get_color_stop_count"sv, t_member<int(t_gradient::*)() const, &t_gradient::f_get_color_stop_count>())
-		(L"get_color_stop_rgba"sv, t_member<t_scoped(t_gradient::*)(int) const, &t_gradient::f_get_color_stop_rgba>())
+		(L"get_color_stop_rgba"sv, t_member<t_pvalue(t_gradient::*)(int) const, &t_gradient::f_get_color_stop_rgba>())
 	;
 }
 
@@ -126,26 +126,26 @@ void t_type_of<xemmaix::cairo::t_linear_gradient>::f_define(t_extension* a_exten
 {
 	using namespace xemmaix::cairo;
 	t_define<t_linear_gradient, t_gradient>(a_extension, L"LinearGradient"sv)
-		(L"get_linear_points"sv, t_member<t_scoped(t_linear_gradient::*)() const, &t_linear_gradient::f_get_linear_points>())
+		(L"get_linear_points"sv, t_member<t_pvalue(t_linear_gradient::*)() const, &t_linear_gradient::f_get_linear_points>())
 	;
 }
 
-t_scoped t_type_of<xemmaix::cairo::t_linear_gradient>::f_do_construct(t_stacked* a_stack, size_t a_n)
+t_pvalue t_type_of<xemmaix::cairo::t_linear_gradient>::f_do_construct(t_pvalue* a_stack, size_t a_n)
 {
-	return t_construct_with<t_scoped(*)(t_type*, double, double, double, double), xemmaix::cairo::t_linear_gradient::f_construct>::t_bind<xemmaix::cairo::t_linear_gradient>::f_do(this, a_stack, a_n);
+	return t_construct_with<t_pvalue(*)(t_type*, double, double, double, double), xemmaix::cairo::t_linear_gradient::f_construct>::t_bind<xemmaix::cairo::t_linear_gradient>::f_do(this, a_stack, a_n);
 }
 
 void t_type_of<xemmaix::cairo::t_radial_gradient>::f_define(t_extension* a_extension)
 {
 	using namespace xemmaix::cairo;
 	t_define<t_radial_gradient, t_gradient>(a_extension, L"RadialGradient"sv)
-		(L"get_radial_circles"sv, t_member<t_scoped(t_radial_gradient::*)() const, &t_radial_gradient::f_get_radial_circles>())
+		(L"get_radial_circles"sv, t_member<t_pvalue(t_radial_gradient::*)() const, &t_radial_gradient::f_get_radial_circles>())
 	;
 }
 
-t_scoped t_type_of<xemmaix::cairo::t_radial_gradient>::f_do_construct(t_stacked* a_stack, size_t a_n)
+t_pvalue t_type_of<xemmaix::cairo::t_radial_gradient>::f_do_construct(t_pvalue* a_stack, size_t a_n)
 {
-	return t_construct_with<t_scoped(*)(t_type*, double, double, double, double, double, double), xemmaix::cairo::t_radial_gradient::f_construct>::t_bind<xemmaix::cairo::t_radial_gradient>::f_do(this, a_stack, a_n);
+	return t_construct_with<t_pvalue(*)(t_type*, double, double, double, double, double, double), xemmaix::cairo::t_radial_gradient::f_construct>::t_bind<xemmaix::cairo::t_radial_gradient>::f_do(this, a_stack, a_n);
 }
 
 }

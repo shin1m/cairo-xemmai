@@ -1,6 +1,6 @@
 math = Module("math"
 cairo = Module("cairo"
-Module("draw-sample")(Module("system").script + ".png", @(context)
+Module("draw-sample")(Module("system").arguments[0], @(context)
 	pattern = cairo.LinearGradient(0.0, 0.0, 0.0, 256.0
 	pattern.add_color_stop_rgba(1.0, 0.0, 0.0, 0.0, 1.0
 	pattern.add_color_stop_rgba(0.0, 1.0, 1.0, 1.0, 1.0

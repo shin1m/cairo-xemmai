@@ -36,7 +36,7 @@ protected:
 
 public:
 	using t_base::f_construct;
-	static t_scoped f_construct(t_type* a_class, t_surface& a_other, cairo_content_t a_content, int a_width, int a_height)
+	static t_pvalue f_construct(t_type* a_class, t_surface& a_other, cairo_content_t a_content, int a_width, int a_height)
 	{
 		return f_transfer(a_class->f_new<t_surface>(false, cairo_surface_create_similar(a_other, a_content, a_width, a_height)));
 	}
@@ -62,9 +62,9 @@ public:
 	{
 		cairo_surface_flush(v_value);
 	}
-	t_scoped f_get_font_options() const
+	t_pvalue f_get_font_options() const
 	{
-		t_scoped options = t_type_of<t_font_options>::f_construct();
+		auto options = t_type_of<t_font_options>::f_construct();
 		cairo_surface_get_font_options(v_value, t_font_options::f_to(f_as<t_font_options*>(options)));
 		return options;
 	}
@@ -84,7 +84,7 @@ public:
 	{
 		cairo_surface_set_device_offset(v_value, a_x, a_y);
 	}
-	t_scoped f_get_device_offset() const
+	t_pvalue f_get_device_offset() const
 	{
 		double x;
 		double y;
@@ -95,7 +95,7 @@ public:
 	{
 		cairo_surface_set_fallback_resolution(v_value, a_x, a_y);
 	}
-	t_scoped f_get_fallback_resolution() const
+	t_pvalue f_get_fallback_resolution() const
 	{
 		double x;
 		double y;
@@ -122,13 +122,13 @@ public:
 	{
 		cairo_surface_write_to_png(v_value, f_convert(a_path).c_str());
 	}
-	void f_write_to_png_stream(const t_value& a_write) const;
+	void f_write_to_png_stream(const t_pvalue& a_write) const;
 };
 
 class t_image_source
 {
 protected:
-	t_scoped v_buffer;
+	t_object* v_buffer;
 	unsigned char* v_head;
 	unsigned char* v_tail;
 
@@ -194,13 +194,13 @@ public:
 
 class t_stream_source : public t_image_source
 {
-	const t_value& v_read;
+	t_pvalue v_read;
 
 protected:
 	virtual size_t f_read(size_t a_offset);
 
 public:
-	t_stream_source(const t_value& a_read) : v_read(a_read)
+	t_stream_source(const t_pvalue& a_read) : v_read(a_read)
 	{
 	}
 };
@@ -212,57 +212,57 @@ class t_image_surface : public t_surface
 
 	static cairo_status_t f_read_stream(void* a_closure, unsigned char* a_data, unsigned int a_length);
 
-	t_scoped v_data;
+	t_rvalue v_data;
 
 	using t_surface::t_surface;
-	t_image_surface(cairo_surface_t* a_value, t_scoped&& a_data) : t_surface(a_value), v_data(std::move(a_data))
+	t_image_surface(cairo_surface_t* a_value, const t_pvalue& a_data) : t_surface(a_value), v_data(a_data)
 	{
 	}
 	virtual void f_destroy();
 
 public:
-	static t_scoped f_construct(t_type* a_class, cairo_format_t a_format, int a_width, int a_height)
+	static t_pvalue f_construct(t_type* a_class, cairo_format_t a_format, int a_width, int a_height)
 	{
 		int stride = cairo_format_stride_for_width(a_format, a_width);
 		if (a_width < 0 || a_height < 0 || stride < 0) f_throw(L"invalid arguments."sv);
 		auto data = t_bytes::f_instantiate(stride * a_height);
 		auto& bytes = f_as<t_bytes&>(data);
-		return f_transfer(a_class->f_new<t_image_surface>(false, cairo_image_surface_create_for_data(&bytes[0], a_format, a_width, a_height, stride), std::move(data)));
+		return f_transfer(a_class->f_new<t_image_surface>(false, cairo_image_surface_create_for_data(&bytes[0], a_format, a_width, a_height, stride), data));
 	}
-	static t_scoped f_construct(t_type* a_class, t_scoped&& a_data, cairo_format_t a_format, int a_width, int a_height, int a_stride)
+	static t_pvalue f_construct(t_type* a_class, const t_pvalue& a_data, cairo_format_t a_format, int a_width, int a_height, int a_stride)
 	{
 		f_check<t_bytes>(a_data, L"data");
 		auto& bytes = f_as<t_bytes&>(a_data);
 		if (a_width < 0 || a_height < 0 || a_stride < 0 || static_cast<int>(bytes.f_size()) < a_stride * a_height) f_throw(L"invalid arguments."sv);
-		return f_transfer(a_class->f_new<t_image_surface>(false, cairo_image_surface_create_for_data(&bytes[0], a_format, a_width, a_height, a_stride), std::move(a_data)));
+		return f_transfer(a_class->f_new<t_image_surface>(false, cairo_image_surface_create_for_data(&bytes[0], a_format, a_width, a_height, a_stride), a_data));
 	}
-	static t_scoped f_create_from_png_source(t_image_source& a_source);
-	static t_scoped f_create_from_png(std::wstring_view a_path)
+	static t_pvalue f_create_from_png_source(t_image_source& a_source);
+	static t_pvalue f_create_from_png(std::wstring_view a_path)
 	{
 		return f_transfer(f_new<t_image_surface>(t_session::f_instance()->f_extension(), false, cairo_image_surface_create_from_png(f_convert(a_path).c_str())));
 	}
-	static t_scoped f_create_from_png_stream(const t_value& a_read);
-	static t_scoped f_create_from_jpeg_source(t_image_source& a_source);
-	static t_scoped f_create_from_jpeg(std::wstring_view a_path);
-	static t_scoped f_create_from_jpeg_stream(const t_value& a_read);
-	static t_scoped f_create_from_gif_source(t_image_source& a_source);
-	static t_scoped f_create_from_gif(std::wstring_view a_path);
-	static t_scoped f_create_from_gif_stream(const t_value& a_read);
-	static t_scoped f_create_all_from_gif(std::wstring_view a_path);
-	static t_scoped f_create_all_from_gif_stream(const t_value& a_read);
-	static t_scoped f_create_from_source(t_image_source& a_source);
-	static t_scoped f_create_from_file(std::wstring_view a_path)
+	static t_pvalue f_create_from_png_stream(const t_pvalue& a_read);
+	static t_pvalue f_create_from_jpeg_source(t_image_source& a_source);
+	static t_pvalue f_create_from_jpeg(std::wstring_view a_path);
+	static t_pvalue f_create_from_jpeg_stream(const t_pvalue& a_read);
+	static t_pvalue f_create_from_gif_source(t_image_source& a_source);
+	static t_pvalue f_create_from_gif(std::wstring_view a_path);
+	static t_pvalue f_create_from_gif_stream(const t_pvalue& a_read);
+	static t_pvalue f_create_all_from_gif(std::wstring_view a_path);
+	static t_pvalue f_create_all_from_gif_stream(const t_pvalue& a_read);
+	static t_pvalue f_create_from_source(t_image_source& a_source);
+	static t_pvalue f_create_from_file(std::wstring_view a_path)
 	{
 		t_file_source source(a_path);
 		return f_create_from_source(source);
 	}
-	static t_scoped f_create_from_stream(const t_value& a_read)
+	static t_pvalue f_create_from_stream(const t_pvalue& a_read)
 	{
 		t_stream_source source(a_read);
 		return f_create_from_source(source);
 	}
 
-	t_scoped f_get_data() const
+	t_pvalue f_get_data() const
 	{
 		return v_data;
 	}
@@ -295,7 +295,7 @@ struct t_type_of<xemmaix::cairo::t_surface> : xemmaix::cairo::t_holds<xemmaix::c
 	static void f_define(t_extension* a_extension);
 
 	using t_base::t_base;
-	t_scoped f_do_construct(t_stacked* a_stack, size_t a_n);
+	t_pvalue f_do_construct(t_pvalue* a_stack, size_t a_n);
 };
 
 template<>
@@ -320,7 +320,7 @@ struct t_type_of<xemmaix::cairo::t_image_surface> : t_bears<xemmaix::cairo::t_im
 	static void f_define(t_extension* a_extension);
 
 	using t_base::t_base;
-	t_scoped f_do_construct(t_stacked* a_stack, size_t a_n);
+	t_pvalue f_do_construct(t_pvalue* a_stack, size_t a_n);
 };
 
 template<>

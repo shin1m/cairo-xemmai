@@ -5,10 +5,10 @@ namespace xemmaix::cairo
 
 cairo_status_t t_surface::f_write_stream(void* a_closure, const unsigned char* a_data, unsigned int a_length)
 {
-	const t_value& write = *static_cast<const t_value**>(a_closure)[0];
-	const t_value& buffer = *static_cast<const t_value**>(a_closure)[1];
+	auto& write = *static_cast<const t_pvalue**>(a_closure)[0];
+	auto& buffer = *static_cast<const t_pvalue**>(a_closure)[1];
 	auto& bytes = f_as<t_bytes&>(buffer);
-	t_scoped zero = f_global()->f_as(0);
+	auto zero = f_global()->f_as(0);
 	try {
 		while (a_length > 0) {
 			size_t m = std::min(bytes.f_size(), static_cast<size_t>(a_length));
@@ -37,10 +37,10 @@ t_surface* t_surface::f_wrap(cairo_surface_t* a_value)
 	}
 }
 
-void t_surface::f_write_to_png_stream(const t_value& a_write) const
+void t_surface::f_write_to_png_stream(const t_pvalue& a_write) const
 {
-	t_scoped buffer = t_bytes::f_instantiate(1024);
-	const t_value* closure[] = {
+	t_pvalue buffer = t_bytes::f_instantiate(1024);
+	const t_pvalue* closure[] = {
 		&a_write, &buffer
 	};
 	cairo_surface_write_to_png_stream(v_value, f_write_stream, closure);
@@ -71,14 +71,14 @@ size_t t_file_source::f_read(size_t a_offset)
 size_t t_stream_source::f_read(size_t a_offset)
 {
 	auto& bytes = f_as<t_bytes&>(v_buffer);
-	t_scoped p = v_read(v_buffer, f_global()->f_as(a_offset), f_global()->f_as(bytes.f_size() - a_offset));
+	auto p = v_read(v_buffer, f_global()->f_as(a_offset), f_global()->f_as(bytes.f_size() - a_offset));
 	f_check<size_t>(p, L"result of read");
 	return f_as<size_t>(p);
 }
 
 cairo_status_t t_image_surface::f_read_stream(void* a_closure, unsigned char* a_data, unsigned int a_length)
 {
-	t_image_source& source = *static_cast<t_image_source*>(a_closure);
+	auto& source = *static_cast<t_image_source*>(a_closure);
 	try {
 		while (a_length > 0) {
 			size_t n = source.f_read_bytes(a_data, a_length);
@@ -98,18 +98,18 @@ void t_image_surface::f_destroy()
 	t_surface::f_destroy();
 }
 
-t_scoped t_image_surface::f_create_from_png_source(t_image_source& a_source)
+t_pvalue t_image_surface::f_create_from_png_source(t_image_source& a_source)
 {
 	return f_transfer(f_new<t_image_surface>(t_session::f_instance()->f_extension(), false, cairo_image_surface_create_from_png_stream(f_read_stream, &a_source)));
 }
 
-t_scoped t_image_surface::f_create_from_png_stream(const t_value& a_read)
+t_pvalue t_image_surface::f_create_from_png_stream(const t_pvalue& a_read)
 {
 	t_stream_source source(a_read);
 	return f_create_from_png_source(source);
 }
 
-t_scoped t_image_surface::f_create_from_source(t_image_source& a_source)
+t_pvalue t_image_surface::f_create_from_source(t_image_source& a_source)
 {
 	switch (a_source.f_prefetch_byte()) {
 	case 'G':
@@ -163,26 +163,26 @@ void t_type_of<xemmaix::cairo::t_surface>::f_define(t_extension* a_extension)
 		(L"status"sv, t_member<cairo_status_t(t_surface::*)() const, &t_surface::f_status>())
 		(L"finish"sv, t_member<void(t_surface::*)(), &t_surface::f_finish>())
 		(L"flush"sv, t_member<void(t_surface::*)(), &t_surface::f_flush>())
-		(L"get_font_options"sv, t_member<t_scoped(t_surface::*)() const, &t_surface::f_get_font_options>())
+		(L"get_font_options"sv, t_member<t_pvalue(t_surface::*)() const, &t_surface::f_get_font_options>())
 		(L"get_content"sv, t_member<cairo_content_t(t_surface::*)() const, &t_surface::f_get_content>())
 		(L"mark_dirty"sv, t_member<void(t_surface::*)(), &t_surface::f_mark_dirty>())
 		(L"mark_dirty_rectangle"sv, t_member<void(t_surface::*)(int, int, int, int), &t_surface::f_mark_dirty>())
 		(L"set_device_offset"sv, t_member<void(t_surface::*)(double, double), &t_surface::f_set_device_offset>())
-		(L"get_device_offset"sv, t_member<t_scoped(t_surface::*)() const, &t_surface::f_get_device_offset>())
+		(L"get_device_offset"sv, t_member<t_pvalue(t_surface::*)() const, &t_surface::f_get_device_offset>())
 		(L"set_fallback_resolution"sv, t_member<void(t_surface::*)(double, double), &t_surface::f_set_fallback_resolution>())
-		(L"get_fallback_resolution"sv, t_member<t_scoped(t_surface::*)() const, &t_surface::f_get_fallback_resolution>())
+		(L"get_fallback_resolution"sv, t_member<t_pvalue(t_surface::*)() const, &t_surface::f_get_fallback_resolution>())
 		(L"get_type"sv, t_member<cairo_surface_type_t(t_surface::*)() const, &t_surface::f_get_type>())
 		(L"copy_page"sv, t_member<void(t_surface::*)(), &t_surface::f_copy_page>())
 		(L"show_page"sv, t_member<void(t_surface::*)(), &t_surface::f_show_page>())
 		(L"has_show_text_glyphs"sv, t_member<bool(t_surface::*)() const, &t_surface::f_has_show_text_glyphs>())
 		(L"write_to_png"sv, t_member<void(t_surface::*)(std::wstring_view) const, &t_surface::f_write_to_png>())
-		(L"write_to_png_stream"sv, t_member<void(t_surface::*)(const t_value&) const, &t_surface::f_write_to_png_stream>())
+		(L"write_to_png_stream"sv, t_member<void(t_surface::*)(const t_pvalue&) const, &t_surface::f_write_to_png_stream>())
 	;
 }
 
-t_scoped t_type_of<xemmaix::cairo::t_surface>::f_do_construct(t_stacked* a_stack, size_t a_n)
+t_pvalue t_type_of<xemmaix::cairo::t_surface>::f_do_construct(t_pvalue* a_stack, size_t a_n)
 {
-	return t_construct_with<t_scoped(*)(t_type*, xemmaix::cairo::t_surface&, cairo_content_t, int, int), xemmaix::cairo::t_surface::f_construct>::t_bind<xemmaix::cairo::t_surface>::f_do(this, a_stack, a_n);
+	return t_construct_with<t_pvalue(*)(t_type*, xemmaix::cairo::t_surface&, cairo_content_t, int, int), xemmaix::cairo::t_surface::f_construct>::t_bind<xemmaix::cairo::t_surface>::f_do(this, a_stack, a_n);
 }
 
 void t_type_of<cairo_content_t>::f_define(t_extension* a_extension)
@@ -218,29 +218,29 @@ void t_type_of<xemmaix::cairo::t_image_surface>::f_define(t_extension* a_extensi
 {
 	using namespace xemmaix::cairo;
 	t_define<t_image_surface, t_surface>(a_extension, L"ImageSurface"sv)
-		(L"get_data"sv, t_member<t_scoped(t_image_surface::*)() const, &t_image_surface::f_get_data>())
+		(L"get_data"sv, t_member<t_pvalue(t_image_surface::*)() const, &t_image_surface::f_get_data>())
 		(L"get_format"sv, t_member<cairo_format_t(t_image_surface::*)() const, &t_image_surface::f_get_format>())
 		(L"get_width"sv, t_member<int(t_image_surface::*)() const, &t_image_surface::f_get_width>())
 		(L"get_height"sv, t_member<int(t_image_surface::*)() const, &t_image_surface::f_get_height>())
 		(L"get_stride"sv, t_member<int(t_image_surface::*)() const, &t_image_surface::f_get_stride>())
-		(L"create_from_png"sv, t_static<t_scoped(*)(std::wstring_view), t_image_surface::f_create_from_png>())
-		(L"create_from_png_stream"sv, t_static<t_scoped(*)(const t_value&), t_image_surface::f_create_from_png_stream>())
-		(L"create_from_jpeg"sv, t_static<t_scoped(*)(std::wstring_view), t_image_surface::f_create_from_jpeg>())
-		(L"create_from_jpeg_stream"sv, t_static<t_scoped(*)(const t_value&), t_image_surface::f_create_from_jpeg_stream>())
-		(L"create_from_gif"sv, t_static<t_scoped(*)(std::wstring_view), t_image_surface::f_create_from_gif>())
-		(L"create_from_gif_stream"sv, t_static<t_scoped(*)(const t_value&), t_image_surface::f_create_from_gif_stream>())
-		(L"create_all_from_gif"sv, t_static<t_scoped(*)(std::wstring_view), t_image_surface::f_create_all_from_gif>())
-		(L"create_all_from_gif_stream"sv, t_static<t_scoped(*)(const t_value&), t_image_surface::f_create_all_from_gif_stream>())
-		(L"create_from_file"sv, t_static<t_scoped(*)(std::wstring_view), t_image_surface::f_create_from_file>())
-		(L"create_from_stream"sv, t_static<t_scoped(*)(const t_value&), t_image_surface::f_create_from_stream>())
+		(L"create_from_png"sv, t_static<t_pvalue(*)(std::wstring_view), t_image_surface::f_create_from_png>())
+		(L"create_from_png_stream"sv, t_static<t_pvalue(*)(const t_pvalue&), t_image_surface::f_create_from_png_stream>())
+		(L"create_from_jpeg"sv, t_static<t_pvalue(*)(std::wstring_view), t_image_surface::f_create_from_jpeg>())
+		(L"create_from_jpeg_stream"sv, t_static<t_pvalue(*)(const t_pvalue&), t_image_surface::f_create_from_jpeg_stream>())
+		(L"create_from_gif"sv, t_static<t_pvalue(*)(std::wstring_view), t_image_surface::f_create_from_gif>())
+		(L"create_from_gif_stream"sv, t_static<t_pvalue(*)(const t_pvalue&), t_image_surface::f_create_from_gif_stream>())
+		(L"create_all_from_gif"sv, t_static<t_pvalue(*)(std::wstring_view), t_image_surface::f_create_all_from_gif>())
+		(L"create_all_from_gif_stream"sv, t_static<t_pvalue(*)(const t_pvalue&), t_image_surface::f_create_all_from_gif_stream>())
+		(L"create_from_file"sv, t_static<t_pvalue(*)(std::wstring_view), t_image_surface::f_create_from_file>())
+		(L"create_from_stream"sv, t_static<t_pvalue(*)(const t_pvalue&), t_image_surface::f_create_from_stream>())
 	;
 }
 
-t_scoped t_type_of<xemmaix::cairo::t_image_surface>::f_do_construct(t_stacked* a_stack, size_t a_n)
+t_pvalue t_type_of<xemmaix::cairo::t_image_surface>::f_do_construct(t_pvalue* a_stack, size_t a_n)
 {
 	return t_overload<
-		t_construct_with<t_scoped(*)(t_type*, cairo_format_t, int, int), xemmaix::cairo::t_image_surface::f_construct>,
-		t_construct_with<t_scoped(*)(t_type*, t_scoped&&, cairo_format_t, int, int, int), xemmaix::cairo::t_image_surface::f_construct>
+		t_construct_with<t_pvalue(*)(t_type*, cairo_format_t, int, int), xemmaix::cairo::t_image_surface::f_construct>,
+		t_construct_with<t_pvalue(*)(t_type*, const t_pvalue&, cairo_format_t, int, int, int), xemmaix::cairo::t_image_surface::f_construct>
 	>::t_bind<xemmaix::cairo::t_image_surface>::f_do(this, a_stack, a_n);
 }
 

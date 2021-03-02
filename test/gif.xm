@@ -1,4 +1,6 @@
+system = Module("system"
+io = Module("io"
 cairo = Module("cairo"
 cairo.main(@
-	images = cairo.ImageSurface.create_all_from_gif("data/foo.gif"
-	images[0].write_to_png(Module("system").script + ".png"
+	images = cairo.ImageSurface.create_all_from_gif((io.Path(system.script) / "../data/foo.gif").__string(
+	images[0].write_to_png(system.arguments[0]

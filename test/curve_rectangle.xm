@@ -1,5 +1,5 @@
 math = Module("math"
-Module("draw-sample")(Module("system").script + ".png", @(context)
+Module("draw-sample")(Module("system").arguments[0], @(context)
 	x0 = 25.6
 	y0 = 25.6
 	rect_width = 204.8

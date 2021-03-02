@@ -1,6 +1,6 @@
 math = Module("math"
 cairo = Module("cairo"
-Module("draw-sample")(Module("system").script + ".png", @(context)
+Module("draw-sample")(Module("system").arguments[0], @(context)
 	context.move_to(50.0, 75.0
 	context.line_to(200.0, 75.0
 	context.move_to(50.0, 125.0

@@ -1,6 +1,6 @@
 math = Module("math"
 cairo = Module("cairo"
-Module("draw-sample")(Module("system").script + ".png", @(context)
+Module("draw-sample")(Module("system").arguments[0], @(context)
 	utf8 = "cairo"
 	context.select_font_face("Sans", cairo.FontSlant.NORMAL, cairo.FontWeight.NORMAL
 	context.set_font_size(52.0

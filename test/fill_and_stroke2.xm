@@ -1,5 +1,5 @@
 math = Module("math"
-Module("draw-sample")(Module("system").script + ".png", @(context)
+Module("draw-sample")(Module("system").arguments[0], @(context)
 	context.move_to(128.0, 25.6
 	context.line_to(230.4, 230.4
 	context.rel_line_to(-102.4, 0.0

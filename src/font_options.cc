@@ -27,11 +27,11 @@ void t_type_of<xemmaix::cairo::t_font_options>::f_do_finalize(t_object* a_this)
 	xemmaix::cairo::t_font_options::f_destroy(a_this->f_as<xemmaix::cairo::t_font_options*>());
 }
 
-t_scoped t_type_of<xemmaix::cairo::t_font_options>::f_do_construct(t_stacked* a_stack, size_t a_n)
+t_pvalue t_type_of<xemmaix::cairo::t_font_options>::f_do_construct(t_pvalue* a_stack, size_t a_n)
 {
 	return t_overload<
-		t_construct_with<t_scoped(*)(t_type*), f_construct>,
-		t_construct_with<t_scoped(*)(t_type*, const xemmaix::cairo::t_font_options*), f_construct>
+		t_construct_with<t_pvalue(*)(t_type*), f_construct>,
+		t_construct_with<t_pvalue(*)(t_type*, const xemmaix::cairo::t_font_options*), f_construct>
 	>::t_bind<xemmaix::cairo::t_font_options>::f_do(this, a_stack, a_n);
 }
 

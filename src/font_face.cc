@@ -50,7 +50,7 @@ void t_type_of<xemmaix::cairo::t_font_face>::f_define(t_extension* a_extension)
 	;
 }
 
-t_scoped t_type_of<xemmaix::cairo::t_font_face>::f_do_construct(t_stacked* a_stack, size_t a_n)
+t_pvalue t_type_of<xemmaix::cairo::t_font_face>::f_do_construct(t_pvalue* a_stack, size_t a_n)
 {
 	f_throw(L"uninstantiatable."sv);
 }
@@ -76,9 +76,9 @@ void t_type_of<xemmaix::cairo::t_toy_font_face>::f_define(t_extension* a_extensi
 	;
 }
 
-t_scoped t_type_of<xemmaix::cairo::t_toy_font_face>::f_do_construct(t_stacked* a_stack, size_t a_n)
+t_pvalue t_type_of<xemmaix::cairo::t_toy_font_face>::f_do_construct(t_pvalue* a_stack, size_t a_n)
 {
-	return t_construct_with<t_scoped(*)(t_type*, std::wstring_view, cairo_font_slant_t, cairo_font_weight_t), xemmaix::cairo::t_toy_font_face::f_construct>::t_bind<xemmaix::cairo::t_toy_font_face>::f_do(this, a_stack, a_n);
+	return t_construct_with<t_pvalue(*)(t_type*, std::wstring_view, cairo_font_slant_t, cairo_font_weight_t), xemmaix::cairo::t_toy_font_face::f_construct>::t_bind<xemmaix::cairo::t_toy_font_face>::f_do(this, a_stack, a_n);
 }
 
 }

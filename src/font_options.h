@@ -96,19 +96,21 @@ struct t_type_of<xemmaix::cairo::t_font_options> : xemmaix::cairo::t_instantiata
 {
 	typedef xemmaix::cairo::t_extension t_extension;
 
-	static t_scoped f_construct(t_type* a_class)
+	static t_pvalue f_construct(t_type* a_class)
 	{
-		auto object = t_object::f_allocate(a_class, false, sizeof(xemmaix::cairo::t_font_options*));
+		auto object = f_engine()->f_allocate(false, sizeof(xemmaix::cairo::t_font_options*));
 		object->f_as<xemmaix::cairo::t_font_options*>() = xemmaix::cairo::t_font_options::f_create();
+		object->f_be(a_class);
 		return object;
 	}
-	static t_scoped f_construct(t_type* a_class, const xemmaix::cairo::t_font_options* a_original)
+	static t_pvalue f_construct(t_type* a_class, const xemmaix::cairo::t_font_options* a_original)
 	{
-		auto object = t_object::f_allocate(a_class, false, sizeof(xemmaix::cairo::t_font_options*));
+		auto object = f_engine()->f_allocate(false, sizeof(xemmaix::cairo::t_font_options*));
 		object->f_as<xemmaix::cairo::t_font_options*>() = xemmaix::cairo::t_font_options::f_copy(a_original);
+		object->f_be(a_class);
 		return object;
 	}
-	static t_scoped f_construct()
+	static t_pvalue f_construct()
 	{
 		return f_construct(xemmaix::cairo::t_session::f_instance()->f_extension()->f_type<xemmaix::cairo::t_font_options>());
 	}
@@ -116,7 +118,7 @@ struct t_type_of<xemmaix::cairo::t_font_options> : xemmaix::cairo::t_instantiata
 
 	using t_base::t_base;
 	static void f_do_finalize(t_object* a_this);
-	t_scoped f_do_construct(t_stacked* a_stack, size_t a_n);
+	t_pvalue f_do_construct(t_pvalue* a_stack, size_t a_n);
 };
 
 template<>

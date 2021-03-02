@@ -70,16 +70,16 @@ class t_solid_pattern : public t_pattern
 	using t_pattern::t_pattern;
 
 public:
-	static t_scoped f_construct(t_type* a_class, double a_red, double a_green, double a_blue)
+	static t_pvalue f_construct(t_type* a_class, double a_red, double a_green, double a_blue)
 	{
 		return f_transfer(a_class->f_new<t_solid_pattern>(false, cairo_pattern_create_rgb(a_red, a_green, a_blue)));
 	}
-	static t_scoped f_construct(t_type* a_class, double a_red, double a_green, double a_blue, double a_alpha)
+	static t_pvalue f_construct(t_type* a_class, double a_red, double a_green, double a_blue, double a_alpha)
 	{
 		return f_transfer(a_class->f_new<t_solid_pattern>(false, cairo_pattern_create_rgba(a_red, a_green, a_blue, a_alpha)));
 	}
 
-	t_scoped f_get_rgba() const
+	t_pvalue f_get_rgba() const
 	{
 		double red;
 		double green;
@@ -97,7 +97,7 @@ class t_surface_pattern : public t_pattern
 	using t_pattern::t_pattern;
 
 public:
-	static t_scoped f_construct(t_type* a_class, t_surface& a_surface)
+	static t_pvalue f_construct(t_type* a_class, t_surface& a_surface)
 	{
 		return f_transfer(a_class->f_new<t_surface_pattern>(false, cairo_pattern_create_for_surface(a_surface)));
 	}
@@ -146,7 +146,7 @@ public:
 		cairo_pattern_get_color_stop_count(v_value, &count);
 		return count;
 	}
-	t_scoped f_get_color_stop_rgba(int a_index) const
+	t_pvalue f_get_color_stop_rgba(int a_index) const
 	{
 		double offset;
 		double red;
@@ -165,12 +165,12 @@ class t_linear_gradient : public t_gradient
 	using t_gradient::t_gradient;
 
 public:
-	static t_scoped f_construct(t_type* a_class, double a_x0, double a_y0, double a_x1, double a_y1)
+	static t_pvalue f_construct(t_type* a_class, double a_x0, double a_y0, double a_x1, double a_y1)
 	{
 		return f_transfer(a_class->f_new<t_linear_gradient>(false, cairo_pattern_create_linear(a_x0, a_y0, a_x1, a_y1)));
 	}
 
-	t_scoped f_get_linear_points() const
+	t_pvalue f_get_linear_points() const
 	{
 		double x0;
 		double y0;
@@ -188,12 +188,12 @@ class t_radial_gradient : public t_gradient
 	using t_gradient::t_gradient;
 
 public:
-	static t_scoped f_construct(t_type* a_class, double a_x0, double a_y0, double a_r0, double a_x1, double a_y1, double a_r1)
+	static t_pvalue f_construct(t_type* a_class, double a_x0, double a_y0, double a_r0, double a_x1, double a_y1, double a_r1)
 	{
 		return f_transfer(a_class->f_new<t_radial_gradient>(false, cairo_pattern_create_radial(a_x0, a_y0, a_r0, a_x1, a_y1, a_r1)));
 	}
 
-	t_scoped f_get_radial_circles() const
+	t_pvalue f_get_radial_circles() const
 	{
 		double x0;
 		double y0;
@@ -217,7 +217,7 @@ struct t_type_of<xemmaix::cairo::t_pattern> : xemmaix::cairo::t_holds<xemmaix::c
 	static void f_define(t_extension* a_extension);
 
 	using t_base::t_base;
-	t_scoped f_do_construct(t_stacked* a_stack, size_t a_n);
+	t_pvalue f_do_construct(t_pvalue* a_stack, size_t a_n);
 };
 
 template<>
@@ -226,7 +226,7 @@ struct t_type_of<xemmaix::cairo::t_solid_pattern> : t_bears<xemmaix::cairo::t_so
 	static void f_define(t_extension* a_extension);
 
 	using t_base::t_base;
-	t_scoped f_do_construct(t_stacked* a_stack, size_t a_n);
+	t_pvalue f_do_construct(t_pvalue* a_stack, size_t a_n);
 };
 
 template<>
@@ -235,7 +235,7 @@ struct t_type_of<xemmaix::cairo::t_surface_pattern> : t_bears<xemmaix::cairo::t_
 	static void f_define(t_extension* a_extension);
 
 	using t_base::t_base;
-	t_scoped f_do_construct(t_stacked* a_stack, size_t a_n);
+	t_pvalue f_do_construct(t_pvalue* a_stack, size_t a_n);
 };
 
 template<>
@@ -276,7 +276,7 @@ struct t_type_of<xemmaix::cairo::t_linear_gradient> : t_bears<xemmaix::cairo::t_
 	static void f_define(t_extension* a_extension);
 
 	using t_base::t_base;
-	t_scoped f_do_construct(t_stacked* a_stack, size_t a_n);
+	t_pvalue f_do_construct(t_pvalue* a_stack, size_t a_n);
 };
 
 template<>
@@ -285,7 +285,7 @@ struct t_type_of<xemmaix::cairo::t_radial_gradient> : t_bears<xemmaix::cairo::t_
 	static void f_define(t_extension* a_extension);
 
 	using t_base::t_base;
-	t_scoped f_do_construct(t_stacked* a_stack, size_t a_n);
+	t_pvalue f_do_construct(t_pvalue* a_stack, size_t a_n);
 };
 
 }

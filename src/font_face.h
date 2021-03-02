@@ -60,7 +60,7 @@ class t_toy_font_face : public t_font_face
 	using t_font_face::t_font_face;
 
 public:
-	static t_scoped f_construct(t_type* a_class, std::wstring_view a_family, cairo_font_slant_t a_slant, cairo_font_weight_t a_weight)
+	static t_pvalue f_construct(t_type* a_class, std::wstring_view a_family, cairo_font_slant_t a_slant, cairo_font_weight_t a_weight)
 	{
 		return f_construct_shared<t_toy_font_face>(a_class, cairo_toy_font_face_create(f_convert(a_family).c_str(), a_slant, a_weight));
 	}
@@ -106,7 +106,7 @@ struct t_type_of<xemmaix::cairo::t_font_face> : xemmaix::cairo::t_holds<xemmaix:
 	static void f_define(t_extension* a_extension);
 
 	using t_base::t_base;
-	t_scoped f_do_construct(t_stacked* a_stack, size_t a_n);
+	t_pvalue f_do_construct(t_pvalue* a_stack, size_t a_n);
 };
 
 template<>
@@ -123,7 +123,7 @@ struct t_type_of<xemmaix::cairo::t_toy_font_face> : t_bears<xemmaix::cairo::t_to
 	static void f_define(t_extension* a_extension);
 
 	using t_base::t_base;
-	t_scoped f_do_construct(t_stacked* a_stack, size_t a_n);
+	t_pvalue f_do_construct(t_pvalue* a_stack, size_t a_n);
 };
 
 }

@@ -27,7 +27,7 @@ struct t_scoped_decompress : jpeg_decompress_struct
 	{
 		jpeg_destroy_decompress(this);
 	}
-	t_scoped f_decompress();
+	t_pvalue f_decompress();
 };
 
 void t_scoped_decompress::f_error(j_common_ptr cinfo)
@@ -37,7 +37,7 @@ void t_scoped_decompress::f_error(j_common_ptr cinfo)
 	f_throw(f_convert(buffer));
 }
 
-t_scoped t_scoped_decompress::f_decompress()
+t_pvalue t_scoped_decompress::f_decompress()
 {
 	jpeg_read_header(this, TRUE);
 	jpeg_start_decompress(this);
@@ -96,7 +96,7 @@ t_scoped t_scoped_decompress::f_decompress()
 		}
 	}
 	jpeg_finish_decompress(this);
-	return t_image_surface::f_construct(t_session::f_instance()->f_extension()->f_type<t_image_surface>(), std::move(data), format, output_width, output_height, stride);
+	return t_image_surface::f_construct(t_session::f_instance()->f_extension()->f_type<t_image_surface>(), data, format, output_width, output_height, stride);
 }
 
 struct t_jpeg_source : jpeg_source_mgr
@@ -164,7 +164,7 @@ void t_jpeg_source::f_terminate(j_decompress_ptr cinfo)
 
 }
 
-t_scoped t_image_surface::f_create_from_jpeg_source(t_image_source& a_source)
+t_pvalue t_image_surface::f_create_from_jpeg_source(t_image_source& a_source)
 {
 	t_jpeg_source source(a_source);
 	t_scoped_decompress cinfo;
@@ -172,13 +172,13 @@ t_scoped t_image_surface::f_create_from_jpeg_source(t_image_source& a_source)
 	return cinfo.f_decompress();
 }
 
-t_scoped t_image_surface::f_create_from_jpeg(std::wstring_view a_path)
+t_pvalue t_image_surface::f_create_from_jpeg(std::wstring_view a_path)
 {
 	t_file_source source(a_path);
 	return source ? f_create_from_jpeg_source(source) : nullptr;
 }
 
-t_scoped t_image_surface::f_create_from_jpeg_stream(const t_value& a_read)
+t_pvalue t_image_surface::f_create_from_jpeg_stream(const t_pvalue& a_read)
 {
 	t_stream_source source(a_read);
 	return f_create_from_jpeg_source(source);

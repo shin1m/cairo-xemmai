@@ -33,7 +33,7 @@ class t_scaled_font : public t_proxy_of<t_scaled_font, cairo_scaled_font_t>
 	using t_base::t_base;
 
 public:
-	static t_scoped f_construct(t_type* a_class, t_font_face& a_font_face, const t_matrix& a_font_matrix, const t_matrix& a_ctm, const t_font_options& a_options)
+	static t_pvalue f_construct(t_type* a_class, t_font_face& a_font_face, const t_matrix& a_font_matrix, const t_matrix& a_ctm, const t_font_options& a_options)
 	{
 		return f_construct_shared<t_scaled_font>(a_class, cairo_scaled_font_create(a_font_face, &a_font_matrix, &a_ctm, t_font_options::f_to(&a_options)));
 	}
@@ -56,19 +56,19 @@ public:
 	{
 		return cairo_scaled_font_status(v_value);
 	}
-	t_scoped f_font_extents() const
+	t_pvalue f_font_extents() const
 	{
 		cairo_font_extents_t extents;
 		cairo_scaled_font_extents(v_value, &extents);
 		return f_tuple(extents.ascent, extents.descent, extents.height, extents.max_x_advance, extents.max_y_advance);
 	}
-	t_scoped f_text_extents(std::wstring_view a_text) const
+	t_pvalue f_text_extents(std::wstring_view a_text) const
 	{
 		cairo_text_extents_t extents;
 		cairo_scaled_font_text_extents(v_value, f_convert(a_text).c_str(), &extents);
 		return f_tuple(extents.x_bearing, extents.y_bearing, extents.width, extents.height, extents.x_advance, extents.y_advance);
 	}
-	t_scoped f_glyph_extents(const cairo_glyph_t* a_glyphs, int a_n) const
+	t_pvalue f_glyph_extents(const cairo_glyph_t* a_glyphs, int a_n) const
 	{
 		cairo_text_extents_t extents;
 		cairo_scaled_font_glyph_extents(v_value, a_glyphs, a_n, &extents);
@@ -82,9 +82,9 @@ public:
 	{
 		return t_font_face::f_wrap(cairo_scaled_font_get_font_face(v_value));
 	}
-	t_scoped f_get_font_options() const
+	t_pvalue f_get_font_options() const
 	{
-		t_scoped options = t_type_of<t_font_options>::f_construct();
+		auto options = t_type_of<t_font_options>::f_construct();
 		cairo_scaled_font_get_font_options(v_value, t_font_options::f_to(f_as<t_font_options*>(options)));
 		return options;
 	}
@@ -123,7 +123,7 @@ struct t_type_of<xemmaix::cairo::t_scaled_font> : xemmaix::cairo::t_holds<xemmai
 	static void f_define(t_extension* a_extension);
 
 	using t_base::t_base;
-	t_scoped f_do_construct(t_stacked* a_stack, size_t a_n);
+	t_pvalue f_do_construct(t_pvalue* a_stack, size_t a_n);
 };
 
 }

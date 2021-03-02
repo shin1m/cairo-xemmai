@@ -60,8 +60,8 @@ public:
 	{
 	}
 	void f_read_header();
-	t_scoped f_read_image();
-	t_scoped f_read_images();
+	t_pvalue f_read_image();
+	t_pvalue f_read_images();
 };
 
 void t_gif_decoder::f_skip_blocks()
@@ -154,7 +154,7 @@ void t_gif_decoder::f_read_header()
 	}
 }
 
-t_scoped t_gif_decoder::f_read_image()
+t_pvalue t_gif_decoder::f_read_image()
 {
 	size_t disposal = 0;
 	bool user_input = false;
@@ -224,7 +224,7 @@ t_scoped t_gif_decoder::f_read_image()
 		f_read_rows(colors, transparent, width, height, 0, 1, &bytes[0], stride);
 	}
 	f_skip_blocks();
-	t_scoped p = t_image_surface::f_construct(t_session::f_instance()->f_extension()->f_type<t_image_surface>(), std::move(data), CAIRO_FORMAT_ARGB32, width, height, stride);
+	auto p = t_image_surface::f_construct(t_session::f_instance()->f_extension()->f_type<t_image_surface>(), data, CAIRO_FORMAT_ARGB32, width, height, stride);
 	p.f_put(t_symbol::f_instantiate(L"left"sv), f_global()->f_as(left));
 	p.f_put(t_symbol::f_instantiate(L"top"sv), f_global()->f_as(top));
 	p.f_put(t_symbol::f_instantiate(L"disposal"sv), f_global()->f_as(disposal));
@@ -233,28 +233,28 @@ t_scoped t_gif_decoder::f_read_image()
 	return p;
 }
 
-t_scoped t_gif_decoder::f_read_images()
+t_pvalue t_gif_decoder::f_read_images()
 {
 	auto p = t_array::f_instantiate();
-	p.f_put(t_symbol::f_instantiate(L"width"sv), f_global()->f_as(v_width));
-	p.f_put(t_symbol::f_instantiate(L"height"sv), f_global()->f_as(v_height));
-	p.f_put(t_symbol::f_instantiate(L"background"sv), f_tuple(
+	p->f_put(t_symbol::f_instantiate(L"width"sv), f_global()->f_as(v_width));
+	p->f_put(t_symbol::f_instantiate(L"height"sv), f_global()->f_as(v_height));
+	p->f_put(t_symbol::f_instantiate(L"background"sv), f_tuple(
 		f_global()->f_as((v_background >> 16 & 0xff) / 255.0),
 		f_global()->f_as((v_background >> 8 & 0xff) / 255.0),
 		f_global()->f_as((v_background & 0xff) / 255.0),
 		f_global()->f_as((v_background >> 24 & 0xff) / 255.0)
 	));
-	p.f_put(t_symbol::f_instantiate(L"aspect"sv), f_global()->f_as(v_aspect));
+	p->f_put(t_symbol::f_instantiate(L"aspect"sv), f_global()->f_as(v_aspect));
 	auto& array = f_as<t_array&>(p);
 	while (true) {
-		t_scoped q = f_read_image();
+		auto q = f_read_image();
 		if (!q) break;
-		array.f_push(std::move(q));
+		array.f_push(q);
 	}
 	return p;
 }
 
-t_scoped f_read_images(t_image_source& a_source)
+t_pvalue f_read_images(t_image_source& a_source)
 {
 	t_gif_decoder decoder(a_source);
 	decoder.f_read_header();
@@ -263,32 +263,32 @@ t_scoped f_read_images(t_image_source& a_source)
 
 }
 
-t_scoped t_image_surface::f_create_from_gif_source(t_image_source& a_source)
+t_pvalue t_image_surface::f_create_from_gif_source(t_image_source& a_source)
 {
 	t_gif_decoder decoder(a_source);
 	decoder.f_read_header();
 	return decoder.f_read_image();
 }
 
-t_scoped t_image_surface::f_create_from_gif(std::wstring_view a_path)
+t_pvalue t_image_surface::f_create_from_gif(std::wstring_view a_path)
 {
 	t_file_source source(a_path);
 	return source ? f_create_from_gif_source(source) : nullptr;
 }
 
-t_scoped t_image_surface::f_create_from_gif_stream(const t_value& a_read)
+t_pvalue t_image_surface::f_create_from_gif_stream(const t_pvalue& a_read)
 {
 	t_stream_source source(a_read);
 	return f_create_from_gif_source(source);
 }
 
-t_scoped t_image_surface::f_create_all_from_gif(std::wstring_view a_path)
+t_pvalue t_image_surface::f_create_all_from_gif(std::wstring_view a_path)
 {
 	t_file_source source(a_path);
 	return source ? f_read_images(source) : nullptr;
 }
 
-t_scoped t_image_surface::f_create_all_from_gif_stream(const t_value& a_read)
+t_pvalue t_image_surface::f_create_all_from_gif_stream(const t_pvalue& a_read)
 {
 	t_stream_source source(a_read);
 	return f_read_images(source);

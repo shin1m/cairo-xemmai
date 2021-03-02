@@ -1,8 +1,9 @@
+system = Module("system"
 io = Module("io"
 math = Module("math"
 cairo = Module("cairo"
-Module("draw-sample")(Module("system").script + ".png", @(context)
-	file = io.File("data/romedalen.png", "rb"
+Module("draw-sample")(system.arguments[0], @(context)
+	file = io.File((io.Path(system.script) / "../data/romedalen.png").__string(), "rb"
 	try
 		image = cairo.ImageSurface.create_from_png_stream(file.read
 	finally

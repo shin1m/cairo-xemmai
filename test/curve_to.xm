@@ -1,5 +1,5 @@
 math = Module("math"
-Module("draw-sample")(Module("system").script + ".png", @(context)
+Module("draw-sample")(Module("system").arguments[0], @(context)
 	x = 25.6
 	y = 128.0
 	x1 = 102.4

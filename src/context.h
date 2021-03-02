@@ -33,7 +33,7 @@ class t_context : public t_proxy_of<t_context, cairo_t>
 
 public:
 	using t_base::f_construct;
-	static t_scoped f_construct(t_type* a_class, t_surface& a_target)
+	static t_pvalue f_construct(t_type* a_class, t_surface& a_target)
 	{
 		return f_transfer(a_class->f_new<t_context>(false, cairo_create(a_target)));
 	}
@@ -111,16 +111,16 @@ public:
 		return cairo_get_antialias(v_value);
 	}
 	void f_set_dash(const t_array& a_dashes, double a_offset);
-	t_scoped f_get_dash() const
+	t_pvalue f_get_dash() const
 	{
 		int n = cairo_get_dash_count(v_value);
 		std::vector<double> dashes(n);
 		double offset;
 		cairo_get_dash(v_value, &dashes[0], &offset);
-		t_scoped p = t_array::f_instantiate();
-		t_array& array = f_as<t_array&>(p);
+		auto p = t_array::f_instantiate();
+		auto& array = f_as<t_array&>(p);
 		for (int i = 0; i < n; ++i) array.f_push(f_global()->f_as(dashes[i]));
-		return f_tuple(std::move(p), offset);
+		return f_tuple(p, offset);
 	}
 	void f_set_fill_rule(cairo_fill_rule_t a_fill_rule)
 	{
@@ -186,7 +186,7 @@ public:
 	{
 		cairo_clip_preserve(v_value);
 	}
-	t_scoped f_clip_extents() const
+	t_pvalue f_clip_extents() const
 	{
 		double x0;
 		double y0;
@@ -211,7 +211,7 @@ public:
 	{
 		cairo_fill_preserve(v_value);
 	}
-	t_scoped f_fill_extents() const
+	t_pvalue f_fill_extents() const
 	{
 		double x0;
 		double y0;
@@ -248,7 +248,7 @@ public:
 	{
 		cairo_stroke_preserve(v_value);
 	}
-	t_scoped f_stroke_extents() const
+	t_pvalue f_stroke_extents() const
 	{
 		double x0;
 		double y0;
@@ -285,7 +285,7 @@ public:
 	{
 		return cairo_has_current_point(v_value) != 0;
 	}
-	t_scoped f_get_current_point() const
+	t_pvalue f_get_current_point() const
 	{
 		double x;
 		double y;
@@ -348,7 +348,7 @@ public:
 	{
 		cairo_rel_move_to(v_value, a_x, a_y);
 	}
-	t_scoped f_path_extents() const
+	t_pvalue f_path_extents() const
 	{
 		double x0;
 		double y0;
@@ -387,22 +387,22 @@ public:
 	{
 		cairo_identity_matrix(v_value);
 	}
-	t_scoped f_user_to_device(double a_x, double a_y) const
+	t_pvalue f_user_to_device(double a_x, double a_y) const
 	{
 		cairo_user_to_device(v_value, &a_x, &a_y);
 		return f_tuple(a_x, a_y);
 	}
-	t_scoped f_user_to_device_distance(double a_x, double a_y) const
+	t_pvalue f_user_to_device_distance(double a_x, double a_y) const
 	{
 		cairo_user_to_device_distance(v_value, &a_x, &a_y);
 		return f_tuple(a_x, a_y);
 	}
-	t_scoped f_device_to_user(double a_x, double a_y) const
+	t_pvalue f_device_to_user(double a_x, double a_y) const
 	{
 		cairo_device_to_user(v_value, &a_x, &a_y);
 		return f_tuple(a_x, a_y);
 	}
-	t_scoped f_device_to_user_distance(double a_x, double a_y) const
+	t_pvalue f_device_to_user_distance(double a_x, double a_y) const
 	{
 		cairo_device_to_user_distance(v_value, &a_x, &a_y);
 		return f_tuple(a_x, a_y);
@@ -429,9 +429,9 @@ public:
 	{
 		cairo_set_font_options(v_value, t_font_options::f_to(&a_options));
 	}
-	t_scoped f_get_font_options() const
+	t_pvalue f_get_font_options() const
 	{
-		t_scoped options = t_type_of<t_font_options>::f_construct();
+		auto options = t_type_of<t_font_options>::f_construct();
 		cairo_get_font_options(v_value, t_font_options::f_to(f_as<t_font_options*>(options)));
 		return options;
 	}
@@ -466,19 +466,19 @@ public:
 	{
 		cairo_show_text_glyphs(v_value, a_utf8, a_n0, a_glyphs, a_n1, a_clusters, a_n2, a_cluster_flags);
 	}
-	t_scoped f_font_extents() const
+	t_pvalue f_font_extents() const
 	{
 		cairo_font_extents_t extents;
 		cairo_font_extents(v_value, &extents);
 		return f_tuple(extents.ascent, extents.descent, extents.height, extents.max_x_advance, extents.max_y_advance);
 	}
-	t_scoped f_text_extents(std::wstring_view a_text) const
+	t_pvalue f_text_extents(std::wstring_view a_text) const
 	{
 		cairo_text_extents_t extents;
 		cairo_text_extents(v_value, f_convert(a_text).c_str(), &extents);
 		return f_tuple(extents.x_bearing, extents.y_bearing, extents.width, extents.height, extents.x_advance, extents.y_advance);
 	}
-	t_scoped f_glyph_extents(const cairo_glyph_t* a_glyphs, int a_n) const
+	t_pvalue f_glyph_extents(const cairo_glyph_t* a_glyphs, int a_n) const
 	{
 		cairo_text_extents_t extents;
 		cairo_glyph_extents(v_value, a_glyphs, a_n, &extents);
@@ -499,7 +499,7 @@ struct t_type_of<xemmaix::cairo::t_context> : xemmaix::cairo::t_holds<xemmaix::c
 	static void f_define(t_extension* a_extension);
 
 	using t_base::t_base;
-	t_scoped f_do_construct(t_stacked* a_stack, size_t a_n);
+	t_pvalue f_do_construct(t_pvalue* a_stack, size_t a_n);
 };
 
 template<>
