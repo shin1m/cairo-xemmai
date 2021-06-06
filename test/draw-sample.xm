@@ -2,7 +2,7 @@ math = Module("math"
 cairo = Module("cairo"
 min = @(x, y) x < y ? x : y
 round = @(x) math.floor(x + 0.5
-$__call = @(path, draw) cairo.main(@
+$do = @(path, draw) cairo.main(@
 	image = cairo.ImageSurface(cairo.Format.ARGB32, 320, 240
 	context = cairo.Context(image
 	try

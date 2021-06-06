@@ -1,6 +1,6 @@
 math = Module("math"
 cairo = Module("cairo"
-Module("draw-sample")(Module("system").arguments[0], @(context)
+Module("draw-sample").do(Module("system").arguments[0], @(context)
 	context.set_line_width(6.0
 	context.rectangle(12.0, 12.0, 232.0, 70.0
 	context.new_sub_path(

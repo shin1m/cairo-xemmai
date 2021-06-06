@@ -1,5 +1,5 @@
 math = Module("math"
-Module("draw-sample")(Module("system").arguments[0], @(context)
+Module("draw-sample").do(Module("system").arguments[0], @(context)
 	x = 25.6
 	y = 128.0
 	x1 = 102.4

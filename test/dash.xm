@@ -1,5 +1,5 @@
 math = Module("math"
-Module("draw-sample")(Module("system").arguments[0], @(context)
+Module("draw-sample").do(Module("system").arguments[0], @(context)
 	dashes = [50.0, 10.0, 10.0, 10.0
 	offset = -50.0
 	context.set_dash(dashes, offset

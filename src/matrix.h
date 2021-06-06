@@ -79,16 +79,16 @@ namespace xemmai
 {
 
 template<>
-struct t_type_of<xemmaix::cairo::t_matrix> : xemmaix::cairo::t_instantiatable<t_underivable<t_holds<xemmaix::cairo::t_matrix>>>
+struct t_type_of<xemmaix::cairo::t_matrix> : xemmaix::cairo::t_instantiatable<t_holds<xemmaix::cairo::t_matrix>>
 {
-	typedef xemmaix::cairo::t_extension t_extension;
+	typedef xemmaix::cairo::t_library t_library;
 
-	template<typename T_extension, typename T>
-	static t_pvalue f_transfer(T_extension* a_extension, T&& a_value)
+	template<typename T_library, typename T>
+	static t_pvalue f_transfer(T_library* a_library, T&& a_value)
 	{
-		return xemmai::f_new<typename t_fundamental<T>::t_type>(a_extension, false, std::forward<T>(a_value));
+		return xemmai::f_new<typename t_fundamental<T>::t_type>(a_library, std::forward<T>(a_value));
 	}
-	static void f_define(t_extension* a_extension);
+	static void f_define(t_library* a_library);
 
 	using t_base::t_base;
 	t_pvalue f_do_construct(t_pvalue* a_stack, size_t a_n);

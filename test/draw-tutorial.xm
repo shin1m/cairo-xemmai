@@ -1,5 +1,5 @@
 cairo = Module("cairo"
-$__call = @(path, draw) cairo.main(@
+$do = @(path, draw) cairo.main(@
 	image = cairo.ImageSurface(cairo.Format.ARGB32, 320, 240
 	context = cairo.Context(image
 	try

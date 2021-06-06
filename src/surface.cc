@@ -28,12 +28,12 @@ t_surface* t_surface::f_wrap(cairo_surface_t* a_value)
 	if (!a_value) return nullptr;
 	t_surface* p = f_from(a_value);
 	if (p) return p;
-	auto extension = t_session::f_instance()->f_extension();
+	auto library = t_session::f_instance()->f_library();
 	switch (cairo_surface_get_type(a_value)) {
 	case CAIRO_SURFACE_TYPE_IMAGE:
-		return &f_new<t_image_surface>(extension, false, a_value)->f_as<t_surface>();
+		return &f_new<t_image_surface>(library, a_value)->f_as<t_surface>();
 	default:
-		return &f_new<t_surface>(extension, false, a_value)->f_as<t_surface>();
+		return &f_new<t_surface>(library, a_value)->f_as<t_surface>();
 	}
 }
 
@@ -100,7 +100,7 @@ void t_image_surface::f_destroy()
 
 t_pvalue t_image_surface::f_create_from_png_source(t_image_source& a_source)
 {
-	return f_transfer(f_new<t_image_surface>(t_session::f_instance()->f_extension(), false, cairo_image_surface_create_from_png_stream(f_read_stream, &a_source)));
+	return f_transfer(f_new<t_image_surface>(t_session::f_instance()->f_library(), cairo_image_surface_create_from_png_stream(f_read_stream, &a_source)));
 }
 
 t_pvalue t_image_surface::f_create_from_png_stream(const t_pvalue& a_read)
@@ -154,10 +154,10 @@ t_pvalue t_image_surface::f_create_from_source(t_image_source& a_source)
 namespace xemmai
 {
 
-void t_type_of<xemmaix::cairo::t_surface>::f_define(t_extension* a_extension)
+void t_type_of<xemmaix::cairo::t_surface>::f_define(t_library* a_library)
 {
 	using namespace xemmaix::cairo;
-	t_define<t_surface, t_object>(a_extension, L"Surface"sv)
+	t_define{a_library}
 		(L"acquire"sv, t_member<void(t_surface::*)(), &t_surface::f_acquire>())
 		(L"release"sv, t_member<void(t_surface::*)(), &t_surface::f_release>())
 		(L"status"sv, t_member<cairo_status_t(t_surface::*)() const, &t_surface::f_status>())
@@ -177,7 +177,7 @@ void t_type_of<xemmaix::cairo::t_surface>::f_define(t_extension* a_extension)
 		(L"has_show_text_glyphs"sv, t_member<bool(t_surface::*)() const, &t_surface::f_has_show_text_glyphs>())
 		(L"write_to_png"sv, t_member<void(t_surface::*)(std::wstring_view) const, &t_surface::f_write_to_png>())
 		(L"write_to_png_stream"sv, t_member<void(t_surface::*)(const t_pvalue&) const, &t_surface::f_write_to_png_stream>())
-	;
+	.f_derive<t_surface, t_object>();
 }
 
 t_pvalue t_type_of<xemmaix::cairo::t_surface>::f_do_construct(t_pvalue* a_stack, size_t a_n)
@@ -185,18 +185,20 @@ t_pvalue t_type_of<xemmaix::cairo::t_surface>::f_do_construct(t_pvalue* a_stack,
 	return t_construct_with<t_pvalue(*)(t_type*, xemmaix::cairo::t_surface&, cairo_content_t, int, int), xemmaix::cairo::t_surface::f_construct>::t_bind<xemmaix::cairo::t_surface>::f_do(this, a_stack, a_n);
 }
 
-void t_type_of<cairo_content_t>::f_define(t_extension* a_extension)
+t_object* t_type_of<cairo_content_t>::f_define(t_library* a_library)
 {
-	t_define<cairo_content_t, intptr_t>(a_extension, L"Content"sv)
+	t_define{a_library}.f_derive<cairo_content_t, intptr_t>();
+	return a_library->f_type<cairo_content_t>()->f_do_derive({{}, t_define(a_library)
 		(L"COLOR"sv, CAIRO_CONTENT_COLOR)
 		(L"ALPHA"sv, CAIRO_CONTENT_ALPHA)
 		(L"COLOR_ALPHA"sv, CAIRO_CONTENT_COLOR_ALPHA)
-	;
+	});
 }
 
-void t_type_of<cairo_surface_type_t>::f_define(t_extension* a_extension)
+t_object* t_type_of<cairo_surface_type_t>::f_define(t_library* a_library)
 {
-	t_define<cairo_surface_type_t, intptr_t>(a_extension, L"SurfaceType"sv)
+	t_define{a_library}.f_derive<cairo_surface_type_t, intptr_t>();
+	return a_library->f_type<cairo_surface_type_t>()->f_do_derive({{}, t_define(a_library)
 		(L"IMAGE"sv, CAIRO_SURFACE_TYPE_IMAGE)
 		(L"PDF"sv, CAIRO_SURFACE_TYPE_PDF)
 		(L"PS"sv, CAIRO_SURFACE_TYPE_PS)
@@ -211,13 +213,13 @@ void t_type_of<cairo_surface_type_t>::f_define(t_extension* a_extension)
 		(L"OS2"sv, CAIRO_SURFACE_TYPE_OS2)
 		(L"WIN32_PRINTING"sv, CAIRO_SURFACE_TYPE_WIN32_PRINTING)
 		(L"QUARTZ_IMAGE"sv, CAIRO_SURFACE_TYPE_QUARTZ_IMAGE)
-	;
+	});
 }
 
-void t_type_of<xemmaix::cairo::t_image_surface>::f_define(t_extension* a_extension)
+void t_type_of<xemmaix::cairo::t_image_surface>::f_define(t_library* a_library)
 {
 	using namespace xemmaix::cairo;
-	t_define<t_image_surface, t_surface>(a_extension, L"ImageSurface"sv)
+	t_define{a_library}
 		(L"get_data"sv, t_member<t_pvalue(t_image_surface::*)() const, &t_image_surface::f_get_data>())
 		(L"get_format"sv, t_member<cairo_format_t(t_image_surface::*)() const, &t_image_surface::f_get_format>())
 		(L"get_width"sv, t_member<int(t_image_surface::*)() const, &t_image_surface::f_get_width>())
@@ -233,7 +235,21 @@ void t_type_of<xemmaix::cairo::t_image_surface>::f_define(t_extension* a_extensi
 		(L"create_all_from_gif_stream"sv, t_static<t_pvalue(*)(const t_pvalue&), t_image_surface::f_create_all_from_gif_stream>())
 		(L"create_from_file"sv, t_static<t_pvalue(*)(std::wstring_view), t_image_surface::f_create_from_file>())
 		(L"create_from_stream"sv, t_static<t_pvalue(*)(const t_pvalue&), t_image_surface::f_create_from_stream>())
-	;
+	.f_derive<t_image_surface, t_surface>();
+	a_library->v_type_gif_surface.f_construct(a_library->f_type<t_image_surface>()->f_derive<t_type_of<t_image_surface>>(t_object::f_of(a_library), {{
+		t_symbol::f_instantiate(L"left"sv),
+		t_symbol::f_instantiate(L"top"sv),
+		t_symbol::f_instantiate(L"disposal"sv),
+		t_symbol::f_instantiate(L"user_input"sv),
+		t_symbol::f_instantiate(L"delay"sv)
+	}}));
+	auto type = a_library->f_type<t_list>();
+	a_library->v_type_gif_surfaces.f_construct((type->*type->v_derive)({{
+		t_symbol::f_instantiate(L"width"sv),
+		t_symbol::f_instantiate(L"height"sv),
+		t_symbol::f_instantiate(L"background"sv),
+		t_symbol::f_instantiate(L"aspect"sv)
+	}}));
 }
 
 t_pvalue t_type_of<xemmaix::cairo::t_image_surface>::f_do_construct(t_pvalue* a_stack, size_t a_n)
@@ -244,14 +260,15 @@ t_pvalue t_type_of<xemmaix::cairo::t_image_surface>::f_do_construct(t_pvalue* a_
 	>::t_bind<xemmaix::cairo::t_image_surface>::f_do(this, a_stack, a_n);
 }
 
-void t_type_of<cairo_format_t>::f_define(t_extension* a_extension)
+t_object* t_type_of<cairo_format_t>::f_define(t_library* a_library)
 {
-	t_define<cairo_format_t, intptr_t>(a_extension, L"Format"sv)
+	t_define{a_library}.f_derive<cairo_format_t, intptr_t>();
+	return a_library->f_type<cairo_format_t>()->f_do_derive({{}, t_define(a_library)
 		(L"ARGB32"sv, CAIRO_FORMAT_ARGB32)
 		(L"RGB24"sv, CAIRO_FORMAT_RGB24)
 		(L"A8"sv, CAIRO_FORMAT_A8)
 		(L"A1"sv, CAIRO_FORMAT_A1)
-	;
+	});
 }
 
 }

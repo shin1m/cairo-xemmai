@@ -1,4 +1,4 @@
-Module("draw-tutorial")(Module("system").arguments[0], @(context)
+Module("draw-tutorial").do(Module("system").arguments[0], @(context)
 	context.set_source_rgb(0.0, 0.0, 0.0
 	context.move_to(0.0, 0.0
 	context.line_to(1.0, 1.0

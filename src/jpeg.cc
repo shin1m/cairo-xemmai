@@ -96,7 +96,7 @@ t_pvalue t_scoped_decompress::f_decompress()
 		}
 	}
 	jpeg_finish_decompress(this);
-	return t_image_surface::f_construct(t_session::f_instance()->f_extension()->f_type<t_image_surface>(), data, format, output_width, output_height, stride);
+	return t_image_surface::f_construct(t_session::f_instance()->f_library()->f_type<t_image_surface>(), data, format, output_width, output_height, stride);
 }
 
 struct t_jpeg_source : jpeg_source_mgr

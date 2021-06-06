@@ -1,6 +1,6 @@
 math = Module("math"
 cairo = Module("cairo"
-Module("draw-sample")(Module("system").arguments[0], @(context)
+Module("draw-sample").do(Module("system").arguments[0], @(context)
 	context.select_font_face("Sans", cairo.FontSlant.NORMAL, cairo.FontWeight.BOLD
 	context.set_font_size(90.0
 	context.move_to(10.0, 135.0

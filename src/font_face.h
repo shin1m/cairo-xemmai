@@ -85,17 +85,17 @@ namespace xemmai
 {
 
 template<>
-struct t_type_of<cairo_font_slant_t> : t_enum_of<cairo_font_slant_t, xemmaix::cairo::t_extension>
+struct t_type_of<cairo_font_slant_t> : t_enum_of<cairo_font_slant_t, xemmaix::cairo::t_library>
 {
-	static void f_define(t_extension* a_extension);
+	static t_object* f_define(t_library* a_library);
 
 	using t_base::t_base;
 };
 
 template<>
-struct t_type_of<cairo_font_weight_t> : t_enum_of<cairo_font_weight_t, xemmaix::cairo::t_extension>
+struct t_type_of<cairo_font_weight_t> : t_enum_of<cairo_font_weight_t, xemmaix::cairo::t_library>
 {
-	static void f_define(t_extension* a_extension);
+	static t_object* f_define(t_library* a_library);
 
 	using t_base::t_base;
 };
@@ -103,16 +103,16 @@ struct t_type_of<cairo_font_weight_t> : t_enum_of<cairo_font_weight_t, xemmaix::
 template<>
 struct t_type_of<xemmaix::cairo::t_font_face> : xemmaix::cairo::t_holds<xemmaix::cairo::t_font_face>
 {
-	static void f_define(t_extension* a_extension);
+	static void f_define(t_library* a_library);
 
 	using t_base::t_base;
 	t_pvalue f_do_construct(t_pvalue* a_stack, size_t a_n);
 };
 
 template<>
-struct t_type_of<cairo_font_type_t> : t_enum_of<cairo_font_type_t, xemmaix::cairo::t_extension>
+struct t_type_of<cairo_font_type_t> : t_enum_of<cairo_font_type_t, xemmaix::cairo::t_library>
 {
-	static void f_define(t_extension* a_extension);
+	static t_object* f_define(t_library* a_library);
 
 	using t_base::t_base;
 };
@@ -120,7 +120,7 @@ struct t_type_of<cairo_font_type_t> : t_enum_of<cairo_font_type_t, xemmaix::cair
 template<>
 struct t_type_of<xemmaix::cairo::t_toy_font_face> : t_bears<xemmaix::cairo::t_toy_font_face, t_type_of<xemmaix::cairo::t_font_face>>
 {
-	static void f_define(t_extension* a_extension);
+	static void f_define(t_library* a_library);
 
 	using t_base::t_base;
 	t_pvalue f_do_construct(t_pvalue* a_stack, size_t a_n);

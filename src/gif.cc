@@ -224,32 +224,32 @@ t_pvalue t_gif_decoder::f_read_image()
 		f_read_rows(colors, transparent, width, height, 0, 1, &bytes[0], stride);
 	}
 	f_skip_blocks();
-	auto p = t_image_surface::f_construct(t_session::f_instance()->f_extension()->f_type<t_image_surface>(), data, CAIRO_FORMAT_ARGB32, width, height, stride);
-	p.f_put(t_symbol::f_instantiate(L"left"sv), f_global()->f_as(left));
-	p.f_put(t_symbol::f_instantiate(L"top"sv), f_global()->f_as(top));
-	p.f_put(t_symbol::f_instantiate(L"disposal"sv), f_global()->f_as(disposal));
-	p.f_put(t_symbol::f_instantiate(L"user_input"sv), f_global()->f_as(user_input));
-	p.f_put(t_symbol::f_instantiate(L"delay"sv), f_global()->f_as(delay));
+	auto p = t_image_surface::f_construct(t_session::f_instance()->f_library()->v_type_gif_surface, data, CAIRO_FORMAT_ARGB32, width, height, stride);
+	p->f_fields()[0] = left;
+	p->f_fields()[1] = top;
+	p->f_fields()[2] = disposal;
+	p->f_fields()[3] = user_input;
+	p->f_fields()[4] = delay;
 	return p;
 }
 
 t_pvalue t_gif_decoder::f_read_images()
 {
-	auto p = t_array::f_instantiate();
-	p->f_put(t_symbol::f_instantiate(L"width"sv), f_global()->f_as(v_width));
-	p->f_put(t_symbol::f_instantiate(L"height"sv), f_global()->f_as(v_height));
-	p->f_put(t_symbol::f_instantiate(L"background"sv), f_tuple(
-		f_global()->f_as((v_background >> 16 & 0xff) / 255.0),
-		f_global()->f_as((v_background >> 8 & 0xff) / 255.0),
-		f_global()->f_as((v_background & 0xff) / 255.0),
-		f_global()->f_as((v_background >> 24 & 0xff) / 255.0)
-	));
-	p->f_put(t_symbol::f_instantiate(L"aspect"sv), f_global()->f_as(v_aspect));
-	auto& array = f_as<t_array&>(p);
+	auto p = t_session::f_instance()->f_library()->v_type_gif_surfaces->f_new<t_list>();
+	p->f_fields()[0] = v_width;
+	p->f_fields()[1] = v_height;
+	p->f_fields()[2] = f_tuple(
+		(v_background >> 16 & 0xff) / 255.0,
+		(v_background >> 8 & 0xff) / 255.0,
+		(v_background & 0xff) / 255.0,
+		(v_background >> 24 & 0xff) / 255.0
+	);
+	p->f_fields()[3] = v_aspect;
+	auto& list = f_as<t_list&>(p);
 	while (true) {
 		auto q = f_read_image();
 		if (!q) break;
-		array.f_push(q);
+		list.f_push(q);
 	}
 	return p;
 }

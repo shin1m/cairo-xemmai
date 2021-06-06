@@ -3,10 +3,10 @@
 namespace xemmai
 {
 
-void t_type_of<xemmaix::cairo::t_font_options>::f_define(t_extension* a_extension)
+void t_type_of<xemmaix::cairo::t_font_options>::f_define(t_library* a_library)
 {
 	using namespace xemmaix::cairo;
-	t_define<t_font_options, t_object>(a_extension, L"FontOptions"sv)
+	t_define{a_library}
 		(L"status"sv, t_member<cairo_status_t(*)(t_font_options*), t_font_options::f_status>())
 		(L"merge"sv, t_member<void(*)(t_font_options*, const t_font_options*), t_font_options::f_merge>())
 		(L"hash"sv, t_member<intptr_t(*)(const t_font_options*), t_font_options::f_hash>())
@@ -19,7 +19,7 @@ void t_type_of<xemmaix::cairo::t_font_options>::f_define(t_extension* a_extensio
 		(L"get_hint_style"sv, t_member<cairo_hint_style_t(*)(const t_font_options*), t_font_options::f_get_hint_style>())
 		(L"set_hint_metrics"sv, t_member<void(*)(t_font_options*, cairo_hint_metrics_t), t_font_options::f_set_hint_metrics>())
 		(L"get_hint_metrics"sv, t_member<cairo_hint_metrics_t(*)(const t_font_options*), t_font_options::f_get_hint_metrics>())
-	;
+	.f_derive<t_font_options, t_object>();
 }
 
 void t_type_of<xemmaix::cairo::t_font_options>::f_do_finalize(t_object* a_this)
@@ -35,45 +35,49 @@ t_pvalue t_type_of<xemmaix::cairo::t_font_options>::f_do_construct(t_pvalue* a_s
 	>::t_bind<xemmaix::cairo::t_font_options>::f_do(this, a_stack, a_n);
 }
 
-void t_type_of<cairo_antialias_t>::f_define(t_extension* a_extension)
+t_object* t_type_of<cairo_antialias_t>::f_define(t_library* a_library)
 {
-	t_define<cairo_antialias_t, intptr_t>(a_extension, L"Antialias"sv)
+	t_define{a_library}.f_derive<cairo_antialias_t, intptr_t>();
+	return a_library->f_type<cairo_antialias_t>()->f_do_derive({{}, t_define(a_library)
 		(L"DEFAULT"sv, CAIRO_ANTIALIAS_DEFAULT)
 		(L"NONE"sv, CAIRO_ANTIALIAS_NONE)
 		(L"GRAY"sv, CAIRO_ANTIALIAS_GRAY)
 		(L"SUBPIXEL"sv, CAIRO_ANTIALIAS_SUBPIXEL)
-	;
+	});
 }
 
-void t_type_of<cairo_subpixel_order_t>::f_define(t_extension* a_extension)
+t_object* t_type_of<cairo_subpixel_order_t>::f_define(t_library* a_library)
 {
-	t_define<cairo_subpixel_order_t, intptr_t>(a_extension, L"SubpixelOrder"sv)
+	t_define{a_library}.f_derive<cairo_subpixel_order_t, intptr_t>();
+	return a_library->f_type<cairo_subpixel_order_t>()->f_do_derive({{}, t_define(a_library)
 		(L"DEFAULT"sv, CAIRO_SUBPIXEL_ORDER_DEFAULT)
 		(L"RGB"sv, CAIRO_SUBPIXEL_ORDER_RGB)
 		(L"BGR"sv, CAIRO_SUBPIXEL_ORDER_BGR)
 		(L"VRGB"sv, CAIRO_SUBPIXEL_ORDER_VRGB)
 		(L"VBGR"sv, CAIRO_SUBPIXEL_ORDER_VBGR)
-	;
+	});
 }
 
-void t_type_of<cairo_hint_style_t>::f_define(t_extension* a_extension)
+t_object* t_type_of<cairo_hint_style_t>::f_define(t_library* a_library)
 {
-	t_define<cairo_hint_style_t, intptr_t>(a_extension, L"HintStyle"sv)
+	t_define{a_library}.f_derive<cairo_hint_style_t, intptr_t>();
+	return a_library->f_type<cairo_hint_style_t>()->f_do_derive({{}, t_define(a_library)
 		(L"DEFAULT"sv, CAIRO_HINT_STYLE_DEFAULT)
 		(L"NONE"sv, CAIRO_HINT_STYLE_NONE)
 		(L"SLIGHT"sv, CAIRO_HINT_STYLE_SLIGHT)
 		(L"MEDIUM"sv, CAIRO_HINT_STYLE_MEDIUM)
 		(L"FULL"sv, CAIRO_HINT_STYLE_FULL)
-	;
+	});
 }
 
-void t_type_of<cairo_hint_metrics_t>::f_define(t_extension* a_extension)
+t_object* t_type_of<cairo_hint_metrics_t>::f_define(t_library* a_library)
 {
-	t_define<cairo_hint_metrics_t, intptr_t>(a_extension, L"HintMetrics"sv)
+	t_define{a_library}.f_derive<cairo_hint_metrics_t, intptr_t>();
+	return a_library->f_type<cairo_hint_metrics_t>()->f_do_derive({{}, t_define(a_library)
 		(L"DEFAULT"sv, CAIRO_HINT_METRICS_DEFAULT)
 		(L"OFF"sv, CAIRO_HINT_METRICS_OFF)
 		(L"ON"sv, CAIRO_HINT_METRICS_ON)
-	;
+	});
 }
 
 }

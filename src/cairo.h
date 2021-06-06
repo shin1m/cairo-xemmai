@@ -13,8 +13,6 @@
 #include <iterator>
 #include <locale>
 #include <xemmai/convert.h>
-#include <xemmai/array.h>
-#include <xemmai/bytes.h>
 #include <cairo.h>
 
 namespace xemmaix::cairo
@@ -23,7 +21,7 @@ namespace xemmaix::cairo
 using namespace xemmai;
 
 class t_proxy;
-class t_extension;
+class t_library;
 struct t_matrix;
 struct t_font_options;
 class t_surface;
@@ -71,7 +69,7 @@ class t_session : public t_entry
 
 	static XEMMAI__PORTABLE__THREAD t_session* v_instance;
 
-	t_extension* v_extension;
+	t_library* v_library;
 	std::wstring_convert<std::codecvt_utf8<wchar_t>> v_convert;
 
 public:
@@ -85,11 +83,11 @@ public:
 	}
 #endif
 
-	t_session(t_extension* a_extension);
+	t_session(t_library* a_library);
 	~t_session();
-	t_extension* f_extension() const
+	t_library* f_library() const
 	{
-		return v_extension;
+		return v_library;
 	}
 };
 
@@ -137,7 +135,7 @@ protected:
 			if (p->v_n > 0) T::f_unreference(a_value);
 			return f_transfer(t_object::f_of(p));
 		} else {
-			return f_transfer(a_class->template f_new<T_type>(false, a_value));
+			return f_transfer(a_class->template f_new<T_type>(a_value));
 		}
 	}
 
@@ -160,7 +158,7 @@ public:
 	}
 	static t_pvalue f_construct(t_type* a_class, T_value* a_value)
 	{
-		return f_transfer(a_class->template f_new<T>(false, a_value));
+		return f_transfer(a_class->template f_new<T>(a_value));
 	}
 
 	virtual void f_dispose()
@@ -186,7 +184,7 @@ public:
 	}
 };
 
-class t_extension : public xemmai::t_extension
+class t_library : public xemmai::t_library
 {
 	t_slot_of<t_type> v_type_matrix;
 	t_slot_of<t_type> v_type_status;
@@ -203,16 +201,16 @@ class t_extension : public xemmai::t_extension
 	t_slot_of<t_type> v_type_pattern;
 	t_slot_of<t_type> v_type_solid_pattern;
 	t_slot_of<t_type> v_type_surface_pattern;
-	t_slot_of<t_type> v_type_gradient;
-	t_slot_of<t_type> v_type_linear_gradient;
-	t_slot_of<t_type> v_type_radial_gradient;
 	t_slot_of<t_type> v_type_extend;
 	t_slot_of<t_type> v_type_filter;
 	t_slot_of<t_type> v_type_pattern_type;
-	t_slot_of<t_type> v_type_font_face;
-	t_slot_of<t_type> v_type_font_type;
+	t_slot_of<t_type> v_type_gradient;
+	t_slot_of<t_type> v_type_linear_gradient;
+	t_slot_of<t_type> v_type_radial_gradient;
 	t_slot_of<t_type> v_type_font_slant;
 	t_slot_of<t_type> v_type_font_weight;
+	t_slot_of<t_type> v_type_font_face;
+	t_slot_of<t_type> v_type_font_type;
 	t_slot_of<t_type> v_type_toy_font_face;
 	t_slot_of<t_type> v_type_scaled_font;
 	t_slot_of<t_type> v_type_context;
@@ -222,10 +220,14 @@ class t_extension : public xemmai::t_extension
 	t_slot_of<t_type> v_type_operator;
 
 public:
-	t_extension(t_object* a_module);
+	t_slot_of<t_type> v_type_gif_surface;
+	t_slot_of<t_type> v_type_gif_surfaces;
+
+	using xemmai::t_library::t_library;
 	virtual void f_scan(t_scan a_scan);
+	virtual std::vector<std::pair<t_root, t_rvalue>> f_define();
 	template<typename T>
-	const T* f_extension() const
+	const T* f_library() const
 	{
 		return f_global();
 	}
@@ -237,213 +239,54 @@ public:
 	template<typename T>
 	t_type* f_type() const
 	{
-		return const_cast<t_extension*>(this)->f_type_slot<T>();
+		return const_cast<t_library*>(this)->f_type_slot<T>();
 	}
 	template<typename T>
 	t_pvalue f_as(T&& a_value) const
 	{
 		typedef t_type_of<typename t_fundamental<T>::t_type> t;
-		return t::f_transfer(f_extension<typename t::t_extension>(), std::forward<T>(a_value));
+		return t::f_transfer(f_library<typename t::t_library>(), std::forward<T>(a_value));
 	}
 };
 
 template<>
-inline const t_extension* t_extension::f_extension<t_extension>() const
+inline const t_library* t_library::f_library<t_library>() const
 {
 	return this;
 }
 
-template<>
-inline t_slot_of<t_type>& t_extension::f_type_slot<t_matrix>()
-{
-	return v_type_matrix;
-}
-
-template<>
-inline t_slot_of<t_type>& t_extension::f_type_slot<cairo_status_t>()
-{
-	return v_type_status;
-}
-
-template<>
-inline t_slot_of<t_type>& t_extension::f_type_slot<t_font_options>()
-{
-	return v_type_font_options;
-}
-
-template<>
-inline t_slot_of<t_type>& t_extension::f_type_slot<cairo_antialias_t>()
-{
-	return v_type_antialias;
-}
-
-template<>
-inline t_slot_of<t_type>& t_extension::f_type_slot<cairo_subpixel_order_t>()
-{
-	return v_type_subpixel_order;
-}
-
-template<>
-inline t_slot_of<t_type>& t_extension::f_type_slot<cairo_hint_style_t>()
-{
-	return v_type_hint_style;
-}
-
-template<>
-inline t_slot_of<t_type>& t_extension::f_type_slot<cairo_hint_metrics_t>()
-{
-	return v_type_hint_metrics;
-}
-
-template<>
-inline t_slot_of<t_type>& t_extension::f_type_slot<t_surface>()
-{
-	return v_type_surface;
-}
-
-template<>
-inline t_slot_of<t_type>& t_extension::f_type_slot<cairo_content_t>()
-{
-	return v_type_content;
-}
-
-template<>
-inline t_slot_of<t_type>& t_extension::f_type_slot<cairo_surface_type_t>()
-{
-	return v_type_surface_type;
-}
-
-template<>
-inline t_slot_of<t_type>& t_extension::f_type_slot<t_image_surface>()
-{
-	return v_type_image_surface;
-}
-
-template<>
-inline t_slot_of<t_type>& t_extension::f_type_slot<cairo_format_t>()
-{
-	return v_type_format;
-}
-
-template<>
-inline t_slot_of<t_type>& t_extension::f_type_slot<t_pattern>()
-{
-	return v_type_pattern;
-}
-
-template<>
-inline t_slot_of<t_type>& t_extension::f_type_slot<t_solid_pattern>()
-{
-	return v_type_solid_pattern;
-}
-
-template<>
-inline t_slot_of<t_type>& t_extension::f_type_slot<t_surface_pattern>()
-{
-	return v_type_surface_pattern;
-}
-
-template<>
-inline t_slot_of<t_type>& t_extension::f_type_slot<t_gradient>()
-{
-	return v_type_gradient;
-}
-
-template<>
-inline t_slot_of<t_type>& t_extension::f_type_slot<t_linear_gradient>()
-{
-	return v_type_linear_gradient;
-}
-
-template<>
-inline t_slot_of<t_type>& t_extension::f_type_slot<t_radial_gradient>()
-{
-	return v_type_radial_gradient;
-}
-
-template<>
-inline t_slot_of<t_type>& t_extension::f_type_slot<cairo_extend_t>()
-{
-	return v_type_extend;
-}
-
-template<>
-inline t_slot_of<t_type>& t_extension::f_type_slot<cairo_filter_t>()
-{
-	return v_type_filter;
-}
-
-template<>
-inline t_slot_of<t_type>& t_extension::f_type_slot<cairo_pattern_type_t>()
-{
-	return v_type_pattern_type;
-}
-
-template<>
-inline t_slot_of<t_type>& t_extension::f_type_slot<t_font_face>()
-{
-	return v_type_font_face;
-}
-
-template<>
-inline t_slot_of<t_type>& t_extension::f_type_slot<cairo_font_type_t>()
-{
-	return v_type_font_type;
-}
-
-template<>
-inline t_slot_of<t_type>& t_extension::f_type_slot<cairo_font_slant_t>()
-{
-	return v_type_font_slant;
-}
-
-template<>
-inline t_slot_of<t_type>& t_extension::f_type_slot<cairo_font_weight_t>()
-{
-	return v_type_font_weight;
-}
-
-template<>
-inline t_slot_of<t_type>& t_extension::f_type_slot<t_toy_font_face>()
-{
-	return v_type_toy_font_face;
-}
-
-template<>
-inline t_slot_of<t_type>& t_extension::f_type_slot<t_scaled_font>()
-{
-	return v_type_scaled_font;
-}
-
-template<>
-inline t_slot_of<t_type>& t_extension::f_type_slot<t_context>()
-{
-	return v_type_context;
-}
-
-template<>
-inline t_slot_of<t_type>& t_extension::f_type_slot<cairo_fill_rule_t>()
-{
-	return v_type_fill_rule;
-}
-
-template<>
-inline t_slot_of<t_type>& t_extension::f_type_slot<cairo_line_cap_t>()
-{
-	return v_type_line_cap;
-}
-
-template<>
-inline t_slot_of<t_type>& t_extension::f_type_slot<cairo_line_join_t>()
-{
-	return v_type_line_join;
-}
-
-template<>
-inline t_slot_of<t_type>& t_extension::f_type_slot<cairo_operator_t>()
-{
-	return v_type_operator;
-}
+XEMMAI__LIBRARY__TYPE(t_library, matrix)
+XEMMAI__LIBRARY__TYPE_AS(t_library, cairo_status_t, status)
+XEMMAI__LIBRARY__TYPE(t_library, font_options)
+XEMMAI__LIBRARY__TYPE_AS(t_library, cairo_antialias_t, antialias)
+XEMMAI__LIBRARY__TYPE_AS(t_library, cairo_subpixel_order_t, subpixel_order)
+XEMMAI__LIBRARY__TYPE_AS(t_library, cairo_hint_style_t, hint_style)
+XEMMAI__LIBRARY__TYPE_AS(t_library, cairo_hint_metrics_t, hint_metrics)
+XEMMAI__LIBRARY__TYPE(t_library, surface)
+XEMMAI__LIBRARY__TYPE_AS(t_library, cairo_content_t, content)
+XEMMAI__LIBRARY__TYPE_AS(t_library, cairo_surface_type_t, surface_type)
+XEMMAI__LIBRARY__TYPE(t_library, image_surface)
+XEMMAI__LIBRARY__TYPE_AS(t_library, cairo_format_t, format)
+XEMMAI__LIBRARY__TYPE(t_library, pattern)
+XEMMAI__LIBRARY__TYPE(t_library, solid_pattern)
+XEMMAI__LIBRARY__TYPE(t_library, surface_pattern)
+XEMMAI__LIBRARY__TYPE_AS(t_library, cairo_extend_t, extend)
+XEMMAI__LIBRARY__TYPE_AS(t_library, cairo_filter_t, filter)
+XEMMAI__LIBRARY__TYPE_AS(t_library, cairo_pattern_type_t, pattern_type)
+XEMMAI__LIBRARY__TYPE(t_library, gradient)
+XEMMAI__LIBRARY__TYPE(t_library, linear_gradient)
+XEMMAI__LIBRARY__TYPE(t_library, radial_gradient)
+XEMMAI__LIBRARY__TYPE_AS(t_library, cairo_font_slant_t, font_slant)
+XEMMAI__LIBRARY__TYPE_AS(t_library, cairo_font_weight_t, font_weight)
+XEMMAI__LIBRARY__TYPE(t_library, font_face)
+XEMMAI__LIBRARY__TYPE_AS(t_library, cairo_font_type_t, font_type)
+XEMMAI__LIBRARY__TYPE(t_library, toy_font_face)
+XEMMAI__LIBRARY__TYPE(t_library, scaled_font)
+XEMMAI__LIBRARY__TYPE(t_library, context)
+XEMMAI__LIBRARY__TYPE_AS(t_library, cairo_fill_rule_t, fill_rule)
+XEMMAI__LIBRARY__TYPE_AS(t_library, cairo_line_cap_t, line_cap)
+XEMMAI__LIBRARY__TYPE_AS(t_library, cairo_line_join_t, line_join)
+XEMMAI__LIBRARY__TYPE_AS(t_library, cairo_operator_t, operator)
 
 template<typename T_base>
 struct t_instantiatable : T_base
@@ -458,7 +301,7 @@ struct t_instantiatable : T_base
 };
 
 template<typename T>
-struct t_holds : t_instantiatable<t_underivable<t_bears<T>>>
+struct t_holds : t_instantiatable<t_bears<T>>
 {
 	template<typename T0>
 	struct t_cast
@@ -519,16 +362,16 @@ struct t_holds : t_instantiatable<t_underivable<t_bears<T>>>
 			}
 		}
 	};
-	typedef xemmaix::cairo::t_extension t_extension;
+	typedef xemmaix::cairo::t_library t_library;
 	typedef t_holds t_base;
 
-	template<typename T_extension, typename T_value>
-	static t_pvalue f_transfer(T_extension* a_extension, T_value&& a_value)
+	template<typename T_library, typename T_value>
+	static t_pvalue f_transfer(T_library* a_library, T_value&& a_value)
 	{
 		return t_object::f_of(a_value);
 	}
 
-	using t_instantiatable<t_underivable<t_bears<T>>>::t_instantiatable;
+	using t_instantiatable<t_bears<T>>::t_instantiatable;
 	static void f_do_finalize(t_object* a_this)
 	{
 		auto& p = a_this->f_as<T>();
@@ -543,9 +386,9 @@ namespace xemmai
 {
 
 template<>
-struct t_type_of<cairo_status_t> : t_enum_of<cairo_status_t, xemmaix::cairo::t_extension>
+struct t_type_of<cairo_status_t> : t_enum_of<cairo_status_t, xemmaix::cairo::t_library>
 {
-	static void f_define(t_extension* a_extension);
+	static t_object* f_define(t_library* a_library);
 
 	using t_base::t_base;
 };

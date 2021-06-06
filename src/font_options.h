@@ -92,29 +92,29 @@ namespace xemmai
 {
 
 template<>
-struct t_type_of<xemmaix::cairo::t_font_options> : xemmaix::cairo::t_instantiatable<t_underivable<t_bears<xemmaix::cairo::t_font_options>>>
+struct t_type_of<xemmaix::cairo::t_font_options> : xemmaix::cairo::t_instantiatable<t_bears<xemmaix::cairo::t_font_options>>
 {
-	typedef xemmaix::cairo::t_extension t_extension;
+	typedef xemmaix::cairo::t_library t_library;
 
 	static t_pvalue f_construct(t_type* a_class)
 	{
-		auto object = f_engine()->f_allocate(false, sizeof(xemmaix::cairo::t_font_options*));
+		auto object = f_engine()->f_allocate(sizeof(xemmaix::cairo::t_font_options*));
 		object->f_as<xemmaix::cairo::t_font_options*>() = xemmaix::cairo::t_font_options::f_create();
 		object->f_be(a_class);
 		return object;
 	}
 	static t_pvalue f_construct(t_type* a_class, const xemmaix::cairo::t_font_options* a_original)
 	{
-		auto object = f_engine()->f_allocate(false, sizeof(xemmaix::cairo::t_font_options*));
+		auto object = f_engine()->f_allocate(sizeof(xemmaix::cairo::t_font_options*));
 		object->f_as<xemmaix::cairo::t_font_options*>() = xemmaix::cairo::t_font_options::f_copy(a_original);
 		object->f_be(a_class);
 		return object;
 	}
 	static t_pvalue f_construct()
 	{
-		return f_construct(xemmaix::cairo::t_session::f_instance()->f_extension()->f_type<xemmaix::cairo::t_font_options>());
+		return f_construct(xemmaix::cairo::t_session::f_instance()->f_library()->f_type<xemmaix::cairo::t_font_options>());
 	}
-	static void f_define(t_extension* a_extension);
+	static void f_define(t_library* a_library);
 
 	using t_base::t_base;
 	static void f_do_finalize(t_object* a_this);
@@ -122,33 +122,33 @@ struct t_type_of<xemmaix::cairo::t_font_options> : xemmaix::cairo::t_instantiata
 };
 
 template<>
-struct t_type_of<cairo_antialias_t> : t_enum_of<cairo_antialias_t, xemmaix::cairo::t_extension>
+struct t_type_of<cairo_antialias_t> : t_enum_of<cairo_antialias_t, xemmaix::cairo::t_library>
 {
-	static void f_define(t_extension* a_extension);
+	static t_object* f_define(t_library* a_library);
 
 	using t_base::t_base;
 };
 
 template<>
-struct t_type_of<cairo_subpixel_order_t> : t_enum_of<cairo_subpixel_order_t, xemmaix::cairo::t_extension>
+struct t_type_of<cairo_subpixel_order_t> : t_enum_of<cairo_subpixel_order_t, xemmaix::cairo::t_library>
 {
-	static void f_define(t_extension* a_extension);
+	static t_object* f_define(t_library* a_library);
 
 	using t_base::t_base;
 };
 
 template<>
-struct t_type_of<cairo_hint_style_t> : t_enum_of<cairo_hint_style_t, xemmaix::cairo::t_extension>
+struct t_type_of<cairo_hint_style_t> : t_enum_of<cairo_hint_style_t, xemmaix::cairo::t_library>
 {
-	static void f_define(t_extension* a_extension);
+	static t_object* f_define(t_library* a_library);
 
 	using t_base::t_base;
 };
 
 template<>
-struct t_type_of<cairo_hint_metrics_t> : t_enum_of<cairo_hint_metrics_t, xemmaix::cairo::t_extension>
+struct t_type_of<cairo_hint_metrics_t> : t_enum_of<cairo_hint_metrics_t, xemmaix::cairo::t_library>
 {
-	static void f_define(t_extension* a_extension);
+	static t_object* f_define(t_library* a_library);
 
 	using t_base::t_base;
 };

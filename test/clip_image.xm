@@ -2,7 +2,7 @@ system = Module("system"
 io = Module("io"
 math = Module("math"
 cairo = Module("cairo"
-Module("draw-sample")(system.arguments[0], @(context)
+Module("draw-sample").do(system.arguments[0], @(context)
 	context.arc(128.0, 128.0, 76.8, 0.0, 2.0 * math.PI
 	context.clip(
 	context.new_path(

@@ -3,10 +3,10 @@
 namespace xemmai
 {
 
-void t_type_of<xemmaix::cairo::t_scaled_font>::f_define(t_extension* a_extension)
+void t_type_of<xemmaix::cairo::t_scaled_font>::f_define(t_library* a_library)
 {
 	using namespace xemmaix::cairo;
-	t_define<t_scaled_font, t_object>(a_extension, L"ScaledFont"sv)
+	t_define{a_library}
 		(L"acquire"sv, t_member<void(t_scaled_font::*)(), &t_scaled_font::f_acquire>())
 		(L"release"sv, t_member<void(t_scaled_font::*)(), &t_scaled_font::f_release>())
 		(L"status"sv, t_member<cairo_status_t(t_scaled_font::*)() const, &t_scaled_font::f_status>())
@@ -20,7 +20,7 @@ void t_type_of<xemmaix::cairo::t_scaled_font>::f_define(t_extension* a_extension
 		(L"get_font_matrix"sv, t_member<t_matrix(t_scaled_font::*)() const, &t_scaled_font::f_get_font_matrix>())
 		(L"get_font_matrix"sv, t_member<t_matrix(t_scaled_font::*)() const, &t_scaled_font::f_get_font_matrix>())
 		(L"get_type"sv, t_member<cairo_font_type_t(t_scaled_font::*)() const, &t_scaled_font::f_get_type>())
-	;
+	.f_derive<t_scaled_font, t_object>();
 }
 
 t_pvalue t_type_of<xemmaix::cairo::t_scaled_font>::f_do_construct(t_pvalue* a_stack, size_t a_n)

@@ -35,7 +35,7 @@ public:
 	using t_base::f_construct;
 	static t_pvalue f_construct(t_type* a_class, t_surface& a_target)
 	{
-		return f_transfer(a_class->f_new<t_context>(false, cairo_create(a_target)));
+		return f_transfer(a_class->f_new<t_context>(cairo_create(a_target)));
 	}
 
 	void f_acquire()
@@ -110,16 +110,16 @@ public:
 	{
 		return cairo_get_antialias(v_value);
 	}
-	void f_set_dash(const t_array& a_dashes, double a_offset);
+	void f_set_dash(const t_list& a_dashes, double a_offset);
 	t_pvalue f_get_dash() const
 	{
 		int n = cairo_get_dash_count(v_value);
 		std::vector<double> dashes(n);
 		double offset;
 		cairo_get_dash(v_value, &dashes[0], &offset);
-		auto p = t_array::f_instantiate();
-		auto& array = f_as<t_array&>(p);
-		for (int i = 0; i < n; ++i) array.f_push(f_global()->f_as(dashes[i]));
+		auto p = t_list::f_instantiate();
+		auto& list = f_as<t_list&>(p);
+		for (int i = 0; i < n; ++i) list.f_push(f_global()->f_as(dashes[i]));
 		return f_tuple(p, offset);
 	}
 	void f_set_fill_rule(cairo_fill_rule_t a_fill_rule)
@@ -496,40 +496,40 @@ struct t_type_of<xemmaix::cairo::t_context> : xemmaix::cairo::t_holds<xemmaix::c
 {
 	typedef xemmaix::cairo::t_context t_context;
 
-	static void f_define(t_extension* a_extension);
+	static void f_define(t_library* a_library);
 
 	using t_base::t_base;
 	t_pvalue f_do_construct(t_pvalue* a_stack, size_t a_n);
 };
 
 template<>
-struct t_type_of<cairo_fill_rule_t> : t_enum_of<cairo_fill_rule_t, xemmaix::cairo::t_extension>
+struct t_type_of<cairo_fill_rule_t> : t_enum_of<cairo_fill_rule_t, xemmaix::cairo::t_library>
 {
-	static void f_define(t_extension* a_extension);
+	static t_object* f_define(t_library* a_library);
 
 	using t_base::t_base;
 };
 
 template<>
-struct t_type_of<cairo_line_cap_t> : t_enum_of<cairo_line_cap_t, xemmaix::cairo::t_extension>
+struct t_type_of<cairo_line_cap_t> : t_enum_of<cairo_line_cap_t, xemmaix::cairo::t_library>
 {
-	static void f_define(t_extension* a_extension);
+	static t_object* f_define(t_library* a_library);
 
 	using t_base::t_base;
 };
 
 template<>
-struct t_type_of<cairo_line_join_t> : t_enum_of<cairo_line_join_t, xemmaix::cairo::t_extension>
+struct t_type_of<cairo_line_join_t> : t_enum_of<cairo_line_join_t, xemmaix::cairo::t_library>
 {
-	static void f_define(t_extension* a_extension);
+	static t_object* f_define(t_library* a_library);
 
 	using t_base::t_base;
 };
 
 template<>
-struct t_type_of<cairo_operator_t> : t_enum_of<cairo_operator_t, xemmaix::cairo::t_extension>
+struct t_type_of<cairo_operator_t> : t_enum_of<cairo_operator_t, xemmaix::cairo::t_library>
 {
-	static void f_define(t_extension* a_extension);
+	static t_object* f_define(t_library* a_library);
 
 	using t_base::t_base;
 };

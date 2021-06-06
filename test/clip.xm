@@ -1,5 +1,5 @@
 math = Module("math"
-Module("draw-sample")(Module("system").arguments[0], @(context)
+Module("draw-sample").do(Module("system").arguments[0], @(context)
 	context.arc(128.0, 128.0, 76.8, 0.0, 2.0 * math.PI
 	context.clip(
 	context.new_path(

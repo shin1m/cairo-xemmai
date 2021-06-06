@@ -2,7 +2,7 @@ system = Module("system"
 io = Module("io"
 math = Module("math"
 cairo = Module("cairo"
-Module("draw-sample")(system.arguments[0], @(context)
+Module("draw-sample").do(system.arguments[0], @(context)
 	image = cairo.ImageSurface.create_from_png((io.Path(system.script) / "../data/romedalen.png").__string(
 	w = Float(image.get_width(
 	h = Float(image.get_height(

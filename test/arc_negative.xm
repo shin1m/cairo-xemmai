@@ -1,5 +1,5 @@
 math = Module("math"
-Module("draw-sample")(Module("system").arguments[0], @(context)
+Module("draw-sample").do(Module("system").arguments[0], @(context)
 	xc = 128.0
 	yc = 128.0
 	radius = 100.0

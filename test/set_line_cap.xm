@@ -1,6 +1,6 @@
 math = Module("math"
 cairo = Module("cairo"
-Module("draw-sample")(Module("system").arguments[0], @(context)
+Module("draw-sample").do(Module("system").arguments[0], @(context)
 	context.set_line_width(30.0
 	context.set_line_cap(cairo.LineCap.BUTT
 	context.move_to(64.0, 50.0

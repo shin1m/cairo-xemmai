@@ -3,7 +3,7 @@
 namespace xemmaix::cairo
 {
 
-void t_context::f_set_dash(const t_array& a_dashes, double a_offset)
+void t_context::f_set_dash(const t_list& a_dashes, double a_offset)
 {
 	size_t n = a_dashes.f_size();
 	std::vector<double> dashes(n);
@@ -20,10 +20,10 @@ void t_context::f_set_dash(const t_array& a_dashes, double a_offset)
 namespace xemmai
 {
 
-void t_type_of<xemmaix::cairo::t_context>::f_define(t_extension* a_extension)
+void t_type_of<xemmaix::cairo::t_context>::f_define(t_library* a_library)
 {
 	using namespace xemmaix::cairo;
-	t_define<t_context, t_object>(a_extension, L"Context"sv)
+	t_define{a_library}
 		(L"acquire"sv, t_member<void(t_context::*)(), &t_context::f_acquire>())
 		(L"release"sv, t_member<void(t_context::*)(), &t_context::f_release>())
 		(L"status"sv, t_member<cairo_status_t(t_context::*)() const, &t_context::f_status>())
@@ -44,7 +44,7 @@ void t_type_of<xemmaix::cairo::t_context>::f_define(t_extension* a_extension)
 		(L"get_source"sv, t_member<t_pattern*(t_context::*)() const, &t_context::f_get_source>())
 		(L"set_antialias"sv, t_member<void(t_context::*)(cairo_antialias_t), &t_context::f_set_antialias>())
 		(L"get_antialias"sv, t_member<cairo_antialias_t(t_context::*)() const, &t_context::f_get_antialias>())
-		(L"set_dash"sv, t_member<void(t_context::*)(const t_array&, double), &t_context::f_set_dash, t_with_lock_for_read>())
+		(L"set_dash"sv, t_member<void(t_context::*)(const t_list&, double), &t_context::f_set_dash>())
 		(L"get_dash"sv, t_member<t_pvalue(t_context::*)() const, &t_context::f_get_dash>())
 		(L"set_fill_rule"sv, t_member<void(t_context::*)(cairo_fill_rule_t), &t_context::f_set_fill_rule>())
 		(L"get_fill_rule"sv, t_member<cairo_fill_rule_t(t_context::*)() const, &t_context::f_get_fill_rule>())
@@ -128,7 +128,7 @@ void t_type_of<xemmaix::cairo::t_context>::f_define(t_extension* a_extension)
 		(L"font_extents"sv, t_member<t_pvalue(t_context::*)() const, &t_context::f_font_extents>())
 		(L"text_extents"sv, t_member<t_pvalue(t_context::*)(std::wstring_view) const, &t_context::f_text_extents>())
 		//(L"glyph_extents"sv, t_member<t_pvalue(t_context::*)(const cairo_glyph_t*, int) const, &t_context::f_glyph_extents>())
-	;
+	.f_derive<t_context, t_object>();
 }
 
 t_pvalue t_type_of<xemmaix::cairo::t_context>::f_do_construct(t_pvalue* a_stack, size_t a_n)
@@ -136,35 +136,39 @@ t_pvalue t_type_of<xemmaix::cairo::t_context>::f_do_construct(t_pvalue* a_stack,
 	return t_construct_with<t_pvalue(*)(t_type*, xemmaix::cairo::t_surface&), xemmaix::cairo::t_context::f_construct>::t_bind<xemmaix::cairo::t_context>::f_do(this, a_stack, a_n);
 }
 
-void t_type_of<cairo_fill_rule_t>::f_define(t_extension* a_extension)
+t_object* t_type_of<cairo_fill_rule_t>::f_define(t_library* a_library)
 {
-	t_define<cairo_fill_rule_t, intptr_t>(a_extension, L"FillRule"sv)
+	t_define{a_library}.f_derive<cairo_fill_rule_t, intptr_t>();
+	return a_library->f_type<cairo_fill_rule_t>()->f_do_derive({{}, t_define(a_library)
 		(L"WINDING"sv, CAIRO_FILL_RULE_WINDING)
 		(L"EVEN_ODD"sv, CAIRO_FILL_RULE_EVEN_ODD)
-	;
+	});
 }
 
-void t_type_of<cairo_line_cap_t>::f_define(t_extension* a_extension)
+t_object* t_type_of<cairo_line_cap_t>::f_define(t_library* a_library)
 {
-	t_define<cairo_line_cap_t, intptr_t>(a_extension, L"LineCap"sv)
+	t_define{a_library}.f_derive<cairo_line_cap_t, intptr_t>();
+	return a_library->f_type<cairo_line_cap_t>()->f_do_derive({{}, t_define(a_library)
 		(L"BUTT"sv, CAIRO_LINE_CAP_BUTT)
 		(L"ROUND"sv, CAIRO_LINE_CAP_ROUND)
 		(L"SQUARE"sv, CAIRO_LINE_CAP_SQUARE)
-	;
+	});
 }
 
-void t_type_of<cairo_line_join_t>::f_define(t_extension* a_extension)
+t_object* t_type_of<cairo_line_join_t>::f_define(t_library* a_library)
 {
-	t_define<cairo_line_join_t, intptr_t>(a_extension, L"LineJoin"sv)
+	t_define{a_library}.f_derive<cairo_line_join_t, intptr_t>();
+	return a_library->f_type<cairo_line_join_t>()->f_do_derive({{}, t_define(a_library)
 		(L"MITER"sv, CAIRO_LINE_JOIN_MITER)
 		(L"ROUND"sv, CAIRO_LINE_JOIN_ROUND)
 		(L"BEVEL"sv, CAIRO_LINE_JOIN_BEVEL)
-	;
+	});
 }
 
-void t_type_of<cairo_operator_t>::f_define(t_extension* a_extension)
+t_object* t_type_of<cairo_operator_t>::f_define(t_library* a_library)
 {
-	t_define<cairo_operator_t, intptr_t>(a_extension, L"Operator"sv)
+	t_define{a_library}.f_derive<cairo_operator_t, intptr_t>();
+	return a_library->f_type<cairo_operator_t>()->f_do_derive({{}, t_define(a_library)
 		(L"CLEAR"sv, CAIRO_OPERATOR_CLEAR)
 		(L"SOURCE"sv, CAIRO_OPERATOR_SOURCE)
 		(L"OVER"sv, CAIRO_OPERATOR_OVER)
@@ -179,7 +183,7 @@ void t_type_of<cairo_operator_t>::f_define(t_extension* a_extension)
 		(L"XOR"sv, CAIRO_OPERATOR_XOR)
 		(L"ADD"sv, CAIRO_OPERATOR_ADD)
 		(L"SATURATE"sv, CAIRO_OPERATOR_SATURATE)
-	;
+	});
 }
 
 }

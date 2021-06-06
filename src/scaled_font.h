@@ -41,7 +41,7 @@ public:
 	{
 		if (!a_value) return nullptr;
 		t_scaled_font* p = f_from(a_value);
-		return p ? p : &f_new<t_scaled_font>(t_session::f_instance()->f_extension(), false, a_value)->f_as<t_scaled_font>();
+		return p ? p : &f_new<t_scaled_font>(t_session::f_instance()->f_library(), a_value)->f_as<t_scaled_font>();
 	}
 
 	void f_acquire()
@@ -120,7 +120,7 @@ namespace xemmai
 template<>
 struct t_type_of<xemmaix::cairo::t_scaled_font> : xemmaix::cairo::t_holds<xemmaix::cairo::t_scaled_font>
 {
-	static void f_define(t_extension* a_extension);
+	static void f_define(t_library* a_library);
 
 	using t_base::t_base;
 	t_pvalue f_do_construct(t_pvalue* a_stack, size_t a_n);

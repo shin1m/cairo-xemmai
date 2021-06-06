@@ -33,7 +33,7 @@ t_session* t_session::f_instance()
 }
 #endif
 
-t_session::t_session(t_extension* a_extension) : t_entry(false), v_extension(a_extension)
+t_session::t_session(t_library* a_library) : t_entry(false), v_library(a_library)
 {
 	if (v_instance) f_throw(L"already inside main."sv);
 	v_instance = this;
@@ -57,52 +57,15 @@ void t_proxy::f_destroy()
 namespace
 {
 
-void f_main(t_extension* a_extension, const t_pvalue& a_callable)
+void f_main(t_library* a_library, const t_pvalue& a_callable)
 {
-	t_session session(a_extension);
+	t_session session(a_library);
 	a_callable();
 }
 
 }
 
-t_extension::t_extension(t_object* a_module) : xemmai::t_extension(a_module)
-{
-	t_type_of<t_matrix>::f_define(this);
-	t_type_of<cairo_status_t>::f_define(this);
-	t_type_of<t_font_options>::f_define(this);
-	t_type_of<cairo_antialias_t>::f_define(this);
-	t_type_of<cairo_subpixel_order_t>::f_define(this);
-	t_type_of<cairo_hint_style_t>::f_define(this);
-	t_type_of<cairo_hint_metrics_t>::f_define(this);
-	t_type_of<t_surface>::f_define(this);
-	t_type_of<cairo_content_t>::f_define(this);
-	t_type_of<cairo_surface_type_t>::f_define(this);
-	t_type_of<t_image_surface>::f_define(this);
-	t_type_of<cairo_format_t>::f_define(this);
-	t_type_of<t_pattern>::f_define(this);
-	t_type_of<t_solid_pattern>::f_define(this);
-	t_type_of<t_surface_pattern>::f_define(this);
-	t_type_of<t_gradient>::f_define(this);
-	t_type_of<t_linear_gradient>::f_define(this);
-	t_type_of<t_radial_gradient>::f_define(this);
-	t_type_of<cairo_extend_t>::f_define(this);
-	t_type_of<cairo_filter_t>::f_define(this);
-	t_type_of<cairo_pattern_type_t>::f_define(this);
-	t_type_of<t_font_face>::f_define(this);
-	t_type_of<cairo_font_type_t>::f_define(this);
-	t_type_of<cairo_font_slant_t>::f_define(this);
-	t_type_of<cairo_font_weight_t>::f_define(this);
-	t_type_of<t_toy_font_face>::f_define(this);
-	t_type_of<t_scaled_font>::f_define(this);
-	t_type_of<t_context>::f_define(this);
-	t_type_of<cairo_fill_rule_t>::f_define(this);
-	t_type_of<cairo_line_cap_t>::f_define(this);
-	t_type_of<cairo_line_join_t>::f_define(this);
-	t_type_of<cairo_operator_t>::f_define(this);
-	f_define<void(*)(t_extension*, const t_pvalue&), f_main>(this, L"main"sv);
-}
-
-void t_extension::f_scan(t_scan a_scan)
+void t_library::f_scan(t_scan a_scan)
 {
 	a_scan(v_type_matrix);
 	a_scan(v_type_status);
@@ -115,20 +78,22 @@ void t_extension::f_scan(t_scan a_scan)
 	a_scan(v_type_content);
 	a_scan(v_type_surface_type);
 	a_scan(v_type_image_surface);
+	a_scan(v_type_gif_surface);
+	a_scan(v_type_gif_surfaces);
 	a_scan(v_type_format);
 	a_scan(v_type_pattern);
 	a_scan(v_type_solid_pattern);
 	a_scan(v_type_surface_pattern);
-	a_scan(v_type_gradient);
-	a_scan(v_type_linear_gradient);
-	a_scan(v_type_radial_gradient);
 	a_scan(v_type_extend);
 	a_scan(v_type_filter);
 	a_scan(v_type_pattern_type);
-	a_scan(v_type_font_face);
-	a_scan(v_type_font_type);
+	a_scan(v_type_gradient);
+	a_scan(v_type_linear_gradient);
+	a_scan(v_type_radial_gradient);
 	a_scan(v_type_font_slant);
 	a_scan(v_type_font_weight);
+	a_scan(v_type_font_face);
+	a_scan(v_type_font_type);
 	a_scan(v_type_toy_font_face);
 	a_scan(v_type_scaled_font);
 	a_scan(v_type_context);
@@ -138,14 +103,68 @@ void t_extension::f_scan(t_scan a_scan)
 	a_scan(v_type_operator);
 }
 
+std::vector<std::pair<t_root, t_rvalue>> t_library::f_define()
+{
+	t_type_of<t_matrix>::f_define(this);
+	t_type_of<t_font_options>::f_define(this);
+	t_type_of<t_surface>::f_define(this);
+	t_type_of<t_image_surface>::f_define(this);
+	t_type_of<t_pattern>::f_define(this);
+	t_type_of<t_solid_pattern>::f_define(this);
+	t_type_of<t_surface_pattern>::f_define(this);
+	t_type_of<t_gradient>::f_define(this);
+	t_type_of<t_linear_gradient>::f_define(this);
+	t_type_of<t_radial_gradient>::f_define(this);
+	t_type_of<t_font_face>::f_define(this);
+	t_type_of<t_toy_font_face>::f_define(this);
+	t_type_of<t_scaled_font>::f_define(this);
+	t_type_of<t_context>::f_define(this);
+	return t_define(this)
+		(L"Matrix"sv, t_object::f_of(v_type_matrix))
+		(L"Status"sv, t_type_of<cairo_status_t>::f_define(this))
+		(L"FontOptions"sv, t_object::f_of(v_type_font_options))
+		(L"Antialias"sv, t_type_of<cairo_antialias_t>::f_define(this))
+		(L"SubpixelOrder"sv, t_type_of<cairo_subpixel_order_t>::f_define(this))
+		(L"HintStyle"sv, t_type_of<cairo_hint_style_t>::f_define(this))
+		(L"HintMetrics"sv, t_type_of<cairo_hint_metrics_t>::f_define(this))
+		(L"Surface"sv, t_object::f_of(v_type_surface))
+		(L"Content"sv, t_type_of<cairo_content_t>::f_define(this))
+		(L"SurfaceType"sv, t_type_of<cairo_surface_type_t>::f_define(this))
+		(L"ImageSurface"sv, t_object::f_of(v_type_image_surface))
+		(L"Format"sv, t_type_of<cairo_format_t>::f_define(this))
+		(L"Pattern"sv, t_object::f_of(v_type_pattern))
+		(L"SolidPattern"sv, t_object::f_of(v_type_solid_pattern))
+		(L"SurfacePattern"sv, t_object::f_of(v_type_surface_pattern))
+		(L"Extend"sv, t_type_of<cairo_extend_t>::f_define(this))
+		(L"Filter"sv, t_type_of<cairo_filter_t>::f_define(this))
+		(L"PatternType"sv, t_type_of<cairo_pattern_type_t>::f_define(this))
+		(L"Gradient"sv, t_object::f_of(v_type_gradient))
+		(L"LinearGradient"sv, t_object::f_of(v_type_linear_gradient))
+		(L"RadialGradient"sv, t_object::f_of(v_type_radial_gradient))
+		(L"FontSlant"sv, t_type_of<cairo_font_slant_t>::f_define(this))
+		(L"FontWeight"sv, t_type_of<cairo_font_weight_t>::f_define(this))
+		(L"FontFace"sv, t_object::f_of(v_type_font_face))
+		(L"FontType"sv, t_type_of<cairo_font_type_t>::f_define(this))
+		(L"ToyFontFace"sv, t_object::f_of(v_type_toy_font_face))
+		(L"ScaledFont"sv, t_object::f_of(v_type_scaled_font))
+		(L"Context"sv, t_object::f_of(v_type_context))
+		(L"FillRule"sv, t_type_of<cairo_fill_rule_t>::f_define(this))
+		(L"LineCap"sv, t_type_of<cairo_line_cap_t>::f_define(this))
+		(L"LineJoin"sv, t_type_of<cairo_line_join_t>::f_define(this))
+		(L"Operator"sv, t_type_of<cairo_operator_t>::f_define(this))
+		(L"main"sv, t_static<void(*)(t_library*, const t_pvalue&), f_main>())
+	;
+}
+
 }
 
 namespace xemmai
 {
 
-void t_type_of<cairo_status_t>::f_define(t_extension* a_extension)
+t_object* t_type_of<cairo_status_t>::f_define(t_library* a_library)
 {
-	t_define<cairo_status_t, intptr_t>(a_extension, L"Status"sv)
+	t_define{a_library}.f_derive<cairo_status_t, intptr_t>();
+	return a_library->f_type<cairo_status_t>()->f_do_derive({{}, t_define(a_library)
 		(L"SUCCESS"sv, CAIRO_STATUS_SUCCESS)
 		(L"NO_MEMORY"sv, CAIRO_STATUS_NO_MEMORY)
 		(L"INVALID_RESTORE"sv, CAIRO_STATUS_INVALID_RESTORE)
@@ -178,12 +197,12 @@ void t_type_of<cairo_status_t>::f_define(t_extension* a_extension)
 		(L"INVALID_CLUSTERS"sv, CAIRO_STATUS_INVALID_CLUSTERS)
 		(L"INVALID_SLANT"sv, CAIRO_STATUS_INVALID_SLANT)
 		(L"INVALID_WEIGHT"sv, CAIRO_STATUS_INVALID_WEIGHT)
-	;
+	});
 }
 
 }
 
-XEMMAI__MODULE__FACTORY(xemmai::t_object* a_module)
+XEMMAI__MODULE__FACTORY(xemmai::t_library::t_handle* a_handle)
 {
-	return new xemmaix::cairo::t_extension(a_module);
+	return xemmai::f_new<xemmaix::cairo::t_library>(a_handle);
 }

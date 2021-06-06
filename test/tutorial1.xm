@@ -1,7 +1,7 @@
 cairo = Module("cairo"
 range = @(i, j, callable) for ; i < j; i = i + 1
 	callable(i
-Module("draw-tutorial")(Module("system").arguments[0], @(context)
+Module("draw-tutorial").do(Module("system").arguments[0], @(context)
 	radial = cairo.RadialGradient(0.25, 0.25, 0.1, 0.5, 0.5, 0.5
 	radial.add_color_stop_rgb(0.0, 1.0, 0.8, 0.8
 	radial.add_color_stop_rgb(1.0, 0.9, 0.0, 0.0

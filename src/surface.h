@@ -38,7 +38,7 @@ public:
 	using t_base::f_construct;
 	static t_pvalue f_construct(t_type* a_class, t_surface& a_other, cairo_content_t a_content, int a_width, int a_height)
 	{
-		return f_transfer(a_class->f_new<t_surface>(false, cairo_surface_create_similar(a_other, a_content, a_width, a_height)));
+		return f_transfer(a_class->f_new<t_surface>(cairo_surface_create_similar(a_other, a_content, a_width, a_height)));
 	}
 	static t_surface* f_wrap(cairo_surface_t* a_value);
 
@@ -227,19 +227,19 @@ public:
 		if (a_width < 0 || a_height < 0 || stride < 0) f_throw(L"invalid arguments."sv);
 		auto data = t_bytes::f_instantiate(stride * a_height);
 		auto& bytes = f_as<t_bytes&>(data);
-		return f_transfer(a_class->f_new<t_image_surface>(false, cairo_image_surface_create_for_data(&bytes[0], a_format, a_width, a_height, stride), data));
+		return f_transfer(a_class->f_new<t_image_surface>(cairo_image_surface_create_for_data(&bytes[0], a_format, a_width, a_height, stride), data));
 	}
 	static t_pvalue f_construct(t_type* a_class, const t_pvalue& a_data, cairo_format_t a_format, int a_width, int a_height, int a_stride)
 	{
 		f_check<t_bytes>(a_data, L"data");
 		auto& bytes = f_as<t_bytes&>(a_data);
 		if (a_width < 0 || a_height < 0 || a_stride < 0 || static_cast<int>(bytes.f_size()) < a_stride * a_height) f_throw(L"invalid arguments."sv);
-		return f_transfer(a_class->f_new<t_image_surface>(false, cairo_image_surface_create_for_data(&bytes[0], a_format, a_width, a_height, a_stride), a_data));
+		return f_transfer(a_class->f_new<t_image_surface>(cairo_image_surface_create_for_data(&bytes[0], a_format, a_width, a_height, a_stride), a_data));
 	}
 	static t_pvalue f_create_from_png_source(t_image_source& a_source);
 	static t_pvalue f_create_from_png(std::wstring_view a_path)
 	{
-		return f_transfer(f_new<t_image_surface>(t_session::f_instance()->f_extension(), false, cairo_image_surface_create_from_png(f_convert(a_path).c_str())));
+		return f_transfer(f_new<t_image_surface>(t_session::f_instance()->f_library(), cairo_image_surface_create_from_png(f_convert(a_path).c_str())));
 	}
 	static t_pvalue f_create_from_png_stream(const t_pvalue& a_read);
 	static t_pvalue f_create_from_jpeg_source(t_image_source& a_source);
@@ -292,24 +292,24 @@ namespace xemmai
 template<>
 struct t_type_of<xemmaix::cairo::t_surface> : xemmaix::cairo::t_holds<xemmaix::cairo::t_surface>
 {
-	static void f_define(t_extension* a_extension);
+	static void f_define(t_library* a_library);
 
 	using t_base::t_base;
 	t_pvalue f_do_construct(t_pvalue* a_stack, size_t a_n);
 };
 
 template<>
-struct t_type_of<cairo_content_t> : t_enum_of<cairo_content_t, xemmaix::cairo::t_extension>
+struct t_type_of<cairo_content_t> : t_enum_of<cairo_content_t, xemmaix::cairo::t_library>
 {
-	static void f_define(t_extension* a_extension);
+	static t_object* f_define(t_library* a_library);
 
 	using t_base::t_base;
 };
 
 template<>
-struct t_type_of<cairo_surface_type_t> : t_enum_of<cairo_surface_type_t, xemmaix::cairo::t_extension>
+struct t_type_of<cairo_surface_type_t> : t_enum_of<cairo_surface_type_t, xemmaix::cairo::t_library>
 {
-	static void f_define(t_extension* a_extension);
+	static t_object* f_define(t_library* a_library);
 
 	using t_base::t_base;
 };
@@ -317,16 +317,16 @@ struct t_type_of<cairo_surface_type_t> : t_enum_of<cairo_surface_type_t, xemmaix
 template<>
 struct t_type_of<xemmaix::cairo::t_image_surface> : t_bears<xemmaix::cairo::t_image_surface, t_type_of<xemmaix::cairo::t_surface>>
 {
-	static void f_define(t_extension* a_extension);
+	static void f_define(t_library* a_library);
 
 	using t_base::t_base;
 	t_pvalue f_do_construct(t_pvalue* a_stack, size_t a_n);
 };
 
 template<>
-struct t_type_of<cairo_format_t> : t_enum_of<cairo_format_t, xemmaix::cairo::t_extension>
+struct t_type_of<cairo_format_t> : t_enum_of<cairo_format_t, xemmaix::cairo::t_library>
 {
-	static void f_define(t_extension* a_extension);
+	static t_object* f_define(t_library* a_library);
 
 	using t_base::t_base;
 };
