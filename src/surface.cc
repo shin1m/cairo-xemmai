@@ -65,7 +65,9 @@ size_t t_file_source::f_read(size_t a_offset)
 {
 	t_safe_region region;
 	auto& bytes = f_as<t_bytes&>(v_buffer);
-	return io::t_file::f_read(bytes, a_offset, bytes.f_size() - a_offset);
+	size_t n = std::fread(&bytes[0] + a_offset, 1, bytes.f_size() - a_offset, *this);
+	if (n <= 0 && std::ferror(*this)) f_throw(L"failed to read."sv);
+	return n;
 }
 
 size_t t_stream_source::f_read(size_t a_offset)

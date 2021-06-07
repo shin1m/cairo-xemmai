@@ -181,13 +181,13 @@ public:
 	}
 };
 
-class t_file_source : public t_image_source, public io::t_file
+class t_file_source : public t_image_source, public io::t_FILE
 {
 protected:
 	virtual size_t f_read(size_t a_offset);
 
 public:
-	t_file_source(std::wstring_view a_path) : io::t_file(a_path, "rb")
+	t_file_source(std::wstring_view a_path) : io::t_FILE(std::fopen(portable::f_convert(a_path).c_str(), "rb"))
 	{
 	}
 };
