@@ -37,46 +37,54 @@ t_pvalue t_type_of<xemmaix::cairo::t_font_options>::f_do_construct(t_pvalue* a_s
 
 t_object* t_type_of<cairo_antialias_t>::f_define(t_library* a_library)
 {
-	t_define{a_library}.f_derive<cairo_antialias_t, intptr_t>();
-	return a_library->f_type<cairo_antialias_t>()->f_do_derive({{}, t_define(a_library)
+	return t_base::f_define(a_library, [](auto a_fields)
+	{
+		a_fields
 		(L"DEFAULT"sv, CAIRO_ANTIALIAS_DEFAULT)
 		(L"NONE"sv, CAIRO_ANTIALIAS_NONE)
 		(L"GRAY"sv, CAIRO_ANTIALIAS_GRAY)
 		(L"SUBPIXEL"sv, CAIRO_ANTIALIAS_SUBPIXEL)
+		;
 	});
 }
 
 t_object* t_type_of<cairo_subpixel_order_t>::f_define(t_library* a_library)
 {
-	t_define{a_library}.f_derive<cairo_subpixel_order_t, intptr_t>();
-	return a_library->f_type<cairo_subpixel_order_t>()->f_do_derive({{}, t_define(a_library)
+	return t_base::f_define(a_library, [](auto a_fields)
+	{
+		a_fields
 		(L"DEFAULT"sv, CAIRO_SUBPIXEL_ORDER_DEFAULT)
 		(L"RGB"sv, CAIRO_SUBPIXEL_ORDER_RGB)
 		(L"BGR"sv, CAIRO_SUBPIXEL_ORDER_BGR)
 		(L"VRGB"sv, CAIRO_SUBPIXEL_ORDER_VRGB)
 		(L"VBGR"sv, CAIRO_SUBPIXEL_ORDER_VBGR)
+		;
 	});
 }
 
 t_object* t_type_of<cairo_hint_style_t>::f_define(t_library* a_library)
 {
-	t_define{a_library}.f_derive<cairo_hint_style_t, intptr_t>();
-	return a_library->f_type<cairo_hint_style_t>()->f_do_derive({{}, t_define(a_library)
+	return t_base::f_define(a_library, [](auto a_fields)
+	{
+		a_fields
 		(L"DEFAULT"sv, CAIRO_HINT_STYLE_DEFAULT)
 		(L"NONE"sv, CAIRO_HINT_STYLE_NONE)
 		(L"SLIGHT"sv, CAIRO_HINT_STYLE_SLIGHT)
 		(L"MEDIUM"sv, CAIRO_HINT_STYLE_MEDIUM)
 		(L"FULL"sv, CAIRO_HINT_STYLE_FULL)
+		;
 	});
 }
 
 t_object* t_type_of<cairo_hint_metrics_t>::f_define(t_library* a_library)
 {
-	t_define{a_library}.f_derive<cairo_hint_metrics_t, intptr_t>();
-	return a_library->f_type<cairo_hint_metrics_t>()->f_do_derive({{}, t_define(a_library)
+	return t_base::f_define(a_library, [](auto a_fields)
+	{
+		a_fields
 		(L"DEFAULT"sv, CAIRO_HINT_METRICS_DEFAULT)
 		(L"OFF"sv, CAIRO_HINT_METRICS_OFF)
 		(L"ON"sv, CAIRO_HINT_METRICS_ON)
+		;
 	});
 }
 

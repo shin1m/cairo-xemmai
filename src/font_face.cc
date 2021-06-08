@@ -24,20 +24,24 @@ namespace xemmai
 
 t_object* t_type_of<cairo_font_slant_t>::f_define(t_library* a_library)
 {
-	t_define{a_library}.f_derive<cairo_font_slant_t, intptr_t>();
-	return a_library->f_type<cairo_font_slant_t>()->f_do_derive({{}, t_define(a_library)
+	return t_base::f_define(a_library, [](auto a_fields)
+	{
+		a_fields
 		(L"NORMAL"sv, CAIRO_FONT_SLANT_NORMAL)
 		(L"ITALIC"sv, CAIRO_FONT_SLANT_ITALIC)
 		(L"OBLIQUE"sv, CAIRO_FONT_SLANT_OBLIQUE)
+		;
 	});
 }
 
 t_object* t_type_of<cairo_font_weight_t>::f_define(t_library* a_library)
 {
-	t_define{a_library}.f_derive<cairo_font_weight_t, intptr_t>();
-	return a_library->f_type<cairo_font_weight_t>()->f_do_derive({{}, t_define(a_library)
+	return t_base::f_define(a_library, [](auto a_fields)
+	{
+		a_fields
 		(L"NORMAL"sv, CAIRO_FONT_WEIGHT_NORMAL)
 		(L"BOLD"sv, CAIRO_FONT_WEIGHT_BOLD)
+		;
 	});
 }
 
@@ -59,13 +63,15 @@ t_pvalue t_type_of<xemmaix::cairo::t_font_face>::f_do_construct(t_pvalue* a_stac
 
 t_object* t_type_of<cairo_font_type_t>::f_define(t_library* a_library)
 {
-	t_define{a_library}.f_derive<cairo_font_type_t, intptr_t>();
-	return a_library->f_type<cairo_font_type_t>()->f_do_derive({{}, t_define(a_library)
+	return t_base::f_define(a_library, [](auto a_fields)
+	{
+		a_fields
 		(L"TOY"sv, CAIRO_FONT_TYPE_TOY)
 		(L"FT"sv, CAIRO_FONT_TYPE_FT)
 		(L"WIN32"sv, CAIRO_FONT_TYPE_WIN32)
 		(L"QUARTZ"sv, CAIRO_FONT_TYPE_QUARTZ)
 		(L"USER"sv, CAIRO_FONT_TYPE_USER)
+		;
 	});
 }
 

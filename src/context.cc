@@ -138,37 +138,44 @@ t_pvalue t_type_of<xemmaix::cairo::t_context>::f_do_construct(t_pvalue* a_stack,
 
 t_object* t_type_of<cairo_fill_rule_t>::f_define(t_library* a_library)
 {
-	t_define{a_library}.f_derive<cairo_fill_rule_t, intptr_t>();
-	return a_library->f_type<cairo_fill_rule_t>()->f_do_derive({{}, t_define(a_library)
+	return t_base::f_define(a_library, [](auto a_fields)
+	{
+		a_fields
 		(L"WINDING"sv, CAIRO_FILL_RULE_WINDING)
 		(L"EVEN_ODD"sv, CAIRO_FILL_RULE_EVEN_ODD)
+		;
 	});
 }
 
 t_object* t_type_of<cairo_line_cap_t>::f_define(t_library* a_library)
 {
-	t_define{a_library}.f_derive<cairo_line_cap_t, intptr_t>();
-	return a_library->f_type<cairo_line_cap_t>()->f_do_derive({{}, t_define(a_library)
+	return t_base::f_define(a_library, [](auto a_fields)
+	{
+		a_fields
 		(L"BUTT"sv, CAIRO_LINE_CAP_BUTT)
 		(L"ROUND"sv, CAIRO_LINE_CAP_ROUND)
 		(L"SQUARE"sv, CAIRO_LINE_CAP_SQUARE)
+		;
 	});
 }
 
 t_object* t_type_of<cairo_line_join_t>::f_define(t_library* a_library)
 {
-	t_define{a_library}.f_derive<cairo_line_join_t, intptr_t>();
-	return a_library->f_type<cairo_line_join_t>()->f_do_derive({{}, t_define(a_library)
+	return t_base::f_define(a_library, [](auto a_fields)
+	{
+		a_fields
 		(L"MITER"sv, CAIRO_LINE_JOIN_MITER)
 		(L"ROUND"sv, CAIRO_LINE_JOIN_ROUND)
 		(L"BEVEL"sv, CAIRO_LINE_JOIN_BEVEL)
+		;
 	});
 }
 
 t_object* t_type_of<cairo_operator_t>::f_define(t_library* a_library)
 {
-	t_define{a_library}.f_derive<cairo_operator_t, intptr_t>();
-	return a_library->f_type<cairo_operator_t>()->f_do_derive({{}, t_define(a_library)
+	return t_base::f_define(a_library, [](auto a_fields)
+	{
+		a_fields
 		(L"CLEAR"sv, CAIRO_OPERATOR_CLEAR)
 		(L"SOURCE"sv, CAIRO_OPERATOR_SOURCE)
 		(L"OVER"sv, CAIRO_OPERATOR_OVER)
@@ -183,6 +190,7 @@ t_object* t_type_of<cairo_operator_t>::f_define(t_library* a_library)
 		(L"XOR"sv, CAIRO_OPERATOR_XOR)
 		(L"ADD"sv, CAIRO_OPERATOR_ADD)
 		(L"SATURATE"sv, CAIRO_OPERATOR_SATURATE)
+		;
 	});
 }
 

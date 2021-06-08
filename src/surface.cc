@@ -189,18 +189,21 @@ t_pvalue t_type_of<xemmaix::cairo::t_surface>::f_do_construct(t_pvalue* a_stack,
 
 t_object* t_type_of<cairo_content_t>::f_define(t_library* a_library)
 {
-	t_define{a_library}.f_derive<cairo_content_t, intptr_t>();
-	return a_library->f_type<cairo_content_t>()->f_do_derive({{}, t_define(a_library)
+	return t_base::f_define(a_library, [](auto a_fields)
+	{
+		a_fields
 		(L"COLOR"sv, CAIRO_CONTENT_COLOR)
 		(L"ALPHA"sv, CAIRO_CONTENT_ALPHA)
 		(L"COLOR_ALPHA"sv, CAIRO_CONTENT_COLOR_ALPHA)
+		;
 	});
 }
 
 t_object* t_type_of<cairo_surface_type_t>::f_define(t_library* a_library)
 {
-	t_define{a_library}.f_derive<cairo_surface_type_t, intptr_t>();
-	return a_library->f_type<cairo_surface_type_t>()->f_do_derive({{}, t_define(a_library)
+	return t_base::f_define(a_library, [](auto a_fields)
+	{
+		a_fields
 		(L"IMAGE"sv, CAIRO_SURFACE_TYPE_IMAGE)
 		(L"PDF"sv, CAIRO_SURFACE_TYPE_PDF)
 		(L"PS"sv, CAIRO_SURFACE_TYPE_PS)
@@ -215,6 +218,7 @@ t_object* t_type_of<cairo_surface_type_t>::f_define(t_library* a_library)
 		(L"OS2"sv, CAIRO_SURFACE_TYPE_OS2)
 		(L"WIN32_PRINTING"sv, CAIRO_SURFACE_TYPE_WIN32_PRINTING)
 		(L"QUARTZ_IMAGE"sv, CAIRO_SURFACE_TYPE_QUARTZ_IMAGE)
+		;
 	});
 }
 
@@ -264,12 +268,14 @@ t_pvalue t_type_of<xemmaix::cairo::t_image_surface>::f_do_construct(t_pvalue* a_
 
 t_object* t_type_of<cairo_format_t>::f_define(t_library* a_library)
 {
-	t_define{a_library}.f_derive<cairo_format_t, intptr_t>();
-	return a_library->f_type<cairo_format_t>()->f_do_derive({{}, t_define(a_library)
+	return t_base::f_define(a_library, [](auto a_fields)
+	{
+		a_fields
 		(L"ARGB32"sv, CAIRO_FORMAT_ARGB32)
 		(L"RGB24"sv, CAIRO_FORMAT_RGB24)
 		(L"A8"sv, CAIRO_FORMAT_A8)
 		(L"A1"sv, CAIRO_FORMAT_A1)
+		;
 	});
 }
 

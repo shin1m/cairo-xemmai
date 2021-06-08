@@ -163,8 +163,9 @@ namespace xemmai
 
 t_object* t_type_of<cairo_status_t>::f_define(t_library* a_library)
 {
-	t_define{a_library}.f_derive<cairo_status_t, intptr_t>();
-	return a_library->f_type<cairo_status_t>()->f_do_derive({{}, t_define(a_library)
+	return t_base::f_define(a_library, [](auto a_fields)
+	{
+		a_fields
 		(L"SUCCESS"sv, CAIRO_STATUS_SUCCESS)
 		(L"NO_MEMORY"sv, CAIRO_STATUS_NO_MEMORY)
 		(L"INVALID_RESTORE"sv, CAIRO_STATUS_INVALID_RESTORE)
@@ -197,6 +198,7 @@ t_object* t_type_of<cairo_status_t>::f_define(t_library* a_library)
 		(L"INVALID_CLUSTERS"sv, CAIRO_STATUS_INVALID_CLUSTERS)
 		(L"INVALID_SLANT"sv, CAIRO_STATUS_INVALID_SLANT)
 		(L"INVALID_WEIGHT"sv, CAIRO_STATUS_INVALID_WEIGHT)
+		;
 	});
 }
 

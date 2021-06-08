@@ -81,36 +81,42 @@ t_pvalue t_type_of<xemmaix::cairo::t_surface_pattern>::f_do_construct(t_pvalue* 
 
 t_object* t_type_of<cairo_extend_t>::f_define(t_library* a_library)
 {
-	t_define{a_library}.f_derive<cairo_extend_t, intptr_t>();
-	return a_library->f_type<cairo_extend_t>()->f_do_derive({{}, t_define(a_library)
+	return t_base::f_define(a_library, [](auto a_fields)
+	{
+		a_fields
 		(L"NONE"sv, CAIRO_EXTEND_NONE)
 		(L"REPEAT"sv, CAIRO_EXTEND_REPEAT)
 		(L"REFLECT"sv, CAIRO_EXTEND_REFLECT)
 		(L"PAD"sv, CAIRO_EXTEND_PAD)
+		;
 	});
 }
 
 t_object* t_type_of<cairo_filter_t>::f_define(t_library* a_library)
 {
-	t_define{a_library}.f_derive<cairo_filter_t, intptr_t>();
-	return a_library->f_type<cairo_filter_t>()->f_do_derive({{}, t_define(a_library)
+	return t_base::f_define(a_library, [](auto a_fields)
+	{
+		a_fields
 		(L"FAST"sv, CAIRO_FILTER_FAST)
 		(L"GOOD"sv, CAIRO_FILTER_GOOD)
 		(L"BEST"sv, CAIRO_FILTER_BEST)
 		(L"NEAREST"sv, CAIRO_FILTER_NEAREST)
 		(L"BILINEAR"sv, CAIRO_FILTER_BILINEAR)
 		(L"GAUSSIAN"sv, CAIRO_FILTER_GAUSSIAN)
+		;
 	});
 }
 
 t_object* t_type_of<cairo_pattern_type_t>::f_define(t_library* a_library)
 {
-	t_define{a_library}.f_derive<cairo_pattern_type_t, intptr_t>();
-	return a_library->f_type<cairo_pattern_type_t>()->f_do_derive({{}, t_define(a_library)
+	return t_base::f_define(a_library, [](auto a_fields)
+	{
+		a_fields
 		(L"SOLID"sv, CAIRO_PATTERN_TYPE_SOLID)
 		(L"SURFACE"sv, CAIRO_PATTERN_TYPE_SURFACE)
 		(L"LINEAR"sv, CAIRO_PATTERN_TYPE_LINEAR)
 		(L"RADIAL"sv, CAIRO_PATTERN_TYPE_RADIAL)
+		;
 	});
 }
 
