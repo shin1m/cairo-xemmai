@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
-project(cairo-xemmai VERSION 202105)
-find_package(xemmai 202105 REQUIRED)
+project(cairo-xemmai VERSION 202205)
+find_package(xemmai 202205 REQUIRED)
 find_package(PkgConfig)
 pkg_check_modules(CAIRO REQUIRED cairo>=1.8)
 find_package(JPEG)
