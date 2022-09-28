@@ -125,7 +125,7 @@ template<typename T, typename T_value>
 class t_proxy_of : public t_proxy
 {
 protected:
-	typedef t_proxy_of t_base;
+	using t_base = t_proxy_of;
 
 	template<typename T_type>
 	static t_pvalue f_construct_shared(t_type* a_class, T_value* a_value)
@@ -244,7 +244,7 @@ public:
 	template<typename T>
 	t_pvalue f_as(T&& a_value) const
 	{
-		typedef t_type_of<typename t_fundamental<T>::t_type> t;
+		using t = t_type_of<typename t_fundamental<T>::t_type>;
 		return t::f_transfer(f_library<typename t::t_library>(), std::forward<T>(a_value));
 	}
 };
@@ -291,7 +291,7 @@ XEMMAI__LIBRARY__TYPE_AS(t_library, cairo_operator_t, operator)
 template<typename T_base>
 struct t_instantiatable : T_base
 {
-	typedef t_instantiatable t_base;
+	using t_base = t_instantiatable;
 
 	using T_base::T_base;
 	void f_do_instantiate(t_pvalue* a_stack, size_t a_n)
@@ -362,8 +362,8 @@ struct t_holds : t_instantiatable<t_bears<T>>
 			}
 		}
 	};
-	typedef xemmaix::cairo::t_library t_library;
-	typedef t_holds t_base;
+	using t_library = xemmaix::cairo::t_library;
+	using t_base = t_holds;
 
 	template<typename T_library, typename T_value>
 	static t_pvalue f_transfer(T_library* a_library, T_value&& a_value)

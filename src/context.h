@@ -494,7 +494,7 @@ namespace xemmai
 template<>
 struct t_type_of<xemmaix::cairo::t_context> : xemmaix::cairo::t_holds<xemmaix::cairo::t_context>
 {
-	typedef xemmaix::cairo::t_context t_context;
+	using t_context = xemmaix::cairo::t_context;
 
 	static void f_define(t_library* a_library);
 

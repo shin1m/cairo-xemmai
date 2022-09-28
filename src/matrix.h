@@ -81,7 +81,7 @@ namespace xemmai
 template<>
 struct t_type_of<xemmaix::cairo::t_matrix> : xemmaix::cairo::t_instantiatable<t_holds<xemmaix::cairo::t_matrix>>
 {
-	typedef xemmaix::cairo::t_library t_library;
+	using t_library = xemmaix::cairo::t_library;
 
 	template<typename T_library, typename T>
 	static t_pvalue f_transfer(T_library* a_library, T&& a_value)

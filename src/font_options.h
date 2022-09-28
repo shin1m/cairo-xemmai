@@ -94,7 +94,7 @@ namespace xemmai
 template<>
 struct t_type_of<xemmaix::cairo::t_font_options> : xemmaix::cairo::t_instantiatable<t_bears<xemmaix::cairo::t_font_options>>
 {
-	typedef xemmaix::cairo::t_library t_library;
+	using t_library = xemmaix::cairo::t_library;
 
 	static t_pvalue f_construct(t_type* a_class)
 	{
