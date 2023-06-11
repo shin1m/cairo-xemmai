@@ -83,10 +83,9 @@ struct t_type_of<xemmaix::cairo::t_matrix> : xemmaix::cairo::t_instantiatable<t_
 {
 	using t_library = xemmaix::cairo::t_library;
 
-	template<typename T_library, typename T>
-	static t_pvalue f_transfer(T_library* a_library, T&& a_value)
+	static t_pvalue f_transfer(auto* a_library, auto&& a_value)
 	{
-		return xemmai::f_new<typename t_fundamental<T>::t_type>(a_library, std::forward<T>(a_value));
+		return xemmai::f_new<typename t_fundamental<decltype(a_value)>::t_type>(a_library, std::forward<decltype(a_value)>(a_value));
 	}
 	static void f_define(t_library* a_library);
 

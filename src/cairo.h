@@ -135,7 +135,7 @@ protected:
 			if (p->v_n > 0) T::f_unreference(a_value);
 			return f_transfer(t_object::f_of(p));
 		} else {
-			return f_transfer(a_class->template f_new<T_type>(a_value));
+			return f_transfer(a_class->f_new<T_type>(a_value));
 		}
 	}
 
@@ -158,7 +158,7 @@ public:
 	}
 	static t_pvalue f_construct(t_type* a_class, T_value* a_value)
 	{
-		return f_transfer(a_class->template f_new<T>(a_value));
+		return f_transfer(a_class->f_new<T>(a_value));
 	}
 
 	virtual void f_dispose()
@@ -276,61 +276,44 @@ struct t_instantiatable : T_base
 template<typename T>
 struct t_holds : t_instantiatable<t_bears<T>>
 {
-	template<typename T0>
+	template<typename U>
+	static U& f_cast(auto&& a_object)
+	{
+		auto& p = static_cast<t_object*>(a_object)->f_as<U>();
+		if (!p.f_valid()) f_throw(L"accessing from other thread."sv);
+		if (!p) f_throw(L"already destroyed."sv);
+		return p;
+	}
+	template<typename U>
 	struct t_cast
 	{
-		template<typename T1>
-		static T0& f_call(T1&& a_object)
+		static U f_as(auto&& a_object)
 		{
-			auto& p = t_base::f_object(std::forward<T1>(a_object))->template f_as<T0>();
-			if (!p.f_valid()) f_throw(L"accessing from other thread."sv);
-			if (!p) f_throw(L"already destroyed."sv);
-			return p;
+			return f_cast<typename t_fundamental<U>::t_type>(std::forward<decltype(a_object)>(a_object));
+		}
+		static bool f_is(auto&& a_object)
+		{
+			auto p = static_cast<t_object*>(a_object);
+			return reinterpret_cast<uintptr_t>(p) >= e_tag__OBJECT && p->f_type()->f_derives<typename t_fundamental<U>::t_type>();
 		}
 	};
-	template<typename T0>
-	struct t_as
+	template<typename U>
+	struct t_cast<U*>
 	{
-		template<typename T1>
-		static T0 f_call(T1&& a_object)
+		static U* f_as(auto&& a_object)
 		{
-			return t_cast<typename t_fundamental<T0>::t_type>::f_call(std::forward<T1>(a_object));
+			return static_cast<t_object*>(a_object) ? &f_cast<U>(std::forward<decltype(a_object)>(a_object)) : nullptr;
 		}
-	};
-	template<typename T0>
-	struct t_as<T0*>
-	{
-		template<typename T1>
-		static T0* f_call(T1&& a_object)
+		static bool f_is(auto&& a_object)
 		{
-			return t_base::f_object(std::forward<T1>(a_object)) ? &t_cast<T0>::f_call(std::forward<T1>(a_object)) : nullptr;
-		}
-	};
-	template<typename T0>
-	struct t_is
-	{
-		template<typename T1>
-		static bool f_call(T1&& a_object)
-		{
-			auto p = t_base::f_object(std::forward<T1>(a_object));
-			return reinterpret_cast<uintptr_t>(p) >= e_tag__OBJECT && p->f_type()->template f_derives<typename t_fundamental<T0>::t_type>();
-		}
-	};
-	template<typename T0>
-	struct t_is<T0*>
-	{
-		template<typename T1>
-		static bool f_call(T1&& a_object)
-		{
-			auto p = t_base::f_object(std::forward<T1>(a_object));
-			return reinterpret_cast<uintptr_t>(p) == e_tag__NULL || reinterpret_cast<uintptr_t>(p) >= e_tag__OBJECT && p->f_type()->template f_derives<typename t_fundamental<T0>::t_type>();
+			auto p = static_cast<t_object*>(a_object);
+			return reinterpret_cast<uintptr_t>(p) == e_tag__NULL || reinterpret_cast<uintptr_t>(p) >= e_tag__OBJECT && p->f_type()->f_derives<typename t_fundamental<U>::t_type>();
 		}
 	};
 	using t_library = xemmaix::cairo::t_library;
 	using t_base = t_holds;
 
-	template<typename T_library, typename T_value>
-	static t_pvalue f_transfer(T_library* a_library, T_value&& a_value)
+	static t_pvalue f_transfer(auto* a_library, auto&& a_value)
 	{
 		return t_object::f_of(a_value);
 	}
