@@ -181,14 +181,25 @@ public:
 	}
 };
 
-class t_file_source : public t_image_source, public io::t_FILE
+class t_file_source : public t_image_source
 {
+	std::FILE* v_file;
+
 protected:
 	virtual size_t f_read(size_t a_offset);
 
 public:
-	t_file_source(std::wstring_view a_path) : io::t_FILE(std::fopen(portable::f_convert(a_path).c_str(), "rb"))
+	t_file_source(std::wstring_view a_path) : v_file(std::fopen(portable::f_convert(a_path).c_str(), "rb"))
 	{
+		if (!v_file) portable::f_throw_system_error();
+	}
+	~t_file_source()
+	{
+		std::fclose(v_file);
+	}
+	operator std::FILE*() const
+	{
+		return v_file;
 	}
 };
 
