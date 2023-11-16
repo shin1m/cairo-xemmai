@@ -8,12 +8,11 @@ cairo_status_t t_surface::f_write_stream(void* a_closure, const unsigned char* a
 	auto& write = *static_cast<const t_pvalue**>(a_closure)[0];
 	auto& buffer = *static_cast<const t_pvalue**>(a_closure)[1];
 	auto& bytes = f_as<t_bytes&>(buffer);
-	auto zero = f_global()->f_as(0);
 	try {
 		while (a_length > 0) {
 			size_t m = std::min(bytes.f_size(), static_cast<size_t>(a_length));
 			std::copy(a_data, a_data + m, &bytes[0]);
-			write(buffer, zero, f_global()->f_as(m));
+			write(buffer, 0, m);
 			a_data += m;
 			a_length -= m;
 		}
@@ -73,7 +72,7 @@ size_t t_file_source::f_read(size_t a_offset)
 size_t t_stream_source::f_read(size_t a_offset)
 {
 	auto& bytes = f_as<t_bytes&>(v_buffer);
-	auto p = v_read(v_buffer, f_global()->f_as(a_offset), f_global()->f_as(bytes.f_size() - a_offset));
+	auto p = v_read(v_buffer, a_offset, bytes.f_size() - a_offset);
 	f_check<size_t>(p, L"result of read");
 	return f_as<size_t>(p);
 }

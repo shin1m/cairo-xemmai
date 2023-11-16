@@ -119,7 +119,7 @@ public:
 		cairo_get_dash(v_value, &dashes[0], &offset);
 		auto p = t_list::f_instantiate();
 		auto& list = f_as<t_list&>(p);
-		for (int i = 0; i < n; ++i) list.f_push(f_global()->f_as(dashes[i]));
+		for (int i = 0; i < n; ++i) list.f_push(dashes[i]);
 		return f_tuple(p, offset);
 	}
 	void f_set_fill_rule(cairo_fill_rule_t a_fill_rule)
