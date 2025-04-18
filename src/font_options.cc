@@ -7,18 +7,18 @@ void t_type_of<xemmaix::cairo::t_font_options>::f_define(t_library* a_library)
 {
 	using namespace xemmaix::cairo;
 	t_define{a_library}
-		(L"status"sv, t_member<cairo_status_t(*)(t_font_options*), t_font_options::f_status>())
-		(L"merge"sv, t_member<void(*)(t_font_options*, const t_font_options*), t_font_options::f_merge>())
-		(L"hash"sv, t_member<intptr_t(*)(const t_font_options*), t_font_options::f_hash>())
-		(L"equal"sv, t_member<bool(*)(const t_font_options*, const t_font_options*), t_font_options::f_equal>())
-		(L"set_antialias"sv, t_member<void(*)(t_font_options*, cairo_antialias_t), t_font_options::f_set_antialias>())
-		(L"get_antialias"sv, t_member<cairo_antialias_t(*)(const t_font_options*), t_font_options::f_get_antialias>())
-		(L"set_subpixel_order"sv, t_member<void(*)(t_font_options*, cairo_subpixel_order_t), t_font_options::f_set_subpixel_order>())
-		(L"get_subpixel_order"sv, t_member<cairo_subpixel_order_t(*)(const t_font_options*), t_font_options::f_get_subpixel_order>())
-		(L"set_hint_style"sv, t_member<void(*)(t_font_options*, cairo_hint_style_t), t_font_options::f_set_hint_style>())
-		(L"get_hint_style"sv, t_member<cairo_hint_style_t(*)(const t_font_options*), t_font_options::f_get_hint_style>())
-		(L"set_hint_metrics"sv, t_member<void(*)(t_font_options*, cairo_hint_metrics_t), t_font_options::f_set_hint_metrics>())
-		(L"get_hint_metrics"sv, t_member<cairo_hint_metrics_t(*)(const t_font_options*), t_font_options::f_get_hint_metrics>())
+	(L"status"sv, t_member<cairo_status_t(*)(t_font_options*), t_font_options::f_status>())
+	(L"merge"sv, t_member<void(*)(t_font_options*, const t_font_options*), t_font_options::f_merge>())
+	(L"hash"sv, t_member<intptr_t(*)(const t_font_options*), t_font_options::f_hash>())
+	(L"equal"sv, t_member<bool(*)(const t_font_options*, const t_font_options*), t_font_options::f_equal>())
+	(L"set_antialias"sv, t_member<void(*)(t_font_options*, cairo_antialias_t), t_font_options::f_set_antialias>())
+	(L"get_antialias"sv, t_member<cairo_antialias_t(*)(const t_font_options*), t_font_options::f_get_antialias>())
+	(L"set_subpixel_order"sv, t_member<void(*)(t_font_options*, cairo_subpixel_order_t), t_font_options::f_set_subpixel_order>())
+	(L"get_subpixel_order"sv, t_member<cairo_subpixel_order_t(*)(const t_font_options*), t_font_options::f_get_subpixel_order>())
+	(L"set_hint_style"sv, t_member<void(*)(t_font_options*, cairo_hint_style_t), t_font_options::f_set_hint_style>())
+	(L"get_hint_style"sv, t_member<cairo_hint_style_t(*)(const t_font_options*), t_font_options::f_get_hint_style>())
+	(L"set_hint_metrics"sv, t_member<void(*)(t_font_options*, cairo_hint_metrics_t), t_font_options::f_set_hint_metrics>())
+	(L"get_hint_metrics"sv, t_member<cairo_hint_metrics_t(*)(const t_font_options*), t_font_options::f_get_hint_metrics>())
 	.f_derive<t_font_options, t_object>();
 }
 

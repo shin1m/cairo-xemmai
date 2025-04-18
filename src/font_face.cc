@@ -49,10 +49,10 @@ void t_type_of<xemmaix::cairo::t_font_face>::f_define(t_library* a_library)
 {
 	using namespace xemmaix::cairo;
 	t_define{a_library}
-		(L"acquire"sv, t_member<void(t_font_face::*)(), &t_font_face::f_acquire>())
-		(L"release"sv, t_member<void(t_font_face::*)(), &t_font_face::f_release>())
-		(L"status"sv, t_member<cairo_status_t(t_font_face::*)() const, &t_font_face::f_status>())
-		(L"get_type"sv, t_member<cairo_font_type_t(t_font_face::*)() const, &t_font_face::f_get_type>())
+	(L"acquire"sv, t_member<void(t_font_face::*)(), &t_font_face::f_acquire>())
+	(L"release"sv, t_member<void(t_font_face::*)(), &t_font_face::f_release>())
+	(L"status"sv, t_member<cairo_status_t(t_font_face::*)() const, &t_font_face::f_status>())
+	(L"get_type"sv, t_member<cairo_font_type_t(t_font_face::*)() const, &t_font_face::f_get_type>())
 	.f_derive<t_font_face, t_object>();
 }
 
@@ -79,9 +79,9 @@ void t_type_of<xemmaix::cairo::t_toy_font_face>::f_define(t_library* a_library)
 {
 	using namespace xemmaix::cairo;
 	t_define{a_library}
-		(L"get_family"sv, t_member<std::wstring(t_toy_font_face::*)() const, &t_toy_font_face::f_get_family>())
-		(L"get_slant"sv, t_member<cairo_font_slant_t(t_toy_font_face::*)() const, &t_toy_font_face::f_get_slant>())
-		(L"get_weight"sv, t_member<cairo_font_weight_t(t_toy_font_face::*)() const, &t_toy_font_face::f_get_weight>())
+	(L"get_family"sv, t_member<std::wstring(t_toy_font_face::*)() const, &t_toy_font_face::f_get_family>())
+	(L"get_slant"sv, t_member<cairo_font_slant_t(t_toy_font_face::*)() const, &t_toy_font_face::f_get_slant>())
+	(L"get_weight"sv, t_member<cairo_font_weight_t(t_toy_font_face::*)() const, &t_toy_font_face::f_get_weight>())
 	.f_derive<t_toy_font_face, t_font_face>();
 }
 

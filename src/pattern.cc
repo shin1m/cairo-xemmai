@@ -32,12 +32,12 @@ void t_type_of<xemmaix::cairo::t_pattern>::f_define(t_library* a_library)
 {
 	using namespace xemmaix::cairo;
 	t_define{a_library}
-		(L"acquire"sv, t_member<void(t_pattern::*)(), &t_pattern::f_acquire>())
-		(L"release"sv, t_member<void(t_pattern::*)(), &t_pattern::f_release>())
-		(L"status"sv, t_member<cairo_status_t(t_pattern::*)() const, &t_pattern::f_status>())
-		(L"set_matrix"sv, t_member<void(t_pattern::*)(const t_matrix&), &t_pattern::f_set_matrix>())
-		(L"get_matrix"sv, t_member<t_matrix(t_pattern::*)() const, &t_pattern::f_get_matrix>())
-		(L"get_type"sv, t_member<cairo_pattern_type_t(t_pattern::*)() const, &t_pattern::f_get_type>())
+	(L"acquire"sv, t_member<void(t_pattern::*)(), &t_pattern::f_acquire>())
+	(L"release"sv, t_member<void(t_pattern::*)(), &t_pattern::f_release>())
+	(L"status"sv, t_member<cairo_status_t(t_pattern::*)() const, &t_pattern::f_status>())
+	(L"set_matrix"sv, t_member<void(t_pattern::*)(const t_matrix&), &t_pattern::f_set_matrix>())
+	(L"get_matrix"sv, t_member<t_matrix(t_pattern::*)() const, &t_pattern::f_get_matrix>())
+	(L"get_type"sv, t_member<cairo_pattern_type_t(t_pattern::*)() const, &t_pattern::f_get_type>())
 	.f_derive<t_pattern, t_object>();
 }
 
@@ -50,7 +50,7 @@ void t_type_of<xemmaix::cairo::t_solid_pattern>::f_define(t_library* a_library)
 {
 	using namespace xemmaix::cairo;
 	t_define{a_library}
-		(L"get_rgba"sv, t_member<t_pvalue(t_solid_pattern::*)() const, &t_solid_pattern::f_get_rgba>())
+	(L"get_rgba"sv, t_member<t_pvalue(t_solid_pattern::*)() const, &t_solid_pattern::f_get_rgba>())
 	.f_derive<t_solid_pattern, t_pattern>();
 }
 
@@ -66,11 +66,11 @@ void t_type_of<xemmaix::cairo::t_surface_pattern>::f_define(t_library* a_library
 {
 	using namespace xemmaix::cairo;
 	t_define{a_library}
-		(L"get_surface"sv, t_member<t_surface*(t_surface_pattern::*)() const, &t_surface_pattern::f_get_surface>())
-		(L"set_extend"sv, t_member<void(t_surface_pattern::*)(cairo_extend_t), &t_surface_pattern::f_set_extend>())
-		(L"get_extend"sv, t_member<cairo_extend_t(t_surface_pattern::*)() const, &t_surface_pattern::f_get_extend>())
-		(L"set_filter"sv, t_member<void(t_surface_pattern::*)(cairo_filter_t), &t_surface_pattern::f_set_filter>())
-		(L"get_filter"sv, t_member<cairo_filter_t(t_surface_pattern::*)() const, &t_surface_pattern::f_get_filter>())
+	(L"get_surface"sv, t_member<t_surface*(t_surface_pattern::*)() const, &t_surface_pattern::f_get_surface>())
+	(L"set_extend"sv, t_member<void(t_surface_pattern::*)(cairo_extend_t), &t_surface_pattern::f_set_extend>())
+	(L"get_extend"sv, t_member<cairo_extend_t(t_surface_pattern::*)() const, &t_surface_pattern::f_get_extend>())
+	(L"set_filter"sv, t_member<void(t_surface_pattern::*)(cairo_filter_t), &t_surface_pattern::f_set_filter>())
+	(L"get_filter"sv, t_member<cairo_filter_t(t_surface_pattern::*)() const, &t_surface_pattern::f_get_filter>())
 	.f_derive<t_surface_pattern, t_pattern>();
 }
 
@@ -124,10 +124,10 @@ void t_type_of<xemmaix::cairo::t_gradient>::f_define(t_library* a_library)
 {
 	using namespace xemmaix::cairo;
 	t_define{a_library}
-		(L"add_color_stop_rgb"sv, t_member<void(t_gradient::*)(double, double, double, double), &t_gradient::f_add_color_stop>())
-		(L"add_color_stop_rgba"sv, t_member<void(t_gradient::*)(double, double, double, double, double), &t_gradient::f_add_color_stop>())
-		(L"get_color_stop_count"sv, t_member<int(t_gradient::*)() const, &t_gradient::f_get_color_stop_count>())
-		(L"get_color_stop_rgba"sv, t_member<t_pvalue(t_gradient::*)(int) const, &t_gradient::f_get_color_stop_rgba>())
+	(L"add_color_stop_rgb"sv, t_member<void(t_gradient::*)(double, double, double, double), &t_gradient::f_add_color_stop>())
+	(L"add_color_stop_rgba"sv, t_member<void(t_gradient::*)(double, double, double, double, double), &t_gradient::f_add_color_stop>())
+	(L"get_color_stop_count"sv, t_member<int(t_gradient::*)() const, &t_gradient::f_get_color_stop_count>())
+	(L"get_color_stop_rgba"sv, t_member<t_pvalue(t_gradient::*)(int) const, &t_gradient::f_get_color_stop_rgba>())
 	.f_derive<t_gradient, t_pattern>();
 }
 
@@ -135,7 +135,7 @@ void t_type_of<xemmaix::cairo::t_linear_gradient>::f_define(t_library* a_library
 {
 	using namespace xemmaix::cairo;
 	t_define{a_library}
-		(L"get_linear_points"sv, t_member<t_pvalue(t_linear_gradient::*)() const, &t_linear_gradient::f_get_linear_points>())
+	(L"get_linear_points"sv, t_member<t_pvalue(t_linear_gradient::*)() const, &t_linear_gradient::f_get_linear_points>())
 	.f_derive<t_linear_gradient, t_gradient>();
 }
 
@@ -148,7 +148,7 @@ void t_type_of<xemmaix::cairo::t_radial_gradient>::f_define(t_library* a_library
 {
 	using namespace xemmaix::cairo;
 	t_define{a_library}
-		(L"get_radial_circles"sv, t_member<t_pvalue(t_radial_gradient::*)() const, &t_radial_gradient::f_get_radial_circles>())
+	(L"get_radial_circles"sv, t_member<t_pvalue(t_radial_gradient::*)() const, &t_radial_gradient::f_get_radial_circles>())
 	.f_derive<t_radial_gradient, t_gradient>();
 }
 
