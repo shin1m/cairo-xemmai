@@ -5,12 +5,12 @@ namespace xemmaix::cairo
 
 std::string f_convert(std::wstring_view a_x)
 {
-	return t_session::v_instance->v_convert.to_bytes(a_x.data(), a_x.data() + a_x.size());
+	return t_session::v_instance->v_to_utf8(a_x);
 }
 
 std::wstring f_convert(std::string_view a_x)
 {
-	return t_session::v_instance->v_convert.from_bytes(a_x.data(), a_x.data() + a_x.size());
+	return t_session::v_instance->v_from_utf8(a_x);
 }
 
 t_entry::t_entry() : v_previous(t_session::f_instance()), v_next(v_previous->v_next)
@@ -33,7 +33,7 @@ t_session* t_session::f_instance()
 }
 #endif
 
-t_session::t_session(t_library* a_library) : t_entry(false), v_library(a_library)
+t_session::t_session(t_library* a_library) : t_entry(false), v_library(a_library), v_to_utf8("utf-8", "wchar_t"), v_from_utf8("wchar_t", "utf-8")
 {
 	if (v_instance) f_throw(L"already inside main."sv);
 	v_instance = this;
