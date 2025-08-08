@@ -18,7 +18,7 @@ namespace xemmaix::cairo
 using namespace xemmai;
 
 class t_proxy;
-class t_library;
+struct t_library;
 struct t_matrix;
 struct t_font_options;
 class t_surface;
@@ -218,82 +218,53 @@ public:
 	}
 };
 
-class t_library : public xemmai::t_library
+struct t_library : xemmai::t_library
 {
-	t_slot_of<t_type> v_type_matrix;
-	t_slot_of<t_type> v_type_status;
-	t_slot_of<t_type> v_type_font_options;
-	t_slot_of<t_type> v_type_antialias;
-	t_slot_of<t_type> v_type_subpixel_order;
-	t_slot_of<t_type> v_type_hint_style;
-	t_slot_of<t_type> v_type_hint_metrics;
-	t_slot_of<t_type> v_type_surface;
-	t_slot_of<t_type> v_type_content;
-	t_slot_of<t_type> v_type_surface_type;
-	t_slot_of<t_type> v_type_image_surface;
-	t_slot_of<t_type> v_type_format;
-	t_slot_of<t_type> v_type_pattern;
-	t_slot_of<t_type> v_type_solid_pattern;
-	t_slot_of<t_type> v_type_surface_pattern;
-	t_slot_of<t_type> v_type_extend;
-	t_slot_of<t_type> v_type_filter;
-	t_slot_of<t_type> v_type_pattern_type;
-	t_slot_of<t_type> v_type_gradient;
-	t_slot_of<t_type> v_type_linear_gradient;
-	t_slot_of<t_type> v_type_radial_gradient;
-	t_slot_of<t_type> v_type_font_slant;
-	t_slot_of<t_type> v_type_font_weight;
-	t_slot_of<t_type> v_type_font_face;
-	t_slot_of<t_type> v_type_font_type;
-	t_slot_of<t_type> v_type_toy_font_face;
-	t_slot_of<t_type> v_type_scaled_font;
-	t_slot_of<t_type> v_type_context;
-	t_slot_of<t_type> v_type_fill_rule;
-	t_slot_of<t_type> v_type_line_cap;
-	t_slot_of<t_type> v_type_line_join;
-	t_slot_of<t_type> v_type_operator;
-
-public:
-	t_slot_of<t_type> v_type_gif_surface;
-	t_slot_of<t_type> v_type_gif_surfaces;
+#define XEMMAIX__CAIRO__TYPES(_)\
+	_(matrix)\
+	_##_AS(cairo_status_t, status)\
+	_(font_options)\
+	_##_AS(cairo_antialias_t, antialias)\
+	_##_AS(cairo_subpixel_order_t, subpixel_order)\
+	_##_AS(cairo_hint_style_t, hint_style)\
+	_##_AS(cairo_hint_metrics_t, hint_metrics)\
+	_(surface)\
+	_##_AS(cairo_content_t, content)\
+	_##_AS(cairo_surface_type_t, surface_type)\
+	_(image_surface)\
+	_##_JUST(gif_surface)\
+	_##_JUST(gif_surfaces)\
+	_##_AS(cairo_format_t, format)\
+	_(pattern)\
+	_(solid_pattern)\
+	_(surface_pattern)\
+	_##_AS(cairo_extend_t, extend)\
+	_##_AS(cairo_filter_t, filter)\
+	_##_AS(cairo_pattern_type_t, pattern_type)\
+	_(gradient)\
+	_(linear_gradient)\
+	_(radial_gradient)\
+	_##_AS(cairo_font_slant_t, font_slant)\
+	_##_AS(cairo_font_weight_t, font_weight)\
+	_(font_face)\
+	_##_AS(cairo_font_type_t, font_type)\
+	_(toy_font_face)\
+	_(scaled_font)\
+	_(context)\
+	_##_AS(cairo_fill_rule_t, fill_rule)\
+	_##_AS(cairo_line_cap_t, line_cap)\
+	_##_AS(cairo_line_join_t, line_join)\
+	_##_AS(cairo_operator_t, operator)
+	XEMMAIX__CAIRO__TYPES(XEMMAI__TYPE__DECLARE)
 
 	using xemmai::t_library::t_library;
 	XEMMAI__LIBRARY__MEMBERS
 };
 
 XEMMAI__LIBRARY__BASE(t_library, t_global, f_global())
-XEMMAI__LIBRARY__TYPE(t_library, matrix)
-XEMMAI__LIBRARY__TYPE_AS(t_library, cairo_status_t, status)
-XEMMAI__LIBRARY__TYPE(t_library, font_options)
-XEMMAI__LIBRARY__TYPE_AS(t_library, cairo_antialias_t, antialias)
-XEMMAI__LIBRARY__TYPE_AS(t_library, cairo_subpixel_order_t, subpixel_order)
-XEMMAI__LIBRARY__TYPE_AS(t_library, cairo_hint_style_t, hint_style)
-XEMMAI__LIBRARY__TYPE_AS(t_library, cairo_hint_metrics_t, hint_metrics)
-XEMMAI__LIBRARY__TYPE(t_library, surface)
-XEMMAI__LIBRARY__TYPE_AS(t_library, cairo_content_t, content)
-XEMMAI__LIBRARY__TYPE_AS(t_library, cairo_surface_type_t, surface_type)
-XEMMAI__LIBRARY__TYPE(t_library, image_surface)
-XEMMAI__LIBRARY__TYPE_AS(t_library, cairo_format_t, format)
-XEMMAI__LIBRARY__TYPE(t_library, pattern)
-XEMMAI__LIBRARY__TYPE(t_library, solid_pattern)
-XEMMAI__LIBRARY__TYPE(t_library, surface_pattern)
-XEMMAI__LIBRARY__TYPE_AS(t_library, cairo_extend_t, extend)
-XEMMAI__LIBRARY__TYPE_AS(t_library, cairo_filter_t, filter)
-XEMMAI__LIBRARY__TYPE_AS(t_library, cairo_pattern_type_t, pattern_type)
-XEMMAI__LIBRARY__TYPE(t_library, gradient)
-XEMMAI__LIBRARY__TYPE(t_library, linear_gradient)
-XEMMAI__LIBRARY__TYPE(t_library, radial_gradient)
-XEMMAI__LIBRARY__TYPE_AS(t_library, cairo_font_slant_t, font_slant)
-XEMMAI__LIBRARY__TYPE_AS(t_library, cairo_font_weight_t, font_weight)
-XEMMAI__LIBRARY__TYPE(t_library, font_face)
-XEMMAI__LIBRARY__TYPE_AS(t_library, cairo_font_type_t, font_type)
-XEMMAI__LIBRARY__TYPE(t_library, toy_font_face)
-XEMMAI__LIBRARY__TYPE(t_library, scaled_font)
-XEMMAI__LIBRARY__TYPE(t_library, context)
-XEMMAI__LIBRARY__TYPE_AS(t_library, cairo_fill_rule_t, fill_rule)
-XEMMAI__LIBRARY__TYPE_AS(t_library, cairo_line_cap_t, line_cap)
-XEMMAI__LIBRARY__TYPE_AS(t_library, cairo_line_join_t, line_join)
-XEMMAI__LIBRARY__TYPE_AS(t_library, cairo_operator_t, operator)
+#define XEMMAI__TYPE__LIBRARY t_library
+XEMMAIX__CAIRO__TYPES(XEMMAI__TYPE__DEFINE)
+#undef XEMMAI__TYPE__LIBRARY
 
 template<typename T_base>
 struct t_instantiatable : T_base

@@ -67,40 +67,7 @@ void f_main(t_library* a_library, const t_pvalue& a_callable)
 
 void t_library::f_scan(t_scan a_scan)
 {
-	a_scan(v_type_matrix);
-	a_scan(v_type_status);
-	a_scan(v_type_font_options);
-	a_scan(v_type_antialias);
-	a_scan(v_type_subpixel_order);
-	a_scan(v_type_hint_style);
-	a_scan(v_type_hint_metrics);
-	a_scan(v_type_surface);
-	a_scan(v_type_content);
-	a_scan(v_type_surface_type);
-	a_scan(v_type_image_surface);
-	a_scan(v_type_gif_surface);
-	a_scan(v_type_gif_surfaces);
-	a_scan(v_type_format);
-	a_scan(v_type_pattern);
-	a_scan(v_type_solid_pattern);
-	a_scan(v_type_surface_pattern);
-	a_scan(v_type_extend);
-	a_scan(v_type_filter);
-	a_scan(v_type_pattern_type);
-	a_scan(v_type_gradient);
-	a_scan(v_type_linear_gradient);
-	a_scan(v_type_radial_gradient);
-	a_scan(v_type_font_slant);
-	a_scan(v_type_font_weight);
-	a_scan(v_type_font_face);
-	a_scan(v_type_font_type);
-	a_scan(v_type_toy_font_face);
-	a_scan(v_type_scaled_font);
-	a_scan(v_type_context);
-	a_scan(v_type_fill_rule);
-	a_scan(v_type_line_cap);
-	a_scan(v_type_line_join);
-	a_scan(v_type_operator);
+	XEMMAIX__CAIRO__TYPES(XEMMAI__TYPE__SCAN)
 }
 
 std::vector<std::pair<t_root, t_rvalue>> t_library::f_define()
